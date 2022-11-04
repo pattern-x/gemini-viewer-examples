@@ -1,0 +1,80 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css" />
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
+</head>
+
+<body>
+    <div id="viewerContainer">
+        <div id="myCanvas" class="renderer-container"></div>
+    </div>
+    <script type="module">
+        import { DxfViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
+        import LayerManager from "./demo/layerManager/LayerManager.js";
+
+        const models = [{
+            modelId: "dxf_2",
+            name: "dxf_2",
+            src: "./demo/projects/dxf_test/dxf_2.dxf",
+            merge: true,
+            visible: true,
+        }];
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableStats: true,
+            enableToolbar: true,
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableBottomBar: true,
+            enableLayoutBar: true,
+        };
+        const viewer = new DxfViewer(config);
+        // const fontFiles = ["three/fonts/Microsoft_YaHei_Regular.typeface.json"];
+        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+        await viewer.setFont(fontFiles);
+
+        // loadProjectModel
+        let counter = 0; // to indicate how many models are loading
+        models.forEach((modelCfg) => {
+            if (modelCfg.visible === false) {
+                // visible is true by default
+                return; // only load visible ones
+            }
+            counter++;
+            const onProgress = (event) => {
+                let type = "Loading progress";
+                if (event.type === "parseProgress") {
+                    type = "Parsing progress";
+                }
+                const progress = ((event.loaded * 100) / event.total).toFixed(2);
+                console.log(`[Demo] ${type}: ${progress}%`);
+            };
+            try {
+                viewer
+                    .loadModelAsync(modelCfg, onProgress)
+                    .then(() => {
+                        console.log(`[Demo] Loaded model ${modelCfg.src}`);
+                        if (!viewer.layerManager) {
+                            viewer.layerManager = new LayerManager(viewer);
+                        }
+                    })
+                    .finally(() => {
+                        counter--;
+                    });
+            } catch (ex) {
+                console.log(ex);
+            }
+        });
+
+        // as a demo page, add dxfSettingsPanel to window!
+        window.dxfSettingsPanel = new DxfSettingsPanel(viewer);
+    </script>
+</body>
+
+</html>

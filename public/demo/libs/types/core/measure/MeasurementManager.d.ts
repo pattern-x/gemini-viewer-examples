@@ -1,0 +1,36 @@
+import * as THREE from "three";
+import { MeasurementData, MeasurementAssets, MeasurementType } from "./BaseMeasurement";
+import { BimViewer, DxfViewer } from "..";
+import { SVGRenderer } from "../patches/SVGRenderer";
+export declare class MeasurementManager {
+    scene: THREE.Scene;
+    selectedMeasurementAssets: MeasurementAssets | undefined;
+    private viewer;
+    private osnapHelper;
+    private measurements;
+    private measurementAssetsArray;
+    private activeMeasurementType;
+    private undoRedoHelper;
+    constructor(viewer: BimViewer | DxfViewer);
+    private eventHandlers;
+    addMeasurement(assets: MeasurementAssets, needRecord?: boolean): void;
+    render(svgRenderer: SVGRenderer, camera: THREE.Camera): void;
+    activateMeasurement(type: MeasurementType): void;
+    deactivateMeasurement(): void;
+    getActiveMeasurementType(): MeasurementType | undefined;
+    isMeasurementActive(): boolean;
+    hasMeasurementData(): boolean;
+    getMeasurementsData(): MeasurementData[];
+    setMeasurementsData(dataArray: MeasurementData[]): void;
+    getMeasurementsMarkers(): THREE.Group[];
+    setMeasurementsVisibility(visible: boolean): void;
+    clearMeasurements(): void;
+    removeMeasurementById(id: string, needRecord?: boolean): void;
+    selectMeasurement(id: string): void;
+    unselectMeasurement(): void;
+    undo(): void;
+    redo(): void;
+    destroy(): void;
+    keydown: (e: KeyboardEvent) => void;
+    private findMeasurementAssetsById;
+}

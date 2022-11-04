@@ -1,0 +1,9 @@
+.NavMenu {
+    width: 220px;
+    transition: ease 0.3s;
+    transition-property: width;
+}
+
+.NavMenu.active {
+    width: 0;
+}

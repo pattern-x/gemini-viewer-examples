@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="./demo/compare/compareSidePanel.css" />
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css" />
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css" />
+</head>
+
+<body>
+    <div id="viewerContainer">
+        <div id="myCanvas" class="renderer-container"></div>
+    </div>
+    <script type="module">
+        import { DxfViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfCompareSidePanel from "./demo/compare/compareSidePanel.js"
+        import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
+        import LayerManager from "./demo/layerManager/LayerManager.js";
+
+        const url1 = "./demo/projects/dxf_test/dxf_3.dxf";
+        const url2 = "./demo/projects/dxf_test/dxf_3_1.dxf";
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableStats: true,
+            enableToolbar: true,
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableBottomBar: true,
+            enableLayoutBar: true,
+        };
+        const viewer = new DxfViewer(config);
+        // const fontFiles = ["three/fonts/Microsoft_YaHei_Regular.typeface.json"];
+        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+        await viewer.setFont(fontFiles);
+
+        const onProgress = (event) => {
+            let type = "Loading progress";
+            if (event.type === "parseProgress") {
+                type = "Parsing progress";
+            }
+            const progress = ((event.loaded * 100) / event.total).toFixed(2);
+            console.log(`[Demo] ${type}: ${progress}%`);
+        };
+        await viewer.compare(url1, url2, onProgress).then(() => {
+            console.log(`[Demo] Compared models: ${url1}, ${url2}`);
+            if (!viewer.layerManager) {
+                viewer.layerManager = new LayerManager(viewer);
+            }
+            if (!viewer.dxfCompareSidePanel) {
+                viewer.dxfCompareSidePanel = new DxfCompareSidePanel(viewer);
+            }
+        });
+
+        // as a demo page, add dxfSettingsPanel to window!
+        window.dxfSettingsPanel = new DxfSettingsPanel(viewer);
+    </script>
+</body>
+
+</html>

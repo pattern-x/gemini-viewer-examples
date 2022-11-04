@@ -1,0 +1,58 @@
+[{
+  "title": "模型",
+  "subMenus": [{
+    "title": "本地模型加载",
+    "url": "./demo/empty_model_project.html"
+  }, {
+    "title": "technical school",
+    "url": "./demo/technical_school.html"
+  }]
+}, {
+  "title": "图纸",
+  "subMenus": [{
+    "title": "本地图纸加载",
+    "url": "../demo/empty_dxf_project.html"
+  }, {
+    "title": "Rac Basic Sample Project",
+    "url": "./demo/dxf_0.html"
+  }, {
+    "title": "运维监控楼地下一层 、首层平面图",
+    "url": "./demo/dxf_1.html"
+  }, {
+    "title": "厨房平面",
+    "url": "./demo/dxf_2.html"
+  }, {
+    "title": "图纸对比",
+    "url": "./demo/dxf_3.html"
+  }, {
+    "title": "多屏图纸对比",
+    "url": "./demo/dxf_4.html"
+  }]
+}, {
+  "title": "全景图",
+  "subMenus": [{
+    "title": "本地全景图加载",
+    "url": "./demo/empty_vr_project.html"
+  }, {
+    "title": "全景图(1张图)",
+    "url": "./demo/vr_0.html"
+  }, {
+    "title": "全景图(6张图)",
+    "url": "./demo/vr_1.html"
+  }, {
+    "title": "全景图(6张图)",
+    "url": "./demo/vr_2.html"
+  }, {
+    "title": "全景图(24张图)",
+    "url": "./demo/vr_3.html"
+  }, {
+    "title": "全景图(模块替换)",
+    "url": "./demo/vr_4.html"
+  }, {
+    "title": "全景图(双屏)",
+    "url": "./demo/vr_5.html"
+  }, {
+    "title": "全景图切换",
+    "url": "./demo/vr_album_0.html"
+  }]
+}]

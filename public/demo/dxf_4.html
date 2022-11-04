@@ -1,0 +1,115 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="./demo/compare/compareSidePanel.css" />
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css" />
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css" />
+    <style>
+        #myCanvas1 {
+            width: 40%;
+            height: 50%;
+            top: 0;
+            left: 0;
+            position: absolute;
+            border: 1px #dddddd solid;
+        }
+        #myCanvas2 {
+            width: 40%;
+            top: 50% !important;
+            height: 50%;
+            left: 0;
+            position: absolute;
+            border: 1px #dddddd solid;
+        }
+        #myCanvas3 {
+            width: 60%;
+            top: 0;
+            right: 0;
+            position: absolute;
+            border: 1px #dddddd solid;
+        }
+        .title {
+            font-size: 18px;
+            z-index: 3;
+            position: absolute;
+            margin-top: 8px;
+            color: white;
+            top: 0%;
+            left: 18%;
+        }
+        .title2 {
+            top: 50%;
+            left: 18%;
+        }
+        .title3 {
+            left: 68%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="viewerContainer">
+        <span class="title">图纸 1</span>
+        <div id="myCanvas1" class="renderer-container"></div>
+        <span class="title title2">图纸 2</span>
+        <div id="myCanvas2" class="renderer-container"></div>
+        <span class="title title3">对比结果</span>
+        <!-- myCanvas3 is the one for compare -->
+        <div id="myCanvas3" class="renderer-container"></div>
+    </div>
+    <script type="module">
+        import { DxfViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfCompareSidePanel from "./demo/compare/compareSidePanel.js"
+        import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
+        import LayerManager from "./demo/layerManager/LayerManager.js";
+
+        const url1 = "./demo/projects/dxf_test/dxf_3.dxf";
+        const url2 = "./demo/projects/dxf_test/dxf_3_1.dxf";
+        const modelConfig1 = { modelId: "dxf_1", name: "dxf 1", src: url1, ignorePaperSpace: true };
+        const modelConfig2 = { modelId: "dxf_2", name: "dxf 2", src: url2, ignorePaperSpace: true };
+        const config = {
+            containerId: "myCanvas3",
+            enableAxisGizmo: true,
+            enableStats: false,
+            enableToolbar: true,
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableBottomBar: true,
+        };
+        const viewer1 = new DxfViewer({ containerId: "myCanvas1"});
+        const viewer2 = new DxfViewer({ containerId: "myCanvas2"});
+        const viewer3 = new DxfViewer(config);
+        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+        await viewer1.setFont(fontFiles);
+        await viewer2.setFont(fontFiles);
+        await viewer3.setFont(fontFiles);
+
+        const onProgress = (event) => {
+            let type = "Loading progress";
+            if (event.type === "parseProgress") {
+                type = "Parsing progress";
+            }
+            const progress = ((event.loaded * 100) / event.total).toFixed(2);
+            console.log(`[Demo] ${type}: ${progress}%`);
+        };
+        await viewer1.loadModelAsync(modelConfig1, onProgress);
+        await viewer2.loadModelAsync(modelConfig2, onProgress);
+        await viewer3.compare(url1, url2, onProgress).then(() => {
+            console.log(`[Demo] Compared models: ${url1}, ${url2}`);
+            if (!viewer3.layerManager) {
+                viewer3.layerManager = new LayerManager(viewer3);
+            }
+            if (!viewer3.dxfCompareSidePanel) {
+                viewer3.dxfCompareSidePanel = new DxfCompareSidePanel(viewer3);
+            }
+        });
+
+        // as a demo page, add dxfSettingsPanel to window!
+        window.dxfSettingsPanel = new DxfSettingsPanel(viewer3);
+    </script>
+</body>
+
+</html>

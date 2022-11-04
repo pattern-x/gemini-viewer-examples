@@ -1,0 +1,219 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <style>
+        .viewpoint {
+            opacity: 0.8;
+            cursor: pointer;
+            top: 0px;
+            left: 0px;
+        }
+        .viewpoint-label {
+            width: 50px;
+            height: 26px;
+            opacity: 0.8;
+            cursor: pointer;
+            position: absolute;
+            left: -25;
+            color: white;
+            background-color: #000000bb;
+            border-radius: 13px;
+            /* border: 1px solid white; */
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+            padding-top: 6px;
+        }
+        .viewpoint-arrow {
+            width: 64px;
+            height: 64px;
+            opacity: 0.9;
+            cursor: pointer;
+            position: absolute;
+            top: 15px;
+            left: -32px;
+            background-image: url('./demo/images/arrow.png');
+            background-position: calc(100%) calc(100% - 128px);
+            background-size: cover;
+        }
+        .hotpoint {
+            opacity: 0.8;
+            cursor: pointer;
+            top: 10px;
+            left: 10px;
+        }
+        .dot:hover {
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+            border: 1px solid rgba(127,255,255,0.75);
+        }
+        .dot {
+            width: 15px;
+            height: 15px;
+            opacity: 0.8;
+            cursor: pointer;
+            top: 10px;
+            left: 10px;
+            background-color: yellow;
+            border-width: 3px;
+            border-style: dotted;
+            border-color: red;
+            border-radius: 50%;
+        }
+        .label {
+            width: 120px;
+            height: 30px;
+            opacity: 0.8;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: -50px;
+            color: white;
+            background-color: #000000bb;
+            border-radius: 5px;
+            /* border: 1px solid white; */
+            border: 1px solid rgba(127,255,255,0.25);
+            box-shadow: 0px 0px 3px rgba(0,255,255,0.5);
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+            padding-top: 8px;
+        }
+        .label:hover {
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+            border: 1px solid rgba(127,255,255,0.75);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="viewerContainer">
+        <div id="myCanvas" class="renderer-container"></div>
+    </div>
+    <script type="module">
+        import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const viewpoints = [{
+            panoramas: [{
+                id: "panorama_1",
+                images: "./demo/images/vr/vr_0/vr_0.jpg",
+                thumbnails:[
+                    "./demo/images/vr/vr_0/thumbnail/right.jpg",
+                    "./demo/images/vr/vr_0/thumbnail/left.jpg",
+                    "./demo/images/vr/vr_0/thumbnail/top.jpg",
+                    "./demo/images/vr/vr_0/thumbnail/bottom.jpg",
+                    "./demo/images/vr/vr_0/thumbnail/front.jpg",
+                    "./demo/images/vr/vr_0/thumbnail/back.jpg",
+                ]
+            }],
+            id: "viewpoint_1",
+            name: "客厅",
+            position: [0, 1, 0],
+            initialDirection: [1, 0, 0],
+            hotpoints: [{
+                targetViewpointId: "viewpoint_2",
+                hotpointId: "hotpoint_11",
+                anchorPosition: [-0.46, 0.61, 9.98],
+                html: "",
+            }, {
+                hotpointId: "hotpoint_1",
+                anchorPosition: [9.37, -1.77, -2.12],
+                html: "",
+            }, {
+                hotpointId: "hotpoint_2",
+                anchorPosition: [8.54, -0.94, 4.82],
+                html: "",
+            }],
+        }, {
+            panoramas: [{
+                id: "panorama_2",
+                images: "./demo/images/vr/album_0/主卧.jpg",
+                thumbnails: [],
+            }],
+            id: "viewpoint_2",
+            name: "卧室",
+            position: [0, 1, 0],
+            initialDirection: [-1, 0, 0],
+            hotpoints: [{
+                targetViewpointId: "viewpoint_1",
+                hotpointId: "hotpoint_1",
+                anchorPosition: [-9.65, 1.25, 2.58],
+                html: "",
+            }, {
+                hotpointId: "hotpoint_3",
+                anchorPosition: [-6.80, -0.15, -7.24],
+            }],
+        }];
+        const hotpoints = [{
+            hotpointId: "hotpoint_1",
+            html: `<div class="hotpoint">
+                        <div class="dot"></div>
+                        <div class="label">桌子价格：2980¥</div>
+                    </div>`,
+        }, {
+            hotpointId: "hotpoint_2",
+            html: `<div class="label">沙发价格：3980¥</div>`,
+        }, {
+            hotpointId: "hotpoint_3",
+            html: "",
+        }];
+        viewpoints.forEach(viewpoint => {
+            viewpoint.hotpoints.forEach(hotpoint => {
+                if (!hotpoint.html) {
+                    if (hotpoint.targetViewpointId) {
+                        const linkedViewpoint = viewpoints.find(vp => vp.id === hotpoint.targetViewpointId);
+                        hotpoint.html = `
+                            <div class="viewpoint">
+                                <div class="viewpoint-label">${linkedViewpoint.name}</div>
+                                <div class="viewpoint-arrow"></div>
+                            </div>`;
+                    } else {
+                        const linkedHotpoint = hotpoints.find(hp => hp.hotpointId === hotpoint.hotpointId);
+                        hotpoint.html = (linkedHotpoint && linkedHotpoint.html) || "";
+                    }
+                }
+            });
+        });
+
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableBottomBar: true,
+        }
+        const viewer = new VRViewer(config);
+        viewer.onHotpointClicked = (hotpoint) => {
+            // there can be a better way to distinguish if a hotpoint is a viewpoint!
+            if (hotpoint.targetViewpointId) {
+                const viewpoint = viewpoints.find((vp) => vp.id === hotpoint.targetViewpointId);
+                const panoramaId = viewpoint.panoramas[0].id;
+                // If it's gonna adjust camera direction by viewpoint's initialDirection when switching viewpoints.
+                // Set it to false in case we want to keep camera direction unchanged.
+                // Switching between panoramas of the same viewpoint won't trigger camera direction reset.
+                const setCameraToInitialDirection = true;
+                viewer.activatePanoramaById(hotpoint.targetViewpointId, panoramaId, setCameraToInitialDirection, (viewpoint) => {
+                    console.log(`[Demo] Swithced to viewpoint '${viewpoint.name}', panorama '${panoramaId}'`);
+                });
+            } else if (hotpoint.anchorPosition) {
+                viewer.lookToPosition(hotpoint.anchorPosition);
+            }
+        };
+        viewer.setViewpoints(viewpoints);
+        viewer.activatePanoramaById(viewpoints[0].id, viewpoints[0].panoramas[0].id);
+
+        // Implement animation for the arrow. The arrow.png is made by 25 sub images,
+        // with 128x128 size. We'll play 25 images in several seconds
+        const width = 128;
+        const numPictures = 25;
+        let currPictureIdx = 0;
+        setInterval(() => {
+            const arrowDivs = document.getElementsByClassName("viewpoint-arrow");
+            for (let i = 0; i < arrowDivs.length; ++i) {
+                arrowDivs[i].style.backgroundPosition = `calc(100%) calc(100% - ${width * currPictureIdx}px)`;
+            }
+            currPictureIdx = (currPictureIdx + 1) % numPictures;
+        }, 2000 / numPictures);
+    </script>
+</body>
+
+</html>
