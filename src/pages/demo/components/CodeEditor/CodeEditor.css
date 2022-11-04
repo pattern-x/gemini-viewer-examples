@@ -62,15 +62,15 @@
 .code-editor .splitter {
     float: left;
     cursor: col-resize;
-    background-color: #ddd;
-    width: 1px;
+    background-color: #fff;
+    width: 2px;
     height: 100vh;
     z-index: 99;
 }
 
 .code-editor .view-box {
     overflow: hidden;
-    border-left: 1px solid #ccc;
+    border-left: 0px solid #ccc;
     background-color: #fff;
     height: 100vh;
 }
