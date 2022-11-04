@@ -61,17 +61,13 @@
         import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const viewpointIds = ["viewpoint_1"];
-        const panoramaIds = ["panorama_1", "panorama_2", "panorama_3"];
+        const panoramaIds = ["panorama_1", "panorama_2"];
         let activePanoramaIdIndex = 0; // used to switch between panoramas
         // in order of right, left, up/top, down/bottom, front, back
         const viewpoints = [{
             panoramas: [{
                 id: panoramaIds[0],
                 images: ["./demo/images/vr/vr_4/vr_1.jpg"],
-                thumbnails: [],
-            }, {
-                id: panoramaIds[2],
-                images: ["./demo/images/vr/no_image.png"],
                 thumbnails: [],
             }],
             id: viewpointIds[0],
@@ -123,7 +119,7 @@
             // there can be a better way to distinguish if a hotpoint is a viewpoint!
             if (hotpoint.usedForSwitchingPanoramas) {
                 // find the target panoramaId
-                const targetPanoramaIdIndex = (++activePanoramaIdIndex) % 3;
+                const targetPanoramaIdIndex = (++activePanoramaIdIndex) % 2;
                 const panoramaId = panoramaIds[targetPanoramaIdIndex];
                 if (!viewer.findPanorama(viewpointIds[0], panoramaId)) {
                     viewer.addPanorama(viewpointIds[0], panoramaNoDecoration);
