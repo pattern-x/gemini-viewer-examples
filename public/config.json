@@ -4,8 +4,8 @@
     "title": "本地模型加载",
     "url": "./demo/empty_model_project.html"
   }, {
-    "title": "technical school",
-    "url": "./demo/technical_school.html"
+    "title": "Duplex",
+    "url": "./demo/duplex.html"
   }]
 }, {
   "title": "图纸",
@@ -16,10 +16,10 @@
     "title": "Rac Basic Sample Project",
     "url": "./demo/dxf_0.html"
   }, {
-    "title": "运维监控楼地下一层 、首层平面图",
+    "title": "城市公寓",
     "url": "./demo/dxf_1.html"
   }, {
-    "title": "厨房平面",
+    "title": "门窗大样",
     "url": "./demo/dxf_2.html"
   }, {
     "title": "图纸对比",
