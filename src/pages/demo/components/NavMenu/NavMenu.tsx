@@ -41,7 +41,7 @@ function getItem(
 
 function NavMenu(props: NavMenuProps) {
     let { menus } = props;
-    const defaultOpenKeys: string[] = [];
+    const [openkeys, setOpenKeys] = useState<string[]>([]);
     const [selectedKey, setSelectedKey] = useState<string>("");
     const [options, setOptions] = useState<{ value: string, label: string }[]>([]);
     const setUrl = useSetRecoilState<string>(urlState);
@@ -49,14 +49,15 @@ function NavMenu(props: NavMenuProps) {
     const collapsed = useRecoilValue<boolean>(collapsedState);
 
     const items: MenuProps['items'] = menus.map((menu, index) => {
-        defaultOpenKeys.push(`menu${index}`);
         return getItem(menu.title, `menu${index}`, undefined, undefined, menu.subMenus.map((subMenu, subIndex) => {
             return getItem(subMenu.title, `menu${index}-${subIndex}`, subMenu.url);
         }));
     });
 
     useEffect(() => {
+        const keys: string[] = [];
         menus.forEach((menu, index) => {
+            keys.push(`menu${index}`);
             menu.subMenus.forEach((subMenu, subIndex) => {
                 if (index === 0 && subIndex === 0) {
                     setSelectedKey(`menu${index}-${subIndex}`);
@@ -65,6 +66,7 @@ function NavMenu(props: NavMenuProps) {
                 }
             });
         });
+        setOpenKeys(keys);
     }, [menus])
 
     const onMenuSelect = (item: any) => {
@@ -88,6 +90,10 @@ function NavMenu(props: NavMenuProps) {
                 }
             });
         });
+    }
+
+    const onMenuOpenChange = (openKeys: string[]) => {
+        setOpenKeys(openKeys);
     }
 
     const handleFilter = (value: string) => {
@@ -118,11 +124,12 @@ function NavMenu(props: NavMenuProps) {
             />
             <Menu
                 style={{ width: "100%"}}
-                openKeys={defaultOpenKeys}
+                openKeys={openkeys}
                 selectedKeys={[selectedKey]}
                 mode="inline"
                 items={items}
                 onSelect={onMenuSelect}
+                onOpenChange={onMenuOpenChange}
             />
         </div>
     );
