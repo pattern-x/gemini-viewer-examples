@@ -49,7 +49,7 @@
 
 <body>
     <div id="viewerContainer">
-        <div id="myVRViewerContainer" class="renderer-container"></div>
+        <div id="myCanvas" class="renderer-container"></div>
     </div>
     <div style="position: absolute; top: 10px; opacity: 0.6; width: 100%;text-align: center;">
         <div class="upload-btn" id="uploadBtn">
@@ -64,7 +64,7 @@
         import { VRViewer, LocalImageUploader } from "./demio/libs/gemini-viewer.esm.min.js";
 
         const config = {
-            containerId: "myVRViewerContainer",
+            containerId: "myCanvas",
             enableAxisGizmo: true,
             enableBottomBar: true,
         }
