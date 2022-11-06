@@ -1,0 +1,73 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <style>
+        #myCanvas {
+            position: absolute;
+            width: calc(100% - 100px);
+            width: -moz-calc(100% - 100px);
+            width: -webkit-calc(100% - 100px);
+            height: calc(100% - 80px);
+            height: -moz-calc(100% - 80px);
+            height: -webkit-calc(100vh - 80px);
+            left: 50px;
+            top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="viewerContainer">
+        <div id="myCanvas" class="renderer-container"></div>
+    </div>
+    <script type="module">
+        import { BimViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const project = {
+            "id": "rac_basic_sample_project",
+            "name": "Rac basic sample project",
+            "camera": {
+                "eye": [-70, 25, 50],
+                "look": [-35, 0, 35],
+                "up": [0, 1, 0],
+                "far": 10000
+            },
+            "models": [{
+                "name": "Rac basic sample project",
+                "src": "./demo/models/gltf/rac_basic_sample_project.gltf",
+                "position": [0, 0, 0],
+                "rotation": [0, 0, 0],
+                "scale": [1, 1, 1],
+                "edges": true,
+                "visible": true
+            }]
+        }
+        const viewer = new BimViewer({
+            containerId: "myCanvas",
+            enableStats: true
+        }, project.camera);
+        const toolbar = viewer.toolbar;
+        toolbar.updateMenu(ToolbarMenuId.BimTree, { visible: false });
+
+        // loadProjectModel
+        let counter = 0; // to indicate how many models are loading
+        project.models.forEach((modelCfg) => {
+            if (modelCfg.visible === false) {
+                // visible is true by default
+                return; // only load visible ones
+            }
+            counter++;
+            viewer.loadModel(modelCfg, (event) => {
+                console.log(`[Demo] Loading model ${modelCfg.src}`);
+            }, (event) => {
+                console.error("[Demo] Failed to load " + modelCfg.src + ". " + event.message);
+            }).then(() => {
+                    console.log(`[Demo] Loaded model ${modelCfg.src}`);
+            });
+        });
+    </script>
+</body>
+
+</html>

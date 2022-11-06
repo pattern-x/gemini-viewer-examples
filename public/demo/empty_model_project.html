@@ -50,7 +50,7 @@
 
 <body>
     <div id="viewerContainer">
-        <div id="myBimViewerContainer" class="renderer-container"></div>
+        <div id="myCanvas" class="renderer-container"></div>
     </div>
     <div style="position: absolute; top: 10px; opacity: 0.6; width: 100%;text-align: center;">
         <div class="upload-btn" id="uploadBtn">
@@ -67,7 +67,6 @@
         const project = {
             id: "empty_project",
             name: "Empty project",
-            thumbnail: "./demo/projects/empty_project/thumbnail.png",
             camera: {
             },
             models: [{
@@ -81,7 +80,7 @@
         };
         const bimViewer = new BimViewer(
             {
-                containerId: "myBimViewerContainer",
+                containerId: "myCanvas",
                 enableAxisGizmo: true,
                 enableStats: true,
                 toolbarMenuConfig: {

@@ -4,8 +4,11 @@
     "title": "本地模型加载",
     "url": "./demo/empty_model_project.html"
   }, {
+    "title": "Rac basic sample project",
+    "url": "./demo/bim_0.html"
+  }, {
     "title": "Duplex",
-    "url": "./demo/duplex.html"
+    "url": "./demo/bim_1.html"
   }]
 }, {
   "title": "图纸",
@@ -13,7 +16,7 @@
     "title": "本地图纸加载",
     "url": "../demo/empty_dxf_project.html"
   }, {
-    "title": "Rac Basic Sample Project",
+    "title": "Rac basic sample project",
     "url": "./demo/dxf_0.html"
   }, {
     "title": "城市公寓",

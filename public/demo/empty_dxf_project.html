@@ -52,7 +52,7 @@
 
 <body>
 <div id="viewerContainer">
-    <div id="myDxfViewerContainer" class="renderer-container"></div>
+    <div id="myCanvas" class="renderer-container"></div>
 </div>
 <div style="position: absolute; top: 10px; opacity: 0.6; width: 100%;text-align: center;">
     <div class="upload-btn" id="uploadBtn">
@@ -76,7 +76,7 @@
     import LayerManager from './demo/layerManager/LayerManager.js';
 
     const config = {
-        containerId: "myDxfViewerContainer",
+        containerId: "myCanvas",
         enableAxisGizmo: true,
         enableStats: true,
         enableToolbar: true,
