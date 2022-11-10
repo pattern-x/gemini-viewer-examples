@@ -56,8 +56,13 @@ viewer.goToHomeView();
 
 ## Features for DxfViewer
 - Load and view dxf file
+![.gif](demo/images/snapshots/.gif)
+- Switch between layouts
+![layouts.gif](demo/images/snapshots/layouts.gif)
 - Distance measurement
+![measure_dist.gif](demo/images/snapshots/measure_dist.gif)
 - Area measurement
 - Angle measurement
 - Markups
+![markups.gif](demo/images/snapshots/markups.gif)
 - Undo/redo
