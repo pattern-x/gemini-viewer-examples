@@ -30,6 +30,9 @@
   }, {
     "title": "多屏图纸对比",
     "url": "./demo/dxf_4.html"
+  }, {
+    "title": "批注",
+    "url": "./demo/dxf_5.html"
   }]
 }, {
   "title": "全景图",

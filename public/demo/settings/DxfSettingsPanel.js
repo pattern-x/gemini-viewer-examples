@@ -105,7 +105,7 @@ export default class DxfSettingsPanel {
         });
 
         const settingsToolbarBtn = document.querySelector("#Settings");
-        settingsToolbarBtn.addEventListener("click", () => {
+        settingsToolbarBtn && settingsToolbarBtn.addEventListener("click", () => {
             if (settingsToolbarBtn.classList.contains("active")) {
                 if (!window.dxfSettingsPanel) {
                     window.dxfSettingsPanel = new DxfSettingsPanel(this.viewer);

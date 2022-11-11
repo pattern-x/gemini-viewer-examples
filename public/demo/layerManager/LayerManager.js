@@ -135,7 +135,7 @@ export default class LayerManager {
         this.closeBtn?.addEventListener("click", this.hide.bind(this));
 
         const layersBtn = document.querySelector("#Layers");
-        layersBtn.addEventListener("click", () => {
+        layersBtn && layersBtn.addEventListener("click", () => {
             if (layersBtn.classList.contains("active")) {
                 if (!this.viewer.layerManager) {
                     this.viewer.layerManager = new LayerManager(this.viewer);
