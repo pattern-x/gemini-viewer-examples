@@ -1,0 +1,61 @@
+# 当前 workflow 的名称
+name: Gemini Viewer Examples
+
+# 指定 workflow 触发的 event
+on:
+  push:
+    branches:
+      - main
+
+# 一个 workflow 由一个或多个 job 组成
+jobs:
+  # job id: 是 job 的唯一标识
+  build_and_deploy:
+  	# 在 Github 中显示的 job 名称
+    name: Build and Deploy
+    # job 运行的环境配置
+    runs-on: ubuntu-latest
+    # 一个 job 由多个 step 组成
+    steps:
+      # 当前 step 的名字
+      - name: Checkout
+        # checkout action 主要用于向 github 仓库拉取源代码
+        # https://github.com/actions/checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+      - name: Cache
+        # cache 在这里主要用于缓存 npm，提升构建速率
+        # https://github.com/actions/cache
+        uses: actions/cache@v2
+        # npm 缓存的路径可查看 https://docs.npmjs.com/cli/cache#cache
+        # 由于这里 runs-on 是 ubuntu-latest，因此配置 ~/.npm
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Use Node.js
+      	# 配置 Node 执行环境（当前构建的服务器默认没有 Node 环境，可以通过 Action 安装 Node）
+      	# https://github.com/actions/setup-node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Build
+      	# 安装 Node 之后就可以执行构建脚本
+        run: |
+          npm install yarn -g
+          yarn
+          yarn build
+      - name: Deploy
+      	# 将构建产物 commit 到一个分支上，用于发布静态站点资源
+      	# https://github.com/peaceiris/actions-gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # Github 会在 workflow 中自动生成 GIHUBT_TOKEN，用于认证 workflow 的运行
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # 静态资源目录设置
+          publish_dir: ./build
+          # 默认发布到 gh-pages 分支上，可以指定特定的发布分支（不能选拉取代码的分支）
+          publish_branch: gh-pages
+          full_commit_message: ${{ github.event.head_commit.message }}
