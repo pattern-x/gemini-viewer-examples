@@ -139,7 +139,7 @@
         viewer.setMarkups(markupData);
 
         viewer.addEventListener(ViewerEvent.MarkupClicked, (data) => {
-            if (data.drawableData) {
+            if (data.markup) {
                 console.log("[Demo] Clicked on markup:", data);
             }
         });
