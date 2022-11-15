@@ -47,7 +47,7 @@
         </div>
     </div>
     <script type="module">
-        import { DxfViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+        import { DxfViewer, ViewerEvent } from "./demo/libs/gemini-viewer.esm.min.js";
         import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
         import LayerManager from './demo/layerManager/LayerManager.js';
 
@@ -137,6 +137,12 @@
         registerClickEvent("CircleMarkup");
         registerClickEvent("DotMarkup");
         registerClickEvent("ClearMarkups");
+
+        viewer.addEventListener(ViewerEvent.MarkupClicked, (data) => {
+            if (data.markup) {
+                console.log("[Demo] Clicked on markup:", data);
+            }
+        });
     </script>
 </body>
 

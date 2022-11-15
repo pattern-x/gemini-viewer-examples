@@ -26,7 +26,7 @@
         <div id="myCanvas" class="renderer-container"></div>
     </div>
     <script type="module">
-        import { DxfViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+        import { DxfViewer, ViewerEvent } from "./demo/libs/gemini-viewer.esm.min.js";
         import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
         import LayerManager from './demo/layerManager/LayerManager.js';
 
@@ -110,25 +110,39 @@
         }];
 
         const markupData = [{
-            type: "Arrow",
+            type: "ArrowMarkup",
             id: "c6ea70a3-ddb0-4dd0-87c8-bd2491936428",
             lineWidth: 2,
-            strokeStyle: "#ff0000",
-            fillStyle: "#ff000030",
+            lineColor: "#ff0000",
+            fillColor: "#ff000030",
             layoutName: "Model",
             points: [[-15000, -9000], [-11000, -4000]],
         }, {
-            type: "Rectangle",
+            type: "RectMarkup",
             id: "82aba74f-7cd6-40e7-bac0-78d95a7bbecd",
             lineWidth: 2,
-            strokeStyle: "#ff0000",
-            fillStyle: "#ff000030",
+            lineColor: "#ff0000",
+            fillColor: "#ff000030",
             layoutName: "Model",
             points: [[-7000, -1800], [-1000, -5000]],
+        }, {
+            type: "DotMarkup",
+            id: "82aba74f-7cd6-40e7-bac0-78d95a7bbece",
+            lineWidth: 2,
+            lineColor: "#ff0000",
+            fillColor: "#ff000030",
+            layoutName: "Model",
+            points: [[-7000, -8000]],
         }];
 
         viewer.setMeasurements(measurementData);
         viewer.setMarkups(markupData);
+
+        viewer.addEventListener(ViewerEvent.MarkupClicked, (data) => {
+            if (data.markup) {
+                console.log("[Demo] Clicked on markup:", data);
+            }
+        });
     </script>
 </body>
 
