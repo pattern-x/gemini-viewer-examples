@@ -11,7 +11,6 @@ on:
 jobs:
   # job id: 是 job 的唯一标识
   build_and_deploy:
-  	# 在 Github 中显示的 job 名称
     name: Build and Deploy
     # job 运行的环境配置
     runs-on: ubuntu-latest
@@ -36,24 +35,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - name: Use Node.js
-      	# 配置 Node 执行环境（当前构建的服务器默认没有 Node 环境，可以通过 Action 安装 Node）
-      	# https://github.com/actions/setup-node
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
       - name: Build
-      	# 安装 Node 之后就可以执行构建脚本
         run: |
           npm install yarn -g
           yarn
           yarn build
       - name: Deploy
-      	# 将构建产物 commit 到一个分支上，用于发布静态站点资源
-      	# https://github.com/peaceiris/actions-gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           # Github 会在 workflow 中自动生成 GIHUBT_TOKEN，用于认证 workflow 的运行
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.ACCESS_TOKEN }}
           # 静态资源目录设置
           publish_dir: ./build
           # 默认发布到 gh-pages 分支上，可以指定特定的发布分支（不能选拉取代码的分支）

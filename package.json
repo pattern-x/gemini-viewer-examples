@@ -2,6 +2,7 @@
   "name": "gemini-viewer-demo",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/gemini-viewer-examples/",
   "dependencies": {
     "@codemirror/autocomplete": "^6.3.0",
     "@codemirror/commands": "^6.1.2",
