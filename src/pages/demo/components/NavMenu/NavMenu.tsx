@@ -67,6 +67,7 @@ function NavMenu(props: NavMenuProps) {
             });
         });
         setOpenKeys(keys);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [menus])
 
     const onMenuSelect = (item: any) => {
