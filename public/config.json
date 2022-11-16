@@ -14,7 +14,7 @@
   "title": "图纸",
   "subMenus": [{
     "title": "本地图纸加载",
-    "url": "../demo/empty_dxf_project.html"
+    "url": "./demo/empty_dxf_project.html"
   }, {
     "title": "Rac basic sample project",
     "url": "./demo/dxf_0.html"
