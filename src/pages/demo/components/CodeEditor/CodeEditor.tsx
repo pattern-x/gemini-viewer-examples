@@ -120,10 +120,12 @@ function CodeEditor() {
             iframeRef.current?.contentWindow?.removeEventListener('mousemove', handleMouseMove);
             iframeRef.current?.contentWindow?.removeEventListener('mouseup', handleMouseUp);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [iframeRef.current])
 
     useEffect(() => {
         getCode(url);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [url])
 
     return (
