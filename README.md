@@ -1,5 +1,7 @@
 # gemini-viewer-examples
-Examples and demos for gemini-viewer sdk
+Examples and demos for gemini-viewer sdk.
+
+[Online examples](https://pattern-x.github.io/gemini-viewer-examples/)
 
 # Set up the example project
 npm install
