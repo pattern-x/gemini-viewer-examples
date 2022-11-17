@@ -16,3 +16,11 @@
     height: 100%;
     overflow: hidden;
 }
+
+.demo .github {
+    position: absolute;
+    bottom: 20px;
+    left: 10px;
+    cursor: pointer;
+    text-decoration: underline;
+}
