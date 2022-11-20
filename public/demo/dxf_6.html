@@ -1,0 +1,247 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css">
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css">
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
+    <style>
+        #myCanvas {
+            position: absolute;
+            width: calc(100% - 100px);
+            width: -moz-calc(100% - 100px);
+            width: -webkit-calc(100% - 100px);
+            height: calc(100% - 80px);
+            height: -moz-calc(100% - 80px);
+            height: -webkit-calc(100vh - 80px);
+            left: 50px;
+            top: 40px;
+        }
+        .hotpoint-toolbar {
+            position: absolute;
+            right: 60px;
+            top: 10%;
+        }
+        .hotpoint-toolbar-btn {
+            min-width: 50px;
+            height: 30px;
+            cursor: pointer;
+            padding: 2px;
+        }
+        .btn-active {
+            background-color: cornflowerblue;
+        }
+        .hotpoint {
+            opacity: 0.8;
+            top: 0px;
+            left: 0px;
+        }
+        .hotpoint-dot:hover {
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+            border: 1px solid rgba(127,255,255,0.75);
+        }
+        .hotpoint-dot {
+            width: 15px;
+            height: 15px;
+            opacity: 0.8;
+            cursor: pointer;
+            top: 10px;
+            left: 10px;
+            background-color: yellow;
+            border-width: 3px;
+            border-style: dotted;
+            border-color: red;
+            border-radius: 50%;
+        }
+        .hotpoint-panel {
+            min-width: 150px;
+            min-height: 30px;
+            opacity: 0.8;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: white;
+            border-radius: 0px;
+            border: 1px solid rgba(127,255,255,0.25);
+            box-shadow: 0px 0px 3px rgba(0,255,255,0.5);
+            vertical-align: middle;
+            font-size: 12px;
+        }
+        .hotpoint-panel:hover {
+            opacity: 1;
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+            border: 1px solid rgba(127,255,255,0.75);
+        }
+        .hotpoint-close {
+            color: black;
+            font-size: 14px;
+            font-family: monospace;
+            background-color: lightskyblue;
+            text-align: right;
+            padding-right: 3px;
+            cursor: pointer;
+        }
+        .hotpoint-body {
+            padding: 3px;
+            min-height: 40px;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="viewerContainer">
+        <div id="myCanvas" class="renderer-container"></div>
+        <div class="hotpoint-toolbar">
+            <button id="AddHotpoint" class="hotpoint-toolbar-btn">Add hotpoint</button>
+            <button id="ClearHotpoints" class="hotpoint-toolbar-btn" title="Clear all hotpoints">Clear</button>
+        </div>
+    </div>
+    <script type="module">
+        import { DxfViewer, ViewerEvent } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
+        import LayerManager from './demo/layerManager/LayerManager.js';
+
+        const models= [{
+            modelId: "dxf_0",
+            name: "dxf_0",
+            src: "./demo/models/dxf/rac_basic_sample_project.dxf",
+            merge: true,
+            visible: true,
+        }];
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableStats: true,
+            enableToolbar: false,
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableBottomBar: true,
+            enableLayoutBar: true,
+            enableSelection: true,
+        };
+        const viewer = new DxfViewer(config);
+        // const fontFiles = ["three/fonts/Microsoft_YaHei_Regular.typeface.json"];
+        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+        await viewer.setFont(fontFiles);
+
+        window.viewer = viewer;
+
+        // loadProjectModel
+        let counter = 0; // to indicate how many models are loading
+        models.forEach((modelCfg) => {
+            if (modelCfg.visible === false) {
+                // visible is true by default
+                return; // only load visible ones
+            }
+            counter++;
+            const onProgress = (event) => {
+                let type = "Loading progress";
+                if (event.type === "parseProgress") {
+                    type = "Parsing progress";
+                }
+                const progress = ((event.loaded * 100) / event.total).toFixed(2);
+                console.log(`[Demo] ${type}: ${progress}%`);
+            };
+            try {
+                viewer.loadModelAsync(modelCfg, onProgress).then(() => {
+                    console.log(`[Demo] Loaded model ${modelCfg.src}`);
+                    if (!viewer.layerManager) {
+                        viewer.layerManager = new LayerManager(viewer);
+                    }
+                }).finally(() => {
+                    counter--;
+                });
+            } catch (ex) {
+                console.log(ex);
+            }
+        });
+
+        // as a demo page, add dxfSettingsPanel to window!
+        window.dxfSettingsPanel = new DxfSettingsPanel(viewer);
+
+        let addingHotpoint = false;
+        let hotpointCount = 0; // used to generate unique id
+        const hotpointsPerLayout = {}; // a map, the key is layoutName
+
+        const addHotpointBtn = document.getElementById("AddHotpoint");
+        const clearHotpointsBtn = document.getElementById("ClearHotpoints");
+        addHotpointBtn.onclick = () => {
+            if (addHotpointBtn.classList.contains("btn-active")) {
+                addHotpointBtn.classList.remove("btn-active")
+                addingHotpoint = false;
+            } else {
+                addHotpointBtn.classList.add("btn-active")
+                addingHotpoint = true;
+            }
+        };
+        clearHotpointsBtn.onclick = () => {
+            addHotpointBtn.classList.remove("btn-active");
+            addingHotpoint = false;
+            viewer.clearHotpoints();
+            Object.keys(hotpointsPerLayout).forEach((key) => {
+                hotpointsPerLayout[key] = [];
+            });
+        };
+
+        document.addEventListener("click", (event) => {
+            // if clicked on "close" button, close the hotpoint panel
+            // if clicked on hotpoint, open the hotpoint panel
+            const target = event.target;
+            if (target.classList.contains("hotpoint-close")) {
+                target.parentElement.classList.add("hide");
+            } else if (target.classList.contains("hotpoint-dot")) {
+                const hotpointId = target.id.replace("hotpoint-dot_", "");
+                const hotpointPanel = document.getElementById(`hotpoint-panel_${hotpointId}`);
+                if (hotpointPanel.classList.contains("hide")) {
+                    hotpointPanel.classList.remove("hide");
+                } else {
+                    hotpointPanel.classList.add("hide");
+                }
+            }
+
+            // create hotpoint...
+            if (addingHotpoint && target instanceof HTMLCanvasElement) {
+                const result = viewer.getHitResult(event);
+                if (!result || !result.location) {
+                    return;
+                }
+                const hotpointId = `hotpoint_${hotpointCount}`;
+                const hotpoint = {
+                    hotpointId,
+                    anchorPosition: [result.location[0], result.location[1]],
+                    visible: true,
+                    html: `<div class="hotpoint" id="hotpoint_${hotpointId}">
+                                <div class="hotpoint-dot" id="hotpoint-dot_${hotpointId}"></div>
+                                <div class="hotpoint-panel" id="hotpoint-panel_${hotpointId}">
+                                    <div class="hotpoint-close">X</div>
+                                    <div class="hotpoint-body">This is a hotpoint with id 'hotpoint_${hotpointCount}'</div>
+                                </div>
+                            </div>`,
+                }
+                const layoutName = viewer.getActiveLayoutName();
+                if (!hotpointsPerLayout[layoutName]) {
+                    hotpointsPerLayout[layoutName] = [];
+                }
+                hotpointsPerLayout[layoutName].push(hotpoint);
+                viewer.addHotpoint(hotpoint);
+                hotpointCount++;
+            }
+        });
+
+        // manages hotpoints for different layouts
+        viewer.addEventListener(ViewerEvent.LayoutChanged, () => {
+            viewer.clearHotpoints();
+            const layoutName = viewer.getActiveLayoutName();
+            const hotpoints = hotpointsPerLayout[layoutName];
+            if (hotpoints) {
+                hotpoints.forEach((h) => viewer.addHotpoint(h));
+            }
+        });
+    </script>
+</body>
+
+</html>
