@@ -26,6 +26,7 @@
         }
         #myCanvas3 {
             width: 60%;
+            height: 100%;
             top: 0;
             right: 0;
             position: absolute;
@@ -97,7 +98,7 @@
         };
         await viewer1.loadModelAsync(modelConfig1, onProgress);
         await viewer2.loadModelAsync(modelConfig2, onProgress);
-        await viewer3.compare(url1, url2, onProgress).then(() => {
+        await viewer3.compare(modelConfig1, modelConfig2, onProgress).then(() => {
             console.log(`[Demo] Compared models: ${url1}, ${url2}`);
             if (!viewer3.layerManager) {
                 viewer3.layerManager = new LayerManager(viewer3);
