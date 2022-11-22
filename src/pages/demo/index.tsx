@@ -8,9 +8,10 @@ function Demo() {
     const [data, setData] = useState<MenusProp[]>([]);
 
     useEffect(() => {
-        fetch("../gemini-viewer-examples/config.json").then(data => data.json()).then((data) => {
+        console.log("fetching data");
+        fetch("../gemini-viewer-examples/config.json").then(data => data.json()).then(data => {
             setData(data);
-        });
+        })
     }, [])
 
     return (

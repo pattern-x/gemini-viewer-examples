@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HashRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -10,9 +10,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-      <HashRouter basename="/">
+      <BrowserRouter basename="/gemini-viewer-examples">
             <App />
-      </HashRouter>
+      </BrowserRouter>
   </React.StrictMode>
 );
 
