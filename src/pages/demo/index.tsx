@@ -10,7 +10,7 @@ function Demo() {
     useEffect(() => {
         fetch("../gemini-viewer-examples/config.json").then(data => data.json()).then(data => {
             setData(data);
-        })
+        });
     }, [])
 
     return (
