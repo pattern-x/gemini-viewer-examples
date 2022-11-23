@@ -1,8 +1,8 @@
 <html>
 
 <head>
-    <link rel="icon" href="./demo/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <link rel="icon" href="./gemini-viewer-examples/demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./gemini-viewer-examples/demo/global.css">
     <style>
         .viewpoint {
             opacity: 0.8;
@@ -34,7 +34,7 @@
             position: absolute;
             top: 15px;
             left: -32px;
-            background-image: url('./demo/images/arrow.png');
+            background-image: url('./gemini-viewer-examples/demo/images/arrow.png');
             background-position: calc(100%) calc(100% - 128px);
             background-size: cover;
         }
@@ -92,19 +92,19 @@
         <div id="myCanvas" class="renderer-container"></div>
     </div>
     <script type="module">
-        import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+        import { VRViewer } from "./gemini-viewer-examples/demo/libs/gemini-viewer.esm.min.js";
 
         const viewpoints = [{
             panoramas: [{
                 id: "panorama_1",
-                images: "./demo/images/vr/vr_0/vr_0.jpg",
+                images: "./gemini-viewer-examples/demo/images/vr/vr_0/vr_0.jpg",
                 thumbnails:[
-                    "./demo/images/vr/vr_0/thumbnail/right.jpg",
-                    "./demo/images/vr/vr_0/thumbnail/left.jpg",
-                    "./demo/images/vr/vr_0/thumbnail/top.jpg",
-                    "./demo/images/vr/vr_0/thumbnail/bottom.jpg",
-                    "./demo/images/vr/vr_0/thumbnail/front.jpg",
-                    "./demo/images/vr/vr_0/thumbnail/back.jpg",
+                    "./gemini-viewer-examples/demo/images/vr/vr_0/thumbnail/right.jpg",
+                    "./gemini-viewer-examples/demo/images/vr/vr_0/thumbnail/left.jpg",
+                    "./gemini-viewer-examples/demo/images/vr/vr_0/thumbnail/top.jpg",
+                    "./gemini-viewer-examples/demo/images/vr/vr_0/thumbnail/bottom.jpg",
+                    "./gemini-viewer-examples/demo/images/vr/vr_0/thumbnail/front.jpg",
+                    "./gemini-viewer-examples/demo/images/vr/vr_0/thumbnail/back.jpg",
                 ]
             }],
             id: "viewpoint_1",
@@ -128,7 +128,7 @@
         }, {
             panoramas: [{
                 id: "panorama_2",
-                images: "./demo/images/vr/album_0/主卧.jpg",
+                images: "./gemini-viewer-examples/demo/images/vr/album_0/主卧.jpg",
                 thumbnails: [],
             }],
             id: "viewpoint_2",

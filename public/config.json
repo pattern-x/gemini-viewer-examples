@@ -2,66 +2,66 @@
   "title": "BIM Models",
   "subMenus": [{
     "title": "Upload your local model",
-    "url": "./demo/empty_model_project.html"
+    "url": "./gemini-viewer-examples/demo/empty_model_project.html"
   }, {
     "title": "Rac basic sample project",
-    "url": "./demo/bim_0.html"
+    "url": "./gemini-viewer-examples/demo/bim_0.html"
   }, {
     "title": "Duplex",
-    "url": "./demo/bim_1.html"
+    "url": "./gemini-viewer-examples/demo/bim_1.html"
   }]
 }, {
   "title": "2D drawings",
   "subMenus": [{
     "title": "Upload your local dxf",
-    "url": "./demo/empty_dxf_project.html"
+    "url": "./gemini-viewer-examples/demo/empty_dxf_project.html"
   }, {
     "title": "Rac basic sample project",
-    "url": "./demo/dxf_0.html"
+    "url": "./gemini-viewer-examples/demo/dxf_0.html"
   }, {
     "title": "City apartments",
-    "url": "./demo/dxf_1.html"
+    "url": "./gemini-viewer-examples/demo/dxf_1.html"
   }, {
     "title": "Doors & windows",
-    "url": "./demo/dxf_2.html"
+    "url": "./gemini-viewer-examples/demo/dxf_2.html"
   }, {
     "title": "Drawing comparison",
-    "url": "./demo/dxf_3.html"
+    "url": "./gemini-viewer-examples/demo/dxf_3.html"
   }, {
     "title": "Drawing comparison with 3 viewports",
-    "url": "./demo/dxf_4.html"
+    "url": "./gemini-viewer-examples/demo/dxf_4.html"
   }, {
     "title": "Markups",
-    "url": "./demo/dxf_5.html"
+    "url": "./gemini-viewer-examples/demo/dxf_5.html"
   }, {
     "title": "Hotpoints",
-    "url": "./demo/dxf_6.html"
+    "url": "./gemini-viewer-examples/demo/dxf_6.html"
   }]
 }, {
   "title": "Panoramas",
   "subMenus": [{
     "title": "Upload your local vr image(s)",
-    "url": "./demo/empty_vr_project.html"
+    "url": "./gemini-viewer-examples/demo/empty_vr_project.html"
   }, {
     "title": "Panorama(1 image)",
-    "url": "./demo/vr_0.html"
+    "url": "./gemini-viewer-examples/demo/vr_0.html"
   }, {
     "title": "Panorama(6 images)",
-    "url": "./demo/vr_1.html"
+    "url": "./gemini-viewer-examples/demo/vr_1.html"
   }, {
     "title": "Panorama(6 images)",
-    "url": "./demo/vr_2.html"
+    "url": "./gemini-viewer-examples/demo/vr_2.html"
   }, {
     "title": "Panorama(24 images)",
-    "url": "./demo/vr_3.html"
+    "url": "./gemini-viewer-examples/demo/vr_3.html"
   }, {
     "title": "Panorama(switching between components)",
-    "url": "./demo/vr_4.html"
+    "url": "./gemini-viewer-examples/demo/vr_4.html"
   }, {
     "title": "Panorama(two viewports)",
-    "url": "./demo/vr_5.html"
+    "url": "./gemini-viewer-examples/demo/vr_5.html"
   }, {
     "title": "Panorama album",
-    "url": "./demo/vr_album_0.html"
+    "url": "./gemini-viewer-examples/demo/vr_album_0.html"
   }]
 }]
