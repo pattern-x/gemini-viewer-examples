@@ -1,8 +1,8 @@
 <html>
 
 <head>
-    <link rel="icon" href="./gemini-viewer-examples/demo/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="./gemini-viewer-examples/demo/global.css">
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
     <style>
         .my-renderer-container {
             width: 50%;
@@ -43,7 +43,7 @@
             position: absolute;
             top: 15px;
             left: -32px;
-            background-image: url('./gemini-viewer-examples/demo/images/arrow.png');
+            background-image: url('./demo/images/arrow.png');
             background-position: calc(100%) calc(100% - 128px);
             background-size: cover;
         }
@@ -102,12 +102,12 @@
         <div id="myCanvas2" class="my-renderer-container canvas2"></div>
     </div>
     <script type="module">
-        import { VRViewer } from "./gemini-viewer-examples/demo/libs/gemini-viewer.esm.min.js";
+        import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const viewpoints = [{
             panoramas: [{
                 id: "panorama_1",
-                images: "./gemini-viewer-examples/demo/images/vr/vr_5/panorama1.jpg",
+                images: "./demo/images/vr/vr_5/panorama1.jpg",
             }],
             id: "viewpoint_1",
             name: "客厅",
@@ -125,7 +125,7 @@
         const viewpoints2 = [{
             panoramas: [{
                 id: "panorama_1",
-                images: "./gemini-viewer-examples/demo/images/vr/vr_5/panorama2.jpg",
+                images: "./demo/images/vr/vr_5/panorama2.jpg",
             }],
             id: "viewpoint_1",
             name: "客厅",

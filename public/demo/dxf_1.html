@@ -1,11 +1,11 @@
 <html>
 
 <head>
-    <link rel="icon" href="./gemini-viewer-examples/demo/favicon.ico" />
-    <link rel="stylesheet" type="text/css" href="./gemini-viewer-examples/demo/global.css" />
-    <link rel="stylesheet" type="text/css" href="./gemini-viewer-examples/demo/iconfont/iconfont.css" />
-    <link rel="stylesheet" href="./gemini-viewer-examples/demo/layerManager/layerManager.css" />
-    <link rel="stylesheet" href="./gemini-viewer-examples/demo/settings/SettingsPanel.css">
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css" />
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
 </head>
 
 <body>
@@ -13,14 +13,14 @@
         <div id="myCanvas" class="renderer-container"></div>
     </div>
     <script type="module">
-        import { DxfViewer } from "./gemini-viewer-examples/demo/libs/gemini-viewer.esm.min.js";
-        import DxfSettingsPanel from './gemini-viewer-examples/demo/settings/DxfSettingsPanel.js';
-        import LayerManager from "./gemini-viewer-examples/demo/layerManager/LayerManager.js";
+        import { DxfViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
+        import LayerManager from "./demo/layerManager/LayerManager.js";
 
         const models = [{
             modelId: "dxf_1",
             name: "dxf_1",
-            src: "./gemini-viewer-examples/demo/models/dxf/apartments.dxf",
+            src: "./demo/models/dxf/apartments.dxf",
             merge: true,
             visible: true,
         }];
@@ -36,7 +36,7 @@
         };
         const viewer = new DxfViewer(config);
         // const fontFiles = ["three/fonts/Microsoft_YaHei_Regular.typeface.json"];
-        const fontFiles = ["./gemini-viewer-examples/demo/three/fonts/hztxt.shx", "./gemini-viewer-examples/demo/three/fonts/simplex.shx"];
+        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
         await viewer.setFont(fontFiles);
 
         // loadProjectModel
