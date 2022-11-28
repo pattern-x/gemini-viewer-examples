@@ -1,8 +1,8 @@
 <html>
 
 <head>
-    <link rel="icon" href="./gemini-viewer-examples/demo/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="./gemini-viewer-examples/demo/global.css">
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
     <style>
         .hotpoint {
             opacity: 0.8;
@@ -58,7 +58,7 @@
         <div id="myCanvas" class="renderer-container"></div>
     </div>
     <script type="module">
-        import { VRViewer } from "./gemini-viewer-examples/demo/libs/gemini-viewer.esm.min.js";
+        import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const viewpointIds = ["viewpoint_1"];
         const panoramaIds = ["panorama_1", "panorama_2"];
@@ -67,7 +67,7 @@
         const viewpoints = [{
             panoramas: [{
                 id: panoramaIds[0],
-                images: ["./gemini-viewer-examples/demo/images/vr/vr_4/vr_1.jpg"],
+                images: ["./demo/images/vr/vr_4/vr_1.jpg"],
                 thumbnails: [],
             }],
             id: viewpointIds[0],
@@ -88,7 +88,7 @@
         // we'll dynamically add this viewpoint and switch to it
         const panoramaNoDecoration = {
             id: panoramaIds[1],
-            images: ["./gemini-viewer-examples/demo/images/vr/vr_4/vr_2.jpg"],
+            images: ["./demo/images/vr/vr_4/vr_2.jpg"],
             thumbnails: [],
         };
         const hotpoints = [{
