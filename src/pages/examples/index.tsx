@@ -1,7 +1,7 @@
 import "./index.css";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import {useEffect, useRef, useState} from "react";
-import {Routes, Route, Link, useParams} from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 interface MenuProp {
     title: string;
@@ -21,13 +21,6 @@ function Examples() {
     const iframeRef = useRef<HTMLIFrameElement>();
     const { id } = useParams();
 
-    const getCode = (url: string) => {
-        if (!url) return;
-        fetch(url, {mode: 'cors'}).then(data => data.text()).then((data) => {
-            run(data);
-        })
-    }
-
     const run = (code: string) => {
         const preview = document.querySelector("#preview") as HTMLElement;
         preview.innerHTML = "";
@@ -38,6 +31,13 @@ function Examples() {
             iframeRef.current.contentWindow?.document.write(code);
             iframeRef.current.contentWindow?.document.close();
         }
+    }
+
+    const getCode = (url: string) => {
+        if (!url) return;
+        fetch(url, {mode: 'cors'}).then(data => data.text()).then((data) => {
+            run(data);
+        })
     }
 
     useEffect(() => {
@@ -64,6 +64,7 @@ function Examples() {
                 }
             });
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, data])
 
 
