@@ -1,0 +1,166 @@
+.examples {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000000;
+}
+
+.examples .menu {
+    position: fixed;
+    top: 0;
+    left: -500px;
+    z-index: 10;
+    width: 460px;
+    height: 100%;
+    padding: 0;
+    transition: all 300ms ease-in-out;
+}
+
+.examples .menu.open {
+    left: 0;
+}
+
+.examples .index-button {
+    position: absolute;
+    font-size: 38px;
+    top: 15px;
+    left: 20px;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 10;
+    transition: all 300ms ease-in-out;
+    border: 0;
+    background: transparent;
+}
+
+.examples .index-button.open {
+    left: 485px;
+    color: white;
+}
+
+.examples .content-container {
+    position: absolute;
+    z-index: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    opacity: 1.0;
+    pointer-events: all;
+    transition: all 300ms ease-in-out;
+    background: lightblue;
+}
+
+.examples .content-container.open {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.examples .content-container iframe {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.examples .content-overlay {
+    position: absolute;
+    z-index: 7;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    opacity: 1.0;
+    pointer-events: none;
+    transition: all 300ms ease-in-out;
+}
+
+.examples .content-overlay.open {
+    pointer-events: all;
+}
+
+.examples .page-title {
+    position: absolute;
+    font-size: 1.6rem;
+    top: 25px;
+    left: 75px;
+    text-align: left;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    z-index: 5;
+    transition: all 300ms ease-in-out;
+    max-width: calc(100% - 450px);
+    pointer-events: none;
+}
+
+.examples .page-title.open {
+    left: 545px;
+    color: white;
+}
+
+.examples .menu #index {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fdfdfd;
+    overflow: auto;
+    border-right: 2px solid #212529;
+    padding: 20px;
+    padding-bottom: 100px;
+    user-select: none;
+    top: 0;
+    left: 0;
+}
+
+#index h1 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 1.8rem;
+    font-weight: normal;
+    text-decoration: none !important;
+}
+
+#index h2 {
+    font-size: 1.4rem;
+    font-weight: normal;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    text-decoration: none;
+}
+
+#index hr {
+    display: block;
+    unicode-bidi: isolate;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    overflow: hidden;
+    border-style: inset;
+    border-width: 1px;
+}
+
+#index .link {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding-top: 1px;
+    text-decoration: none;
+    font-weight: normal;
+    background: #fdfdfd;
+    cursor: pointer;
+    line-height: 1.5em;
+    font-size: 1rem;
+}
+
+
+element.style {
+}
+#index .link:hover {
+    text-decoration: underline;
+}
+

@@ -2,6 +2,7 @@ import NavMenu, {MenusProp} from "./components/NavMenu/NavMenu";
 import CodeEditor from "./components/CodeEditor/CodeEditor";
 import {useEffect, useState} from "react";
 import "./index.css";
+import { useParams } from "react-router-dom";
 
 
 function Demo() {
