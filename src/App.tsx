@@ -9,10 +9,10 @@ const App: FC = () => {
   return (
       <RecoilRoot>
           <Routes>
-              <Route index path="/" element={<Demo />} />
-              <Route path="/examples" element={<Examples />}>
+              <Route path="/" element={<Examples />}>
                   <Route path=":id" element={<Examples />} />
               </Route>
+              <Route path="/demo" element={<Demo />} />
           </Routes>
       </RecoilRoot>
   )
