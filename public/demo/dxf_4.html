@@ -74,11 +74,10 @@
         const config = {
             containerId: "myCanvas3",
             enableAxisGizmo: true,
-            enableStats: false,
             enableToolbar: true,
             enableSpinner: true,
             enableProgressBar: true,
-            enableBottomBar: true,
+            enableLayoutBar: true,
         };
         const viewer1 = new DxfViewer({ containerId: "myCanvas1"});
         const viewer2 = new DxfViewer({ containerId: "myCanvas2"});
@@ -89,12 +88,8 @@
         await viewer3.setFont(fontFiles);
 
         const onProgress = (event) => {
-            let type = "Loading progress";
-            if (event.type === "parseProgress") {
-                type = "Parsing progress";
-            }
-            const progress = ((event.loaded * 100) / event.total).toFixed(2);
-            console.log(`[Demo] ${type}: ${progress}%`);
+            const progress = ((event.loaded * 100) / event.total).toFixed(1);
+            console.log(`[Demo] Loading progress: ${progress}%`);
         };
         await viewer1.loadModelAsync(modelConfig1, onProgress);
         await viewer2.loadModelAsync(modelConfig2, onProgress);
