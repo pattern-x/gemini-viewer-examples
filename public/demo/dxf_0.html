@@ -30,59 +30,34 @@
         import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
         import LayerManager from './demo/layerManager/LayerManager.js';
 
-        const models= [{
-            modelId: "dxf_0",
-            name: "dxf_0",
-            src: "./demo/models/dxf/rac_basic_sample_project.dxf",
+        const filename = "rac_basic_sample_project";
+        const modelCfg = {
+            modelId: filename,
+            name: filename,
+            src: `./demo/models/dxf/${filename}.dxf`,
             merge: true,
-            visible: true,
-        }];
-        const config = {
+        };
+        const viewerCfg = {
             containerId: "myCanvas",
             enableAxisGizmo: true,
-            enableStats: true,
             enableToolbar: true,
             enableSpinner: true,
             enableProgressBar: true,
-            enableBottomBar: true,
             enableLayoutBar: true,
-            enableSelection: true,
         };
-        const viewer = new DxfViewer(config);
-        // const fontFiles = ["three/fonts/Microsoft_YaHei_Regular.typeface.json"];
+        const viewer = new DxfViewer(viewerCfg);
         const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
         await viewer.setFont(fontFiles);
 
-        window.viewer = viewer;
-        // loadProjectModel
-        let counter = 0; // to indicate how many models are loading
-        models.forEach((modelCfg) => {
-            if (modelCfg.visible === false) {
-                // visible is true by default
-                return; // only load visible ones
-            }
-            counter++;
-            const onProgress = (event) => {
-                let type = "Loading progress";
-                if (event.type === "parseProgress") {
-                    type = "Parsing progress";
-                }
-                const progress = ((event.loaded * 100) / event.total).toFixed(2);
-                console.log(`[Demo] ${type}: ${progress}%`);
-            };
-            try {
-                viewer.loadModelAsync(modelCfg, onProgress).then(() => {
-                    console.log(`[Demo] Loaded model ${modelCfg.src}`);
-                    if (!viewer.layerManager) {
-                        viewer.layerManager = new LayerManager(viewer);
-                    }
-                }).finally(() => {
-                    counter--;
-                });
-            } catch (ex) {
-                console.log(ex);
-            }
-        });
+        const onProgress = (event) => {
+            const progress = ((event.loaded * 100) / event.total).toFixed(1);
+            console.log(`[Demo] Loading progress: ${progress}%`);
+        };
+        await viewer.loadModelAsync(modelCfg, onProgress);
+        console.log(`[Demo] Loaded model ${modelCfg.src}`);
+        if (!viewer.layerManager) {
+            viewer.layerManager = new LayerManager(viewer);
+        }
 
         // as a demo page, add dxfSettingsPanel to window!
         window.dxfSettingsPanel = new DxfSettingsPanel(viewer);
