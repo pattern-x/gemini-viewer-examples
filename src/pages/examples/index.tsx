@@ -58,7 +58,7 @@ function Examples() {
         if (!id) {
             return;
         }
-        const subTitle = id.split("_").join(" ");;
+        const subTitle = id.split("_").join(" ");
         data.forEach((menu: MenusProp) => {
             menu.subMenus.forEach((subMenu: MenuProp) => {
                 if (subMenu.title === subTitle) {
@@ -87,7 +87,7 @@ function Examples() {
             </button>
             <div className={`page-title${collapsed? " open" : ""}`}>{title}</div>
             {/* <div className={`content-overlay${collapsed? " open" : ""}`} onClick={toggleCollapsed}></div> */}
-            <div className={`content-container${collapsed? " open" : ""}`} id="preview"></div>
+            <div className={`content-container${collapsed ? " open" : ""}`} id="preview"></div>
             <div className={`menu${collapsed? " open" : ""}`}>
                 <div id="index">
                     <h1>Examples</h1>
