@@ -27,9 +27,12 @@ function Examples() {
         iframeRef.current = document.createElement("iframe") as HTMLIFrameElement;
         preview.appendChild(iframeRef.current);
         if(code) {
-            iframeRef.current.contentWindow?.document.open();
-            iframeRef.current.contentWindow?.document.write(code);
-            iframeRef.current.contentWindow?.document.close();
+            const doc = iframeRef.current.contentWindow?.document;
+            if (doc) {
+                doc.open();
+                doc.write(code);
+                doc.close();
+            }
         }
     }
 
@@ -83,7 +86,7 @@ function Examples() {
                 {!collapsed ?  <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             </button>
             <div className={`page-title${collapsed? " open" : ""}`}>{title}</div>
-            <div className={`content-overlay${collapsed? " open" : ""}`} onClick={toggleCollapsed}></div>
+            {/* <div className={`content-overlay${collapsed? " open" : ""}`} onClick={toggleCollapsed}></div> */}
             <div className={`content-container${collapsed? " open" : ""}`} id="preview"></div>
             <div className={`menu${collapsed? " open" : ""}`}>
                 <div id="index">
