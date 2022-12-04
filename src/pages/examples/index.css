@@ -34,6 +34,7 @@
     transition: all 300ms ease-in-out;
     border: 0;
     background: transparent;
+    cursor: pointer;
 }
 
 .examples .index-button.open {
@@ -55,10 +56,10 @@
     background: lightblue;
 }
 
-.examples .content-container.open {
+/* .examples .content-container.open {
     opacity: 0.4;
     pointer-events: none;
-}
+} */
 
 .examples .content-container iframe {
     width: 100%;
@@ -66,7 +67,7 @@
     overflow: hidden;
 }
 
-.examples .content-overlay {
+/* .examples .content-overlay {
     position: absolute;
     z-index: 7;
     padding: 0;
@@ -81,7 +82,7 @@
 
 .examples .content-overlay.open {
     pointer-events: all;
-}
+} */
 
 .examples .page-title {
     position: absolute;
