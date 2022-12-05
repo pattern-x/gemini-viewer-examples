@@ -35,11 +35,12 @@
     border: 0;
     background: transparent;
     cursor: pointer;
+    color: #ccc;
 }
 
 .examples .index-button.open {
     left: 485px;
-    color: white;
+    /* color: white; */
 }
 
 .examples .content-container {
@@ -54,6 +55,8 @@
     pointer-events: all;
     transition: all 300ms ease-in-out;
     background: lightblue;
+    background: url(./../../../public/demo/images/dwg_background.png) no-repeat center center fixed;
+    background-size: cover;
 }
 
 /* .examples .content-container.open {
@@ -97,11 +100,12 @@
     transition: all 300ms ease-in-out;
     max-width: calc(100% - 450px);
     pointer-events: none;
+    color: #ccc;
 }
 
 .examples .page-title.open {
     left: 545px;
-    color: white;
+    /* color: white; */
 }
 
 .examples .menu #index {
