@@ -81,14 +81,14 @@ function Examples() {
     };
 
     return (
-        <div className="examples" >
-            <button className={`index-button${collapsed? " open" : ""}`} onClick={toggleCollapsed}>
+        <div className="examples">
+            <button className={`index-button${collapsed ? " open" : ""}`} onClick={toggleCollapsed}>
                 {!collapsed ?  <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             </button>
-            <div className={`page-title${collapsed? " open" : ""}`}>{title}</div>
+            <div className={`page-title${collapsed ? " open" : ""}`}>{title}</div>
             {/* <div className={`content-overlay${collapsed? " open" : ""}`} onClick={toggleCollapsed}></div> */}
             <div className={`content-container${collapsed ? " open" : ""}`} id="preview"></div>
-            <div className={`menu${collapsed? " open" : ""}`}>
+            <div className={`menu${collapsed ? " open" : ""}`}>
                 <div id="index">
                     <h1>Examples</h1>
                     <div>
