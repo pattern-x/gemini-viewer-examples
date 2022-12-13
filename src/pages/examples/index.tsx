@@ -125,6 +125,11 @@ function Examples() {
                         }
                     </div>
                 </div>
+                <div className="links">
+                    <a href="https://pattern-x.github.io/gemini-viewer-examples/#/demo/">Demos</a>
+                    &nbsp;|&nbsp;
+                    <a href="https://github.com/pattern-x/gemini-viewer-examples">Github repo</a>
+                </div>
             </div>
         </div>
     )
