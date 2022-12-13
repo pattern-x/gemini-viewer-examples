@@ -17,10 +17,21 @@
     overflow: hidden;
 }
 
-.demo .github {
+.demo .links {
     position: absolute;
-    bottom: 20px;
-    left: 10px;
+    bottom: 0px;
+    left: 0px;
+    background-color: #00000050;
+    padding: 0 3px;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.demo .links a {
     cursor: pointer;
+    color: white;
+}
+
+.demo .links a:hover {
     text-decoration: underline;
 }

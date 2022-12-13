@@ -169,3 +169,21 @@ element.style {
     text-decoration: underline;
 }
 
+.examples .links {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    background-color: #00000050;
+    padding: 0 3px;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.examples .links a {
+    cursor: pointer;
+    color: white;
+}
+
+.examples .links a:hover {
+    text-decoration: underline;
+}

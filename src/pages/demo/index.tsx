@@ -21,7 +21,9 @@ function Demo() {
             <div className="content">
                 <CodeEditor></CodeEditor>
             </div>
-            <div className="github">
+            <div className="links">
+                <a href="https://pattern-x.github.io/gemini-viewer-examples/">Examples</a>
+                &nbsp;|&nbsp;
                 <a href="https://github.com/pattern-x/gemini-viewer-examples">Github repo</a>
             </div>
         </div>
