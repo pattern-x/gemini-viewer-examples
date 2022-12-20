@@ -1,0 +1,173 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <style>
+        .my-renderer-container {
+            width: 50%;
+            height: 100%;
+            position: absolute;
+            overflow: hidden;
+        }
+        .canvas2 {
+            right: 0;
+        }
+        .viewpoint {
+            opacity: 0.8;
+            cursor: pointer;
+            top: 0px;
+            left: 0px;
+        }
+        .viewpoint-label {
+            width: 50px;
+            height: 26px;
+            opacity: 0.8;
+            cursor: pointer;
+            position: absolute;
+            left: -25;
+            color: white;
+            background-color: #000000bb;
+            border-radius: 13px;
+            /* border: 1px solid white; */
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+            padding-top: 6px;
+        }
+        .viewpoint-arrow {
+            width: 64px;
+            height: 64px;
+            opacity: 0.9;
+            cursor: pointer;
+            position: absolute;
+            top: 15px;
+            left: -32px;
+            background-image: url('./demo/images/arrow.png');
+            background-position: calc(100%) calc(100% - 128px);
+            background-size: cover;
+        }
+        .hotpoint {
+            opacity: 0.8;
+            cursor: pointer;
+            top: 10px;
+            left: 10px;
+        }
+        .dot:hover {
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+            border: 1px solid rgba(127,255,255,0.75);
+        }
+        .dot {
+            width: 15px;
+            height: 15px;
+            opacity: 0.8;
+            cursor: pointer;
+            top: 10px;
+            left: 10px;
+            background-color: yellow;
+            border-width: 3px;
+            border-style: dotted;
+            border-color: red;
+            border-radius: 50%;
+        }
+        .label {
+            width: 120px;
+            height: 30px;
+            opacity: 0.8;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: -50px;
+            color: white;
+            background-color: #000000bb;
+            border-radius: 5px;
+            /* border: 1px solid white; */
+            border: 1px solid rgba(127,255,255,0.25);
+            box-shadow: 0px 0px 3px rgba(0,255,255,0.5);
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+            padding-top: 8px;
+        }
+        .label:hover {
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+            border: 1px solid rgba(127,255,255,0.75);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="viewerContainer">
+        <div id="myCanvas" class="my-renderer-container"></div>
+        <div id="myCanvas2" class="my-renderer-container canvas2"></div>
+    </div>
+    <script type="module">
+        import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const viewpoints = [{
+            panoramas: [{
+                id: "panorama_1",
+                images: "./demo/images/vr/vr_5/panorama1.jpg",
+            }],
+            id: "viewpoint_1",
+            name: "客厅",
+            position: [0, 1, 0],
+            initialDirection: [-1, 0, 0],
+            hotpoints: [{
+                hotpointId: "hotpoint_1",
+                anchorPosition: [-9.78, -0.98, -0.65],
+                html: `<div class="hotpoint">
+                        <div class="dot"></div>
+                        <div class="label">沙发价格：2980¥</div>
+                    </div>`,
+            }],
+        }];
+        const viewpoints2 = [{
+            panoramas: [{
+                id: "panorama_1",
+                images: "./demo/images/vr/vr_5/panorama2.jpg",
+            }],
+            id: "viewpoint_1",
+            name: "客厅",
+            position: [0, 1, 0],
+            initialDirection: [-1, 0, 0],
+        }];
+
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableBottomBar: true,
+        }
+        const config2 = {
+            containerId: "myCanvas2",
+            enableAxisGizmo: true,
+            enableBottomBar: true,
+        }
+        const viewer = new VRViewer(config);
+        const viewer2 = new VRViewer(config2);
+        viewer.onHotpointClicked = (hotpoint) => {
+            if (hotpoint.anchorPosition) {
+                viewer.lookToPosition(hotpoint.anchorPosition);
+            }
+        };
+
+        // TODOs
+        // 1) Needs to refine these events
+        // 2) The two canvas cause recursive events now, need to fix it
+        viewer.controls.addEventListener("change", (e) => {
+            const posAndDir = viewer.getCameraPositionAndDirection();
+            viewer2.setCameraPositionAndDirection(posAndDir.position, posAndDir.direction, false);
+        });
+        // viewer2.controls.addEventListener("change", (e) => {
+        //     const posAndDir = viewer2.getCameraPositionAndDirection();
+        //     viewer.setCameraPositionAndDirection(posAndDir.position, posAndDir.direction);
+        // });
+
+        viewer.setViewpoints(viewpoints);
+        viewer.activatePanoramaById(viewpoints[0].id, viewpoints[0].panoramas[0].id);
+        viewer2.setViewpoints(viewpoints2);
+        viewer2.activatePanoramaById(viewpoints2[0].id, viewpoints2[0].panoramas[0].id);
+    </script>
+</body>
+
+</html>

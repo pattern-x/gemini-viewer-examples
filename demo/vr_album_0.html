@@ -1,0 +1,292 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <style>
+        .viewpoint {
+            opacity: 0.8;
+            cursor: pointer;
+            top: 0px;
+            left: 0px;
+        }
+        .viewpoint-label {
+            opacity: 0.9;
+            cursor: pointer;
+            position: absolute;
+            left: -30;
+            color: white;
+            background-color: #000000bb;
+            border-radius: 13px;
+            /* border: 1px solid white; */
+            text-align: center;
+            vertical-align: middle;
+            font-size: 25px;
+            padding: 6px 10px;
+            white-space: nowrap;
+        }
+        .viewpoint-arrow {
+            width: 64px;
+            height: 64px;
+            opacity: 0.9;
+            cursor: pointer;
+            position: absolute;
+            top: 12px;
+            left: -36px;
+            background-image: url('./demo/images/arrow.png');
+            background-position: calc(100%) calc(100% - 128px);
+            background-size: cover;
+            transform: scale(1.2);
+        }
+        .viewpoint-arrow-left {
+            width: 64px;
+            height: 64px;
+            opacity: 0.9;
+            cursor: pointer;
+            position: absolute;
+            top: 12px;
+            left: -36px;
+            background-image: url('./demo/images/arrow_left.png');
+            background-position: calc(100%) calc(100% - 128px);
+            background-size: cover;;
+            transform: scale(1.2);
+        }
+        .viewpoint-arrow-right {
+            width: 64px;
+            height: 64px;
+            opacity: 0.9;
+            cursor: pointer;
+            position: absolute;
+            top: 12px;
+            left: -36px;
+            background-image: url('./demo/images/arrow_right.png');
+            background-position: calc(100%) calc(100% - 128px);
+            background-size: cover;;
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="viewerContainer">
+        <div id="myCanvas" class="renderer-container"></div>
+    </div>
+    <script type="module">
+        import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const viewpoints = [{
+            panoramas: [{
+                id: "panorama_1",
+                images: [
+                    "./demo/images/vr/album_0/客厅/right.jpg",
+                    "./demo/images/vr/album_0/客厅/left.jpg",
+                    "./demo/images/vr/album_0/客厅/top.jpg",
+                    "./demo/images/vr/album_0/客厅/bottom.jpg",
+                    "./demo/images/vr/album_0/客厅/front.jpg",
+                    "./demo/images/vr/album_0/客厅/back.jpg",
+                ],
+                thumbnails: [],
+            }],
+            id: "viewpoint_1",
+            name: "客厅",
+            position: [0, 1, 0],
+            initialDirection: [0, 0, -1],
+            hotpoints: [{
+                targetViewpointId: "viewpoint_2",
+                hotpointId: "hotpoint_11",
+                anchorPosition: [1.11, -1.19, -10.00],
+                html: "",
+            }, {
+                targetViewpointId: "viewpoint_4",
+                hotpointId: "hotpoint_12",
+                anchorPosition: [4.17, 1.56, -10.00],
+                html: "",
+                arrowClass: "viewpoint-arrow-right",
+            }],
+        }, {
+            panoramas: [{
+                id: "panorama_2",
+                images: [
+                    "./demo/images/vr/album_0/客餐厅/right.jpg",
+                    "./demo/images/vr/album_0/客餐厅/left.jpg",
+                    "./demo/images/vr/album_0/客餐厅/top.jpg",
+                    "./demo/images/vr/album_0/客餐厅/bottom.jpg",
+                    "./demo/images/vr/album_0/客餐厅/front.jpg",
+                    "./demo/images/vr/album_0/客餐厅/back.jpg",
+                ],
+                thumbnails: [],
+            }],
+            id: "viewpoint_2",
+            name: "客餐厅",
+            position: [0, 1, -3],
+            initialDirection: [0, 0, -1],
+            hotpoints: [{
+                targetViewpointId: "viewpoint_1",
+                hotpointId: "hotpoint_21",
+                anchorPosition: [-5.59, -3.36, 10.00],
+                html: "",
+            }, {
+                targetViewpointId: "viewpoint_3",
+                hotpointId: "hotpoint_22",
+                anchorPosition: [-1.75, -0.46, -10.00],
+                html: "",
+            }, {
+                targetViewpointId: "viewpoint_4",
+                hotpointId: "hotpoint_23",
+                anchorPosition: [4.26, 1.53, -13.00],
+                html: "",
+                arrowClass: "viewpoint-arrow-right",
+            }, {
+                targetViewpointId: "viewpoint_5",
+                hotpointId: "hotpoint_24",
+                anchorPosition: [-10.00, 0.5, -11.52],
+                html: "",
+                arrowClass: "viewpoint-arrow-left",
+            }],
+        }, {
+            panoramas: [{
+                id: "panorama_3",
+                images: [
+                    "./demo/images/vr/album_0/餐厅/right.jpg",
+                    "./demo/images/vr/album_0/餐厅/left.jpg",
+                    "./demo/images/vr/album_0/餐厅/top.jpg",
+                    "./demo/images/vr/album_0/餐厅/bottom.jpg",
+                    "./demo/images/vr/album_0/餐厅/front.jpg",
+                    "./demo/images/vr/album_0/餐厅/back.jpg",
+                ],
+                thumbnails: [],
+            }],
+            id: "viewpoint_3",
+            name: "餐厅",
+            position: [0, 1, -6],
+            initialDirection: [0, 0, -1],
+            hotpoints: [{
+                targetViewpointId: "viewpoint_4",
+                hotpointId: "hotpoint_1",
+                anchorPosition: [10.00, 0.21, -3.56],
+                html: "",
+            }, {
+                targetViewpointId: "viewpoint_5",
+                hotpointId: "hotpoint_2",
+                anchorPosition: [-10.00, 0.0, -6.05],
+                html: "",
+                arrowClass: "viewpoint-arrow-left",
+            }],
+        }, {
+            panoramas: [{
+                id: "panorama_4",
+                images: [
+                    "./demo/images/vr/album_0/主卧/right.jpg",
+                    "./demo/images/vr/album_0/主卧/left.jpg",
+                    "./demo/images/vr/album_0/主卧/top.jpg",
+                    "./demo/images/vr/album_0/主卧/bottom.jpg",
+                    "./demo/images/vr/album_0/主卧/front.jpg",
+                    "./demo/images/vr/album_0/主卧/back.jpg",
+                ],
+                thumbnails: [],
+            }],
+            id: "viewpoint_4",
+            name: "主卧",
+            position: [5, 1, 1],
+            initialDirection: [0, 0, -1],
+            hotpoints: [{
+                targetViewpointId: "viewpoint_1",
+                hotpointId: "hotpoint_1",
+                anchorPosition: [1.82, 0.47, -10.00],
+                html: "",
+                arrowClass: "viewpoint-arrow-left",
+            }],
+        }, {
+            panoramas: [{
+                id: "panorama_5",
+                images: [
+                    "./demo/images/vr/album_0/小孩房/right.jpg",
+                    "./demo/images/vr/album_0/小孩房/left.jpg",
+                    "./demo/images/vr/album_0/小孩房/top.jpg",
+                    "./demo/images/vr/album_0/小孩房/bottom.jpg",
+                    "./demo/images/vr/album_0/小孩房/front.jpg",
+                    "./demo/images/vr/album_0/小孩房/back.jpg",
+                ],
+                thumbnails: [],
+            }],
+            id: "viewpoint_5",
+            name: "小孩房",
+            position: [-3, 1, 0],
+            initialDirection: [-1, 0, 0],
+            hotpoints: [{
+                targetViewpointId: "viewpoint_2",
+                hotpointId: "hotpoint_1",
+                anchorPosition: [-3.51, -0.43, -10.00],
+                html: "",
+            }],
+        }];
+        const hotpoints = [];
+        viewpoints.forEach(viewpoint => {
+            viewpoint.hotpoints.forEach(hotpoint => {
+                if (!hotpoint.html) {
+                    if (hotpoint.targetViewpointId) {
+                        const linkedViewpoint = viewpoints.find(vp => vp.id === hotpoint.targetViewpointId);
+                        hotpoint.html = `
+                            <div class="viewpoint">
+                                <div class="viewpoint-label">${linkedViewpoint.name}</div>
+                                <div class=${hotpoint.arrowClass || "viewpoint-arrow"}></div>
+                            </div>`;
+                    } else {
+                        const linkedHotpoint = hotpoints.find(hp => hp.hotpointId === hotpoint.hotpointId);
+                        hotpoint.html = (linkedHotpoint && linkedHotpoint.html) || "";
+                    }
+                }
+            });
+        });
+
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableBottomBar: true,
+        }
+        const viewer = new VRViewer(config);
+        viewer.onHotpointClicked = (hotpoint) => {
+            // there can be a better way to distinguish if a hotpoint is a viewpoint!
+            if (hotpoint.targetViewpointId) {
+                const viewpoint = viewpoints.find((vp) => vp.id === hotpoint.targetViewpointId);
+                const panoramaId = viewpoint.panoramas[0].id;
+                // If it's gonna adjust camera direction by viewpoint's initialDirection when switching viewpoints.
+                // Set it to false in case we want to keep camera direction unchanged.
+                // Switching between panoramas of the same viewpoint won't trigger camera direction reset.
+                const setCameraToInitialDirection = true;
+                viewer.activatePanoramaById(hotpoint.targetViewpointId, panoramaId, setCameraToInitialDirection, (viewpoint) => {
+                    console.log(`[Demo] Swithced to viewpoint '${viewpoint.name}', panorama '${panoramaId}'`);
+                });
+            } else {
+                viewer.lookToPosition(hotpoint.anchorPosition);
+            }
+        }
+        viewer.setViewpoints(viewpoints);
+        viewer.activatePanoramaById(viewpoints[0].id, viewpoints[0].panoramas[0].id);
+
+        // Implement animation for the arrow. The arrow.png is made by 25 sub images,
+        // with 128x128 size. We'll play 25 images in several seconds
+        const width = 128;
+        const numPictures = 25;
+        let currPictureIdx = 0;
+        setInterval(() => {
+            const arrowDivs = [];
+            ["viewpoint-arrow", "viewpoint-arrow-left", "viewpoint-arrow-right"].forEach(cls => {
+                arrowDivs.push(...document.getElementsByClassName(cls));
+            });
+            for (let i = 0; i < arrowDivs.length; ++i) {
+                arrowDivs[i].style.backgroundPosition = `calc(100%) calc(100% - ${width * currPictureIdx}px)`;
+            }
+            currPictureIdx = (currPictureIdx + 1) % numPictures;
+        }, 2000 / numPictures);
+
+        window.addEventListener("keydown", (e) => {
+            // press "F1" to unlimit controls and show all assets
+            if (e.code === "Digit1") {
+                viewer.unlimitControlsAndShowAssets();
+            }
+        });
+    </script>
+</body>
+
+</html>
