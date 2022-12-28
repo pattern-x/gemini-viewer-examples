@@ -23,7 +23,7 @@ input[type="color"] {
 .popup-container {
     position: absolute;
     top: 76px;
-    left: calc(5%);
+    right: 10px;
     width: 330px;
     height: 600px;
     max-height: 90%; /* fix the issue when canvas's height is less than 600px */

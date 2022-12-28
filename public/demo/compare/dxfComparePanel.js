@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-export default class CompareSidePanel {
+export default class DxfComparePanel {
     compareDetail;
     container;
     viewer;
@@ -29,13 +29,16 @@ export default class CompareSidePanel {
         panelContainer.appendChild(compareDetail);
         this.compareDetail = compareDetail;
 
-        const changes = this.viewer.changes;
+        const changes = this.viewer.getCompareChanges();
+        if (!changes) {
+            return;
+        }
         const changesValues = Object.values(changes);
 
         header.innerHTML = `差异列表(${changesValues.length})`;
 
         const addedChangesValues = changesValues.filter((val) => val.type === "Added");
-        const deletedChangeValues = changesValues.filter((val) => val.type === "Deleted");
+        const deletedChangeValues = changesValues.filter((val) => val.type === "Removed");
         const modifiedChanageValues = changesValues.filter((val) => val.type === "Modified");
 
         if (addedChangesValues.length > 0) {
@@ -62,7 +65,7 @@ export default class CompareSidePanel {
 
         let listFragment = "";
         changesValues.forEach((val) => {
-            listFragment += `<li class="list-item">${val.handle}</li>`;
+            listFragment += `<li data-id=${val.id} class="list-item">${val.handle}</li>`;
         });
         listEle.innerHTML = listFragment;
     }
@@ -94,8 +97,15 @@ export default class CompareSidePanel {
         const lists = document.querySelectorAll(".list");
         lists.forEach((list) => {
             list.addEventListener("click", (e) => {
-                this.viewer.zoomToCompareChange(e.target.innerHTML);
+                if (e.target.tagName.toUpperCase() === "LI" && e.target.dataset.id) {
+                    this.viewer.zoomToCompareChange(e.target.dataset.id);
+                }
             });
         });
+    }
+
+    destroy() {
+        this.container.remove();
+        this.container = undefined;
     }
 }
