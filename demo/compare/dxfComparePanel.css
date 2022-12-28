@@ -9,7 +9,7 @@ b {
 .compare-panel-container {
     position: absolute;
     top: 80px;
-    right: 0;
+    right: 10px;
     width: 160px;
     height: auto;
     min-height: 200px;

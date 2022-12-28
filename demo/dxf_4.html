@@ -4,7 +4,7 @@
     <link rel="icon" href="./demo/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="./demo/global.css" />
     <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css" />
-    <link rel="stylesheet" href="./demo/compare/compareSidePanel.css" />
+    <link rel="stylesheet" href="./demo/compare/dxfComparePanel.css" />
     <link rel="stylesheet" href="./demo/layerManager/layerManager.css" />
     <link rel="stylesheet" href="./demo/settings/SettingsPanel.css" />
     <style>
@@ -63,14 +63,14 @@
     </div>
     <script type="module">
         import { DxfViewer } from "./demo/libs/gemini-viewer.esm.min.js";
-        import DxfCompareSidePanel from "./demo/compare/compareSidePanel.js"
+        import DxfComparePanel from "./demo/compare/dxfComparePanel.js"
         import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
         import LayerManager from "./demo/layerManager/LayerManager.js";
 
-        const url1 = "./demo/models/dxf/dxf_3.dxf";
-        const url2 = "./demo/models/dxf/dxf_3_1.dxf";
-        const modelConfig1 = { modelId: "dxf_3", name: "dxf 1", src: url1, ignorePaperSpace: true };
-        const modelConfig2 = { modelId: "dxf_3_1", name: "dxf 2", src: url2, ignorePaperSpace: true };
+        const url1 = "./demo/models/dxf/doors_and_windows.dxf";
+        const url2 = "./demo/models/dxf/doors_and_windows_mopdified.dxf";
+        const modelConfig1 = { modelId: "doors_and_windows", name: "dxf 1", src: url1, ignorePaperSpace: true };
+        const modelConfig2 = { modelId: "doors_and_windows_mopdified", name: "dxf 2", src: url2, ignorePaperSpace: true };
         const config = {
             containerId: "myCanvas3",
             enableAxisGizmo: true,
@@ -98,8 +98,8 @@
             if (!viewer3.layerManager) {
                 viewer3.layerManager = new LayerManager(viewer3);
             }
-            if (!viewer3.dxfCompareSidePanel) {
-                viewer3.dxfCompareSidePanel = new DxfCompareSidePanel(viewer3);
+            if (!viewer3.dxfComparePanel) {
+                viewer3.dxfComparePanel = new DxfComparePanel(viewer3);
             }
         });
 
