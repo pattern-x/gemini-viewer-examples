@@ -18,6 +18,12 @@
 
 .examples .menu.open {
     left: 0;
+    opacity: 0.9;
+}
+
+.examples .menu.open:hover {
+    left: 0;
+    opacity: 1;
 }
 
 .examples .index-button {
