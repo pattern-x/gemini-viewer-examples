@@ -60,6 +60,7 @@ viewer.goToHomeView();
 ## Features for BimViewer
 - Load and view BIM model
 ![bim_view_model.png](public/demo/images/snapshots/bim_view_model.png)
+- Orthographic view
 ![bim_ortho_camera.png](public/demo/images/snapshots/bim_ortho_camera.png)
 - Selection
 ![bim_selection.gif](public/demo/images/snapshots/bim_selection.gif)
