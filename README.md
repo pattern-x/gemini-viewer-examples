@@ -57,6 +57,19 @@ console.log("Loaded");
 viewer.goToHomeView();
 ```
 
+## Features for BimViewer
+- Load and view BIM model
+![bim_view_model.png](public/demo/images/snapshots/bim_view_model.png)
+![bim_ortho_camera.png](public/demo/images/snapshots/bim_ortho_camera.png)
+- Selection
+![bim_selection.gif](public/demo/images/snapshots/bim_selection.gif)
+- X-Ray
+![bim_xray.gif](public/demo/images/snapshots/bim_xray.gif)
+- Distance measurement
+![bim_dist_measure.gif](public/demo/images/snapshots/bim_dist_measure.gif)
+- Section
+![bim_section_plane.png](public/demo/images/snapshots/bim_section_plane.png)
+
 ## Features for DxfViewer
 - Load and view dxf file
 ![load_and_view.gif](public/demo/images/snapshots/load_and_view.gif)
