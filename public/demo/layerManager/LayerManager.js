@@ -18,7 +18,7 @@ export default class LayerManager {
 
     init(viewer, container) {
         this.viewer = viewer;
-        this.container = container;
+        this.container = viewer.viewerContainer;
         this.layers = this.viewer.getLayers();
         this.buildPage();
         this.addContent();
@@ -47,12 +47,12 @@ export default class LayerManager {
     destroy() {
         this.closeBtn?.removeEventListener("click", this.hide);
 
-        this.checkboxes?.forEach((checkbox) => {
+        this.checkboxes?.forEach((checkbox, i) => {
             checkbox.removeEventListener("change", () => {
-                this.checkboxHandler(checkbox);
+                this.checkboxHandler(checkbox, i);
             });
         });
-        document.body.removeChild(this.listContainer);
+        this.listContainer.remove();
     }
 
     buildPage() {
@@ -86,6 +86,7 @@ export default class LayerManager {
             <span class="popup-layer-name">图层名称</span>
         </div>
         `;
+
         const bAppendModelId = this.layers.length > 1;
         for (let i = 0; i < this.layers.length; ++i) {
             const layers = this.layers[i].layers;
@@ -106,15 +107,15 @@ export default class LayerManager {
         }
 
         // add checkboxes events
-        const checkboxEles = document.querySelectorAll("input[type=checkbox]");
+        const checkboxEles = this.listContainer.querySelectorAll("input[type=checkbox]");
         this.checkboxes = [].slice.call(checkboxEles, 0);
-        const colorInputsEles = document.querySelectorAll("input[type=color]");
+        const colorInputsEles = this.listContainer.querySelectorAll("input[type=color]");
         this.colorInputs = [].slice.call(colorInputsEles, 0);
 
         // input[type=checkbox]
-        this.checkboxes.forEach((checkbox) => {
+        this.checkboxes.forEach((checkbox, i) => {
             checkbox.addEventListener("change", () => {
-                this.checkboxHandler(checkbox);
+                this.checkboxHandler(checkbox, i);
             });
         });
     }
@@ -134,21 +135,22 @@ export default class LayerManager {
     addEventHandlers() {
         this.closeBtn?.addEventListener("click", this.hide.bind(this));
 
-        const layersBtn = document.querySelector("#Layers");
-        layersBtn && layersBtn.addEventListener("click", () => {
-            if (layersBtn.classList.contains("active")) {
-                if (!this.viewer.layerManager) {
-                    this.viewer.layerManager = new LayerManager(this.viewer);
-                } else {
-                    this.viewer.layerManager.show();
-                }
-            } else {
-                this.hide();
-            }
-        });
+        // const layersBtn = document.querySelector("#Layers");
+        // layersBtn &&
+        //     layersBtn.addEventListener("click", () => {
+        //         if (layersBtn.classList.contains("active")) {
+        //             if (!this.viewer.layerManager) {
+        //                 this.viewer.layerManager = new LayerManager(this.viewer);
+        //             } else {
+        //                 this.viewer.layerManager.show();
+        //             }
+        //         } else {
+        //             this.hide();
+        //         }
+        //     });
     }
 
-    checkboxHandler(checkbox) {
+    checkboxHandler(checkbox, index) {
         if (checkbox.id === "toggleAllLayers") {
             for (let i = 0; i < this.layers.length; ++i) {
                 const modelId = this.layers[i].modelId;
@@ -164,6 +166,11 @@ export default class LayerManager {
 
         let modelId = "";
         let layerName = checkbox.value;
+        let layerHandle = undefined;
+        if (index === this.checkboxes.length - 1) {
+            layerHandle = Object.values(this.layers.at(-1).layers)[0].handle;
+        }
+
         const idx = layerName.indexOf(">");
         if (idx !== -1) {
             modelId = layerName.slice(1, idx);

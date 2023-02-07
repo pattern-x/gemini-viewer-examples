@@ -12,7 +12,7 @@ export default class DxfSettingsPanel {
 
     init(viewer, parentContainer) {
         this.viewer = viewer;
-        this.parentContainer = parentContainer;
+        this.parentContainer = viewer.viewerContainer;
         this.buildPage();
         this.addEventHandlers();
     }
@@ -43,7 +43,7 @@ export default class DxfSettingsPanel {
                 this.checkboxHandler(checkbox, i);
             });
         });
-        document.body.removeChild(this.panel);
+        this.panel.remove();
     }
 
     buildPage() {
@@ -104,18 +104,18 @@ export default class DxfSettingsPanel {
             // };
         });
 
-        const settingsToolbarBtn = document.querySelector("#Settings");
-        settingsToolbarBtn && settingsToolbarBtn.addEventListener("click", () => {
-            if (settingsToolbarBtn.classList.contains("active")) {
-                if (!window.dxfSettingsPanel) {
-                    window.dxfSettingsPanel = new DxfSettingsPanel(this.viewer);
-                } else {
-                    window.dxfSettingsPanel.show();
-                }
-            } else {
-                this.hide();
-            }
-        });
+        // const settingsToolbarBtn = document.querySelector("#Settings");
+        // settingsToolbarBtn && settingsToolbarBtn.addEventListener("click", () => {
+        //     if (settingsToolbarBtn.classList.contains("active")) {
+        //         if (!window.dxfSettingsPanel) {
+        //             window.dxfSettingsPanel = new DxfSettingsPanel(this.viewer);
+        //         } else {
+        //             window.dxfSettingsPanel.show();
+        //         }
+        //     } else {
+        //         this.hide();
+        //     }
+        // });
     }
 
     // convert "#rrggbb" to { r, g, b }
