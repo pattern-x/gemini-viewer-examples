@@ -62,7 +62,7 @@
         <div id="myCanvas3" class="container"></div>
     </div>
     <script type="module">
-        import { DxfViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+        import { DxfViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
         import DxfComparePanel from "./demo/compare/dxfComparePanel.js"
         import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
         import LayerManager from "./demo/layerManager/LayerManager.js";
@@ -78,6 +78,40 @@
             enableSpinner: true,
             enableProgressBar: true,
             enableLayoutBar: true,
+            toolbarMenuConfig: {
+                [ToolbarMenuId.Settings]: {
+                    onActive: () => {
+                        console.log("[Toolbar]", "Activate Settings");
+                        if (!window.dxfSettingsPanel) {
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                        }
+                        window.dxfSettingsPanel.show();
+                    },
+                    onDeactive: () => {
+                        console.log("[Toolbar]", "Deactivate Settings");
+                        if (!window.dxfSettingsPanel) {
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                        }
+                        window.dxfSettingsPanel.hide();
+                    },
+                },
+                [ToolbarMenuId.Layers]: {
+                    onActive: () => {
+                        console.log("[Toolbar]", "Activate Layers");
+                        if (!window.layerManager) {
+                            window.layerManager = new LayerManager(window.viewer);
+                        }
+                        window.layerManager.show();
+                    },
+                    onDeactive: () => {
+                        console.log("[Toolbar]", "Deactivate Layers");
+                        if (!window.layerManager) {
+                            window.layerManager = new LayerManager(window.viewer);
+                        }
+                        window.layerManager.hide();
+                    },
+                },
+            },
         };
         const viewer1 = new DxfViewer({ containerId: "myCanvas1"});
         const viewer2 = new DxfViewer({ containerId: "myCanvas2"});
@@ -87,6 +121,8 @@
         await viewer2.setFont(fontFiles);
         await viewer3.setFont(fontFiles);
 
+        window.viewer = viewer3;
+
         const onProgress = (event) => {
             const progress = ((event.loaded * 100) / event.total).toFixed(1);
             console.log(`[Demo] Loading progress: ${progress}%`);
@@ -95,16 +131,11 @@
         await viewer2.loadModelAsync(modelConfig2, onProgress);
         await viewer3.compare(modelConfig1, modelConfig2, onProgress).then(() => {
             console.log(`[Demo] Compared models: ${url1}, ${url2}`);
-            if (!viewer3.layerManager) {
-                viewer3.layerManager = new LayerManager(viewer3);
-            }
-            if (!viewer3.dxfComparePanel) {
-                viewer3.dxfComparePanel = new DxfComparePanel(viewer3);
+            if (!viewer.dxfComparePanel) {
+                viewer.dxfComparePanel = new DxfComparePanel(viewer);
             }
         });
 
-        // as a demo page, add dxfSettingsPanel to window!
-        window.dxfSettingsPanel = new DxfSettingsPanel(viewer3);
     </script>
 </body>
 

@@ -1,0 +1,33 @@
+import * as THREE from "three";
+import { Raycaster, Scene, WebGLRenderer } from "three";
+import { BasePlaneSection } from "./BasePlaneSection";
+import { PickSectionPopPanel } from "../../components/pop-panel/PickSectionPopPanel";
+import { Tooltip } from "../../components/tool-tip/Tooltip";
+import { OrbitControls } from "../controls/OrbitControls";
+import type { BaseViewer } from "../viewers/BaseViewer";
+export declare class PickPlaneSection {
+    private readonly container?;
+    protected viewer: BaseViewer;
+    protected camera: THREE.Camera;
+    protected controls: OrbitControls;
+    protected scene: Scene;
+    protected renderer: WebGLRenderer;
+    protected objectIds: number[];
+    isShowSectionPlane: boolean;
+    protected sectionPlane?: BasePlaneSection;
+    protected popPanel?: PickSectionPopPanel;
+    protected tooltip?: Tooltip;
+    protected isSelected: boolean;
+    protected raycaster: Raycaster;
+    constructor(viewer: BaseViewer, objectIds: number[], container?: HTMLElement | undefined);
+    protected updateMouseAndRay(event: MouseEvent): void;
+    protected pickFace(evt: MouseEvent): boolean;
+    init(): void;
+    protected clickOnceListerner: (event: MouseEvent) => void;
+    open(): void;
+    close(): void;
+    enableSection(): void;
+    cancelSection(): void;
+    hideSectionPlane(): void;
+    showSectionPlane(): void;
+}
