@@ -28,9 +28,38 @@
             height: 30px;
             cursor: pointer;
             padding: 2px;
+            border: 1px solid cornflowerblue;
+        }
+        .markup-toolbar-btn:hover {
+            border: 1px solid peru;
         }
         .btn-active {
             background-color: cornflowerblue;
+        }
+        .markup-manager {
+            width: 400px;
+            height: 400px;
+            right: 20px;
+            top: 60px;
+            position: absolute;
+            background: white;
+        }
+        .markup-manager-text {
+            width: 398px;
+            height: calc(100% - 40px);
+            font-size: 10px;
+            background-color: #eeeeee;
+            position: absolute;
+            margin: 1px;
+        }
+        .markup-manager-bottom {
+            position: absolute;
+            width: 100%;
+            bottom: 3px;
+            margin-left: 5px;
+        }
+        .hide {
+            display: none;
         }
     </style>
 </head>
@@ -44,6 +73,14 @@
             <button id="CircleMarkup" class="markup-toolbar-btn">Circle</button>
             <button id="DotMarkup" class="markup-toolbar-btn">Dot</button>
             <button id="ClearMarkups" class="markup-toolbar-btn" title="Clear all markups">Clear</button>
+            <button id="ManageMarkups" class="markup-toolbar-btn" title="View and manage markup data">View data</button>
+        </div>
+        <div class="markup-manager hide">
+            <textarea id="MarkupData" class="markup-manager-text"></textarea>
+            <div class="markup-manager-bottom">
+                <button id="GetMarkupData" class="markup-toolbar-btn">Get markup data</button>
+                <button id="SetMarkupData" class="markup-toolbar-btn">Set markup data</button>
+            </div>
         </div>
     </div>
     <script type="module">
@@ -112,6 +149,17 @@
         console.log(`[Demo] Loaded model ${modelCfg.src}`);
 
         const markupButtonClicked = (markupType, btn) => {
+            if (markupType === "ManageMarkups") {
+                const mgr = document.getElementsByClassName("markup-manager")[0];
+                if (mgr.classList.contains("hide")) {
+                    mgr.classList.remove("hide");
+                    btn.classList.add("btn-active");
+                } else {
+                    mgr.classList.add("hide");
+                    btn.classList.remove("btn-active");
+                }
+                return;
+            }
             // deactive current markup
             const activeMarkupType = viewer.getActiveMarkupType();
             if (activeMarkupType) {
@@ -139,12 +187,38 @@
         registerClickEvent("CircleMarkup");
         registerClickEvent("DotMarkup");
         registerClickEvent("ClearMarkups");
+        registerClickEvent("ManageMarkups");
 
         viewer.addEventListener(ViewerEvent.MarkupClicked, (data) => {
             if (data.markup) {
                 console.log("[Demo] Clicked on markup:", data);
             }
         });
+
+        const getMarkupDataBtn = document.getElementById("GetMarkupData");
+        const setMarkupDataBtn = document.getElementById("SetMarkupData");
+        const markupDataTxt = document.getElementById("MarkupData");
+        getMarkupDataBtn.onclick = () => {
+            const markups = viewer.getMarkups();
+            // format the data a bit, so it looks better
+            let val = "[";
+            for (let i = 0; i < markups.length; ++i) {
+                val += i > 0 ? ",\n" : "\n";
+                val += JSON.stringify(markups[i]);
+            }
+            val += "\n]";
+            markupDataTxt.value = val;
+            console.log(val);
+        };
+        setMarkupDataBtn.onclick = () => {
+            try {
+                const val = JSON.parse(markupDataTxt.value);
+                console.log(val);
+                viewer.setMarkups(val);
+            } catch (ex) {
+                console.warn(ex);
+            }
+        };
     </script>
 </body>
 
