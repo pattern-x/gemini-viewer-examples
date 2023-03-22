@@ -230,7 +230,7 @@
                 // update markups one by one
                 for (let i = 0; i < markups.length; ++i) {
                     const ret = viewer.updateMarkup(markups[i]);
-                    const str = `[Demo] ${ret ? "Updated" : "Failed to"} markup with id: ${markups[i].id}`;
+                    const str = `[Demo] ${ret ? "Updated" : "Failed to update"} markup with id: ${markups[i].id}`;
                     console.log(str);
                 }
             } catch (ex) {
@@ -244,7 +244,7 @@
                 // remove markups one by one
                 for (let i = 0; i < markups.length; ++i) {
                     const ret = viewer.removeMarkup(markups[i].id);
-                    const str = `[Demo] ${ret ? "Updated" : "Failed to"} markup with id: ${markups[i].id}`;
+                    const str = `[Demo] ${ret ? "Removed" : "Failed to remove"} markup with id: ${markups[i].id}`;
                     console.log(str);
                 }
             } catch (ex) {
