@@ -78,8 +78,10 @@
         <div class="markup-manager hide">
             <textarea id="MarkupData" class="markup-manager-text"></textarea>
             <div class="markup-manager-bottom">
-                <button id="GetMarkupData" class="markup-toolbar-btn">Get markup data</button>
-                <button id="SetMarkupData" class="markup-toolbar-btn">Set markup data</button>
+                <button id="GetMarkupData" class="markup-toolbar-btn" title="Get all markups">Get</button>
+                <button id="SetMarkupData" class="markup-toolbar-btn" title="Reset markups">Set</button>
+                <button id="UpdateMarkupData" class="markup-toolbar-btn" title="Update one or more markups">Update</button>
+                <button id="RemoveMarkupData" class="markup-toolbar-btn" title="Remove one or more markups">Remove</button>
             </div>
         </div>
     </div>
@@ -197,6 +199,8 @@
 
         const getMarkupDataBtn = document.getElementById("GetMarkupData");
         const setMarkupDataBtn = document.getElementById("SetMarkupData");
+        const updateMarkupDataBtn = document.getElementById("UpdateMarkupData");
+        const removeMarkupDataBtn = document.getElementById("RemoveMarkupData");
         const markupDataTxt = document.getElementById("MarkupData");
         getMarkupDataBtn.onclick = () => {
             const markups = viewer.getMarkups();
@@ -212,9 +216,37 @@
         };
         setMarkupDataBtn.onclick = () => {
             try {
-                const val = JSON.parse(markupDataTxt.value);
-                console.log(val);
-                viewer.setMarkups(val);
+                const markups = JSON.parse(markupDataTxt.value);
+                console.log(markups);
+                viewer.setMarkups(markups);
+            } catch (ex) {
+                console.warn(ex);
+            }
+        };
+        updateMarkupDataBtn.onclick = () => {
+            try {
+                const markups = JSON.parse(markupDataTxt.value);
+                console.log(markups);
+                // update markups one by one
+                for (let i = 0; i < markups.length; ++i) {
+                    const ret = viewer.updateMarkup(markups[i]);
+                    const str = `[Demo] ${ret ? "Updated" : "Failed to update"} markup with id: ${markups[i].id}`;
+                    console.log(str);
+                }
+            } catch (ex) {
+                console.warn(ex);
+            }
+        };
+        removeMarkupDataBtn.onclick = () => {
+            try {
+                const markups = JSON.parse(markupDataTxt.value);
+                console.log(markups);
+                // remove markups one by one
+                for (let i = 0; i < markups.length; ++i) {
+                    const ret = viewer.removeMarkup(markups[i].id);
+                    const str = `[Demo] ${ret ? "Removed" : "Failed to remove"} markup with id: ${markups[i].id}`;
+                    console.log(str);
+                }
             } catch (ex) {
                 console.warn(ex);
             }
