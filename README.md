@@ -59,7 +59,7 @@ viewer.goToHomeView();
 
 ## Features for BimViewer
 - Load and view BIM model
-![bim_view_model.png](public/demo/images/snapshots/bim_view_model.png)
+![load_and_view.gif](public/demo/images/snapshots/load_and_view.gif)
 - Orthographic view
 ![bim_ortho_camera.png](public/demo/images/snapshots/bim_ortho_camera.png)
 - Selection
@@ -83,3 +83,9 @@ viewer.goToHomeView();
 - Markups
 ![markups.gif](public/demo/images/snapshots/markups.gif)
 - Undo/redo
+
+## How to integrate DxfViewer into your system
+- Physical structure diagram:
+![physical_structure.png](public/demo/images/physical_structure.png)
+- Logical structure diagram:
+![logical_structure.png](public/demo/images/logical_structure.png)
