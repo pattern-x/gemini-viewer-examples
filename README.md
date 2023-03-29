@@ -82,7 +82,7 @@ viewer.goToHomeView();
 - Angle measurement
 - Markups
 ![markups.gif](public/demo/images/snapshots/markups.gif)
-- Comparision
+- Comparison
 ![markups.gif](public/demo/images/snapshots/dxf_compare.png)
 - Undo/redo
 
