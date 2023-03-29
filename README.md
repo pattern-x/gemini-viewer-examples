@@ -59,7 +59,7 @@ viewer.goToHomeView();
 
 ## Features for BimViewer
 - Load and view BIM model
-![load_and_view.gif](public/demo/images/snapshots/load_and_view.gif)
+![load_and_view.gif](public/demo/images/snapshots/bim_view_model.png)
 - Orthographic view
 ![bim_ortho_camera.png](public/demo/images/snapshots/bim_ortho_camera.png)
 - Selection
@@ -82,6 +82,8 @@ viewer.goToHomeView();
 - Angle measurement
 - Markups
 ![markups.gif](public/demo/images/snapshots/markups.gif)
+- Comparision
+![markups.gif](public/demo/images/snapshots/dxf_compare.png)
 - Undo/redo
 
 ## How to integrate DxfViewer into your system
