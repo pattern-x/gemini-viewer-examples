@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Box3, Group, LineSegments, Matrix4, Mesh, Plane, Raycaster, Scene, Vector2, Vector3, WebGLRenderer } from "three";
-import { OrbitControls } from "../controls/OrbitControls";
+import { CameraControlsEx } from "../controls/CameraControlsEx";
 import { ObjectPixelSizeHelper } from "../helpers/ObjectPixelSizeHelper";
 declare enum ActionType {
     None = "",
@@ -19,7 +19,7 @@ export declare class BasePlaneSection {
     protected scene: Scene;
     protected camera: THREE.Camera;
     protected renderer: WebGLRenderer;
-    protected controls: OrbitControls;
+    protected controls: CameraControlsEx;
     protected isSectionObjectVisible: boolean;
     protected gizmo: THREE.Group;
     protected objectPixelSizeHelper?: ObjectPixelSizeHelper;
@@ -27,7 +27,7 @@ export declare class BasePlaneSection {
     /**
      * Constructor
      */
-    constructor(scene: Scene, camera: THREE.Camera, renderer: WebGLRenderer, controls: OrbitControls);
+    constructor(scene: Scene, camera: THREE.Camera, renderer: WebGLRenderer, controls: CameraControlsEx);
     /**
      * If plane is not assigned in constructor, then set it here.
      * For now, we only support it to be set once. Otherwise, need to check isOpen status, and initSectionPlane properly.

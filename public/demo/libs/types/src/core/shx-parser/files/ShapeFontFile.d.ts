@@ -1,5 +1,6 @@
-import { FontFile, ShxFontType } from "./FontFile";
 import { BinaryReader } from "../../helpers/BinaryReader";
+import { ShxFontType } from "../Shx.constants";
+import { FontFile } from "./FontFile";
 export declare class ShapeFontFile extends FontFile {
     type: ShxFontType;
     constructor(url: string);

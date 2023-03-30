@@ -1,4 +1,4 @@
-import { DxfViewer } from "../../core/viewers";
+import type { DxfViewer } from "../../core/viewers";
 export declare class DxfLayoutBar {
     protected readonly viewer: DxfViewer;
     private element?;

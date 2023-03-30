@@ -1,6 +1,9 @@
 import * as THREE from "three";
 import { DrawableData } from "./Constants";
-import { Event } from "../utils";
+import { Event } from "../../core/utils";
+/**
+ * @internal
+ */
 export declare abstract class Drawable extends Event {
     protected readonly DEFAULT_LINE_WIDTH = 1;
     protected readonly DEFAULT_STROKE_STYLE = "#000000";

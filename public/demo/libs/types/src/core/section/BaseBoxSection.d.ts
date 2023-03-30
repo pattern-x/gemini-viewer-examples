@@ -1,5 +1,5 @@
 import { Box3, Group, LineSegments, Mesh, OrthographicCamera, PerspectiveCamera, Plane, Raycaster, Scene, Vector2, Vector3, WebGLRenderer } from "three";
-import { OrbitControls } from "../controls/OrbitControls";
+import { CameraControlsEx } from "../controls/CameraControlsEx";
 import { Views } from "../utils/Viewer3DUtils";
 /**
  * Object's box section
@@ -10,13 +10,13 @@ export declare class BaseBoxSection {
     protected scene: Scene;
     protected camera: PerspectiveCamera | OrthographicCamera;
     protected renderer: WebGLRenderer;
-    protected controls: OrbitControls;
+    protected controls: CameraControlsEx;
     protected draggableArrowView: Views | string;
     protected visibleArrowView: Views | string;
     /**
      * Constructor
      */
-    constructor(scene: Scene, camera: PerspectiveCamera | OrthographicCamera, renderer: WebGLRenderer, controls: OrbitControls);
+    constructor(scene: Scene, camera: PerspectiveCamera | OrthographicCamera, renderer: WebGLRenderer, controls: CameraControlsEx);
     /**
      * If sectionBox is not assigned in constructor, then set it here.
      * For now, we only support it to be set once. Otherwise, need to check isOpen status, and initSectionBox properly.

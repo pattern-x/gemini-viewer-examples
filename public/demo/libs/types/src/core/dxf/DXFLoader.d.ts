@@ -1,11 +1,11 @@
 import * as THREE from "three";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { DxfChange, DxfChangeType } from "./DxfCompare";
-import { Units } from "../Units";
-import { IBlock, IDxf, IEntity, ILayer, ILayoutObject, IPoint, IViewPort, IViewportEntity } from "../dxf-parser";
-import { IMLeaderContextData } from "../dxf-parser/entities/mleader";
-import { ISpatialFilterObject } from "../dxf-parser/objects/spatialfilter";
-import { ShxFont } from "../shx-parser/ShxFont";
+import { Units } from "../../core/Units";
+import { IBlock, IDxf, IEntity, ILayer, ILayoutObject, IPoint, IViewPort, IViewportEntity } from "../../core/dxf-parser";
+import { IMLeaderContextData } from "../../core/dxf-parser/entities/mleader";
+import { ISpatialFilterObject } from "../../core/dxf-parser/objects/spatialfilter";
+import { ShxFont } from "../../core/shx-parser";
 /**
  * @internal
  */
@@ -15,8 +15,14 @@ export interface DxfData extends IDxf {
     loadedEntityCount: number;
     layoutViewportsMap: Record<string, IViewportEntity[]>;
 }
-export interface DxfLayer extends ILayer {
-}
+/**
+ * Dxf/dwg layer, which contains a number of objects in it.
+ *
+ * A layer has "name", "handle", "color", "visible" and many other properties.
+ *
+ * We can change a layer's visibility, color, etc.
+ */
+export type DxfLayer = ILayer;
 /**
  * @internal
  */
@@ -145,7 +151,7 @@ export interface DxfSpatialFilter extends ISpatialFilterObject {
  * @author Sourabh Soni / https://www.prolincur.com
  * @internal
  */
-export declare class DXFLoader extends THREE.Loader {
+export declare class DxfLoader extends THREE.Loader {
     static readonly MODEL_LAYOUT_NAME = "Model";
     private timer;
     private ignorePaperSpace;
@@ -290,19 +296,7 @@ export declare class DXFLoader extends THREE.Loader {
     };
     private getTextLineNum;
     draw3DFace(entity: DxfEntity): THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial> | undefined;
-    drawSpline(entity: DxfEntity): THREE.Line | undefined;
-    /**
-     * Interpolate a b-spline. The algorithm examins the knot vector
-     * to create segments for interpolation. The parameterisation value
-     * is re-normalised back to [0,1] as that is what the lib expects (
-     * and t i de-normalised in the b-spline library)
-     *
-     * @param controlPoints the control points
-     * @param degree the b-spline degree
-     * @param knots the knot vector
-     * @returns the polyline
-     */
-    getBSplinePolyline(controlPoints: IPoint[], degree: number, knots: number[], interpolationsPerSplineSegment?: number, weights?: number[]): THREE.Vector3[];
+    drawSpline(entity: DxfEntity, blockEntity?: IEntity): THREE.Line | undefined;
     drawXLine(entity: DxfEntity): THREE.Line | undefined;
     drawRay(entity: DxfEntity): THREE.Line | undefined;
     drawLine(entity: DxfEntity): THREE.LineSegments | THREE.Points | undefined;
@@ -344,6 +338,10 @@ export declare class DXFLoader extends THREE.Loader {
      * Note that, when entity is in layer "0", it tries to get its parent blockEntity's layer name.
      */
     private getLayerName;
+    /**
+     * Sets object's material after being created
+     * TODO: hatch is handled separately, and may move its logic here.
+     */
     private setMaterial;
     private setHatchMaterial;
     private setRenderOrderByObjectType;
@@ -360,6 +358,13 @@ export declare class DXFLoader extends THREE.Loader {
      * @param size may not be accurate, can be the radius, long size of bbox, etc.
      */
     getDivision(startAngle: number, endAngle: number, size: number): number;
+    /**
+     * Gets a proper interpolation for bspline.
+     * A bigger interpolation value generates smooth bspline, but with a bad performance, so we need to limit this value.
+     * @param pointCount control point count
+     * @param size may not be accurate, can be the long side of bbox, etc.
+     */
+    getBSplineInterpolationsPerSplineSegment(pointCount: number, size: number): number;
     /**
      * Gets proper simplify tolerance.
      * If tolerance is bigger, more points are simpified.

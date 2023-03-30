@@ -1,10 +1,14 @@
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
-import { BaseViewer } from "./BaseViewer";
 import { Toolbar } from "../../components/toolbar";
-import { CameraConfig, Hotpoint, Panorama, VRViewerConfig, VRViewpoint } from "../Configs";
-import { Vector3 } from "../Constants";
+import { CameraConfig, Hotpoint, Panorama, VRViewerConfig, VRViewpoint } from "../../core/Configs";
+import { Vector3 } from "../../core/Constants";
+import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 export declare class VRViewer extends BaseViewer {
+    /**
+     * @internal
+     */
+    name: ViewerName;
     /**
      * @internal
      */
@@ -92,7 +96,7 @@ export declare class VRViewer extends BaseViewer {
     /**
      * Sets spinner visibility
      */
-    setSpinnerVisibility(visible: boolean): void;
+    protected setSpinnerVisibility(visible: boolean): void;
     /**
      * Calls addEventListener of a node.
      * This makes sure to removeEventListener properly
@@ -154,6 +158,7 @@ export declare class VRViewer extends BaseViewer {
     removeCachedPanoramas(): void;
     /**
      * Unlimits controls and show all assets. This is useful for debugging.
+     * @internal
      */
     unlimitControlsAndShowAssets(showAllHotpoints?: boolean): void;
     private relocateAnchorIfTooCloseToCamera;

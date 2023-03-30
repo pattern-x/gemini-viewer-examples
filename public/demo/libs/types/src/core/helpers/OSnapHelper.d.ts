@@ -1,8 +1,6 @@
 import * as THREE from "three";
-import { CanvasRender } from "../canvas/CanvasRender";
-import { Drawable } from "../canvas/Drawable";
-import { ILine } from "../utils/GeometryUtils";
-import { SnapType } from "../utils/SVGObjectUtils";
+import { CanvasRender, Drawable } from "../../core/canvas";
+import { ILine, SnapType } from "../../core/utils";
 export declare class SnapDrawable extends Drawable {
     static readonly LINE_COLOR = "rgba(255, 240, 0, 0.8)";
     static readonly FILL_COLOR = "rgba(135, 206, 250, 0.5)";

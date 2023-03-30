@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { TextShape } from "./TextShape";
-import { FontFile } from "./files/FontFile";
 import { BinaryReader } from "../helpers/BinaryReader";
+import { TextShape } from "./TextShape";
+import type { FontFile } from "./files/FontFile";
 export declare class ShxParser {
     static stopFlag: string;
     static FILE_STOP_FLAG: string[];

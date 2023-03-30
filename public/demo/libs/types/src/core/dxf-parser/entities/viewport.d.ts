@@ -1,5 +1,5 @@
-import IGeometry, { IEntity, IPoint } from "./geomtry";
 import { DxfBaseReader, IGroup } from "../DxfBaseReader";
+import IGeometry, { IEntity, IPoint } from "./geomtry";
 export interface IViewportEntity extends IEntity {
     centerPoint: IPoint;
     width_paperSpace: number;

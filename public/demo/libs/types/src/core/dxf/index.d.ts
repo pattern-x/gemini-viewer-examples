@@ -1,5 +1,9 @@
 export * from "./DxfCompare";
-export * from "./DXFLoader";
-export * from "./bspline";
+export * from "./DxfLoader";
+export * as bspline from "./bspline";
 export * from "./dxfom-mtext";
-export * from "./round10";
+export * as round10 from "./round10";
+export * from "./DxfConstants";
+export * from "./HatchPatternShaders";
+export * from "./LinePatternShaders";
+export * from "./dxfom-text";

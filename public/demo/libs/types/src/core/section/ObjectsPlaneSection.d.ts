@@ -1,6 +1,6 @@
 import { OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { CameraControlsEx } from "../controls/CameraControlsEx";
 import { BasePlaneSection } from "./BasePlaneSection";
-import { OrbitControls } from "../controls/OrbitControls";
 /**
  * Objects' plane section
  **/
@@ -9,7 +9,7 @@ export declare class ObjectsPlaneSection extends BasePlaneSection {
     /**
      * Constructor
      */
-    constructor(objectIds: number[], scene: Scene, camera: PerspectiveCamera | OrthographicCamera, renderer: WebGLRenderer, controls: OrbitControls);
+    constructor(objectIds: number[], scene: Scene, camera: PerspectiveCamera | OrthographicCamera, renderer: WebGLRenderer, controls: CameraControlsEx);
     /**
      * Initialize 6 section plane
      **/

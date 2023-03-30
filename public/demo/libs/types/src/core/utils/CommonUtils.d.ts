@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { SVGObject } from "../patches/SVGRenderer";
+import { SVGObject } from "src/core/patches/SVGRenderer";
 /**
  * @internal
  */
@@ -75,6 +75,11 @@ export declare class CommonUtils {
     static roundNumber(value: number, n: number): number;
     static convertDecimalToHex(decimal: number | string): string;
     static canvasToImage(canvas: HTMLCanvasElement): Promise<HTMLImageElement>;
+    /**
+     * Takes screenshot to given rendering context and return base64 string in png/jpeg format.
+     * @param bbox If valid, takes screenshot of a sub image with given bounding box in screen coordinate.
+     */
+    static renderingContextToImage(context: CanvasRenderingContext2D, bbox?: THREE.Box2, type?: string, quality?: number): string;
     /**
      * Prints memory usage
      */

@@ -1,13 +1,18 @@
 import { TilesRenderer } from "3d-tiles-renderer";
 import * as THREE from "three";
-import { BaseViewer } from "./BaseViewer";
-import { Settings as SettingsType } from "../../components/settings/ProjectSettingsDef";
+import { Settings as SettingsType } from "../../components/settings";
 import { Toolbar } from "../../components/toolbar";
-import { BimViewerConfig, CameraConfig, ModelConfig } from "../Configs";
-import { SectionType } from "../Constants";
-import { Drawable } from "../canvas/Drawable";
-import { MeasurementType } from "../measure/";
+import { BimViewerConfig, CameraConfig, ModelConfig } from "../../core/Configs";
+import { SectionType } from "../../core/Constants";
+import { Drawable } from "../../core/canvas";
+import { EventInfo } from "../../core/input/InputManager";
+import { MeasurementData, MeasurementManager, MeasurementType } from "../../core/measure";
+import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 export declare class BimViewer extends BaseViewer {
+    /**
+     * @internal
+     */
+    name: ViewerName;
     private timer;
     /**
      * @internal
@@ -83,27 +88,26 @@ export declare class BimViewer extends BaseViewer {
     private raycaster?;
     private cameraUpdateInterval?;
     private savedMaterialsForOpacity?;
-    private mouseMoved;
-    private mouseDoubleClicked;
     private section?;
     /**
      * @internal
      */
     sectionType?: string;
+    private sectionManager?;
     private measurementManager?;
-    private zoomToRect?;
+    private zoomToRectHelper?;
     private datGui?;
     private shadowCameraHelper?;
     private directionalLightHelper?;
     private webcam?;
     private webcamPlane?;
     private raf?;
+    private clock;
     private renderEnabled;
     private timeoutSymbol?;
     private isFrustumInsectChecking;
     private lastFrameExecuteTime;
     private maxFps;
-    private events;
     private settings;
     private spinner?;
     private jobCount;
@@ -130,25 +134,20 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     init(): void;
+    private initThree;
+    private initDom;
     private initScene;
     private initRenderer;
     private initCamera;
     private initControls;
     private initRotateToCursor;
     private onResize;
-    private onControlsChange;
     private onKeyDown;
-    /**
-     * When 'pointerup' event is triggered, we don't know if it is a dblclick.
-     * So, need to wait for 200ms etc. to see if there is another mouse click.
-     * @internal
-     */
-    onPointerUp(viewer: BimViewer, event: MouseEvent): () => void;
     private initLights;
     /**
      * Initialize mouse/pointer events
      */
-    private initPointerEvents;
+    private initEvents;
     private initDatGui;
     private initSpinner;
     private initOthers;
@@ -199,6 +198,7 @@ export declare class BimViewer extends BaseViewer {
      * Loads 3dtiles
      * TODO: Temporarily does not support 3dtiles version 1.0 above
      * The coordinate system is not processed yet
+     * @internal
      */
     load3dTiles(modelCfg: ModelConfig): Promise<void>;
     /**
@@ -215,6 +215,7 @@ export declare class BimViewer extends BaseViewer {
      * We won't set a opacity directly, because that way will lose model's original opacity value
      * @param isAdd is add or remove the opacity we added
      * @param opacity
+     * @internal
      */
     addOrRemoveObjectOpacity(isAdd?: boolean, opacity?: number, includeObjectIds?: number[], excludeObjectIds?: number[]): void;
     /**
@@ -233,7 +234,7 @@ export declare class BimViewer extends BaseViewer {
     /**
      * @internal
      */
-    getRaycastableObjectsByMouse(event?: MouseEvent | TouchEvent): THREE.Object3D[];
+    getRaycastableObjectsByMouse(event?: EventInfo): THREE.Object3D[];
     private getRaycastableObjects;
     /**
      * Gets intersections by given mouse location.
@@ -267,8 +268,9 @@ export declare class BimViewer extends BaseViewer {
      * selected by user manually, we don't need to make sure user can see it. While if selection is
      * made by program, we parbably need to make sure user can see it, in other words, the selected
      * object won't be blocked by other objects.
+     * @internal
      */
-    selectObject(object?: THREE.Object3D, instanceId?: number, batchId?: number, depthTest?: boolean | undefined): void;
+    selectObject(object?: THREE.Object3D | Drawable, instanceId?: number, batchId?: number, depthTest?: boolean | undefined): void;
     /**
      * Clears the current selection
      */
@@ -284,6 +286,7 @@ export declare class BimViewer extends BaseViewer {
     protected flyToObjects(objects: THREE.Object3D[]): void;
     /**
      * Make camera fly to an object
+     * @internal
      */
     flyToObject(object: THREE.Object3D): void;
     /**
@@ -317,8 +320,14 @@ export declare class BimViewer extends BaseViewer {
      */
     private tryAdjustCameraNearAndFar;
     private tryAdjustDirectionalLight;
+    /**
+     * @internal
+     */
     updateDirectionalLight(): void;
     private updateDirectionalLightShadow;
+    /**
+     * @internal
+     */
     showDirectionalLightHelper(visible: boolean): void;
     /**
      * Regenerates skybox according to models' location and size
@@ -330,8 +339,7 @@ export declare class BimViewer extends BaseViewer {
     private regenGroundGrid;
     /**** Anchor rotation related interface start ****/
     private setOrbitPoint;
-    private updateOrbPoint;
-    private onPointerDown;
+    private onAnchorPointerDown;
     private setAnchorPosition;
     private createAnchor;
     private disposeAnchor;
@@ -388,15 +396,23 @@ export declare class BimViewer extends BaseViewer {
      * Currently, it only implemented local(object) box section.
      */
     activateSection(type?: SectionType): void;
+    /**
+     * Deactivates section
+     */
     deactivateSection(): void;
     /**
-     * @deprecated Use deactivateSection instead
+     * @internal
      */
-    disableSection(): void;
+    getActiveSection(): import("../../core/section").BaseSection | undefined;
     /**
-     * @deprecated Use activateSection instead
+     * @internal
      */
-    enableSection(type?: SectionType): void;
+    getMeasurementManager(): MeasurementManager | undefined;
+    /**
+     * Gets measurement data
+     * @internal
+     */
+    getMeasurements(): MeasurementData[];
     /**
      * Activates one of "Distance", "Area" or "Angle" measurement
      * @param type "Distance", "Area" or "Angle"
@@ -407,11 +423,21 @@ export declare class BimViewer extends BaseViewer {
      */
     deactivateMeasurement(): void;
     /**
+     * @internal
+     */
+    setMeasurementVisibility(id: string, visible: boolean): boolean;
+    /**
      * Clears all measurement results
      */
     clearMeasurements(): void;
-    activateZoomToRect(): void;
-    deactivateZoomToRect(): void;
+    /**
+     * Zooms to selected box area.
+     */
+    zoomToRect(): void;
+    /**
+     * @internal
+     */
+    deactivateZoomRect(): void;
     /**
      * @internal
      */
@@ -450,9 +476,8 @@ export declare class BimViewer extends BaseViewer {
     private merge;
     /**
      * Sets spinner visibility
-     * @internal
      */
-    setSpinnerVisibility(visible: boolean): void;
+    protected setSpinnerVisibility(visible: boolean): void;
     /**
      * Increases job count, and show spinner accordingly
      * @internal
@@ -463,14 +488,6 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     decreaseJobCount(): void;
-    /**
-     * Calls addEventListener of a node.
-     * This makes sure to removeEventListener properly
-     * @param node window, dom element, etc.
-     * @param type 'change', 'keydown', etc.
-     * @param func event callback
-     */
-    private addEvent;
     /**
      * Updates project settings
      * @internal

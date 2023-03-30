@@ -1,5 +1,5 @@
-import { IObject, IObjectParser } from "./common";
 import { DxfBaseReader, IGroup } from "../DxfBaseReader";
+import { IObject, IObjectParser } from "./common";
 export interface ISortEntsObject extends IObject {
     entityHandles: string[][];
 }

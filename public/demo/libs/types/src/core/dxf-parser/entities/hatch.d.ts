@@ -1,5 +1,5 @@
-import IGeometry, { IEntity, IPoint } from "./geomtry";
 import { DxfBaseReader, IGroup } from "../DxfBaseReader";
+import IGeometry, { IEntity, IPoint } from "./geomtry";
 export declare enum HatchBoundaryPathTypeFlag {
     Default = 0,
     External = 1,

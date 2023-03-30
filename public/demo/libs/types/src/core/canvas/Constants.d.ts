@@ -1,5 +1,6 @@
 /**
  * Markup data
+ * @internal
  */
 export interface DrawableData {
     /**
@@ -7,15 +8,16 @@ export interface DrawableData {
      */
     id: string;
     /**
-     * Two dimension float array stores 2d points.
-     * e.g. [[1, 1], [2.5, 3]]
+     * Two dimension float array stores 2d or 3d points.
+     * e.g., You can use "[[1, 1], [2.5, 3]]" to represent a distance measurement result
+     * "[1, 1]" is the first point, and "[2.5, 3]" is the second point.
      */
     points: number[][];
     lineWidth?: number;
     lineColor?: string;
     fillColor?: string;
     /**
-     * is class type for serialize
+     * Drawable dta type
      */
     type: string;
 }

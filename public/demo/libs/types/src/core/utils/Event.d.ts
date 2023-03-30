@@ -1,17 +1,45 @@
+export type Handler<T = any> = (val: T) => void;
 /**
  * @internal
  */
-export declare class Event {
-    private eventList;
+export declare class Event<Events extends Record<string, any> = {}> {
+    private map;
     /**
      * @internal
      */
-    addEventListener(type: string | symbol, handler: (event?: unknown) => void): void;
+    addEventListener<EventName extends keyof Events>(name: EventName, handler: Handler<Events[EventName]>): void;
     /**
      * @internal
      */
-    dispatchEvent(type: string | symbol, event?: unknown): void;
-    removeEventListener(type: string | symbol, handler: (event?: unknown) => void): void;
-    clearEventListeners(type: string | symbol): void;
+    dispatchEvent<EventName extends keyof Events>(name: EventName, value?: Events[EventName]): void;
+    /**
+     * Checks if there is a listener
+     * @internal
+     */
+    hasEventListener<EventName extends keyof Events>(name: EventName): boolean;
+    /**
+     * Removes all event listeners
+     * @internal
+     */
+    removeEventListener(): void;
+    /**
+     * @internal
+     */
+    removeEventListener<EventName extends keyof Events>(name: EventName): void;
+    /**
+     * @internal
+     */
+    removeEventListener<EventName extends keyof Events>(name: EventName, handler: Handler<Events[EventName]>): void;
+    /**
+     *
+     * @param name
+     * @deprecated Replaced by removeEventListener(name);
+     * @internal
+     */
+    clearEventListeners<EventName extends keyof Events>(name: EventName): void;
+    /**
+     * @deprecated Replaced by removeEventListener();
+     * @internal
+     */
     clearAllEventListener(): void;
 }

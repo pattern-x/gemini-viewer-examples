@@ -1,9 +1,16 @@
 import { DrawableData } from "./Constants";
 import { Drawable } from "./Drawable";
+import { Event } from "../../core/utils";
+type DrawableListHandler = {
+    addDrawable: DrawableData;
+    updateDrawable: DrawableData;
+    removeDrawable: DrawableData;
+};
 /**
  * A group of Drawlables for a certain category
+ * @internal
  */
-export declare class DrawableList {
+export declare class DrawableList extends Event<DrawableListHandler> {
     private category;
     private drawableMap;
     constructor(category: string);
@@ -17,3 +24,4 @@ export declare class DrawableList {
     setDrawableDatas(drawableDatas: DrawableData[]): void;
     getDrawableByPosition(p: THREE.Vector3, raycaster?: THREE.Raycaster): Drawable | undefined;
 }
+export {};

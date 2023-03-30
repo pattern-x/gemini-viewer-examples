@@ -1,7 +1,7 @@
 import { OrthographicCamera, Scene, Vector3 } from "three";
 import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 import { NavCube } from "./NavCube";
-import type { BaseViewer } from "../viewers/BaseViewer";
+import type { BaseViewer } from "../../core/viewers";
 /**
  * This renderer monitors the host renderer's camera, and keeps a NavCube
  * the same direction as host renderer's

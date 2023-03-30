@@ -1,4 +1,4 @@
-import { Toolbar } from "./Toolbar";
+import type { Toolbar } from "./Toolbar";
 import { IconClass } from "../../core/utils";
 import type { BaseViewer } from "../../core/viewers";
 /**
@@ -53,7 +53,7 @@ export declare enum ToolbarMenuId {
     Section = "Section",
     SectionBox = "SectionBox",
     SectionPlane = "SectionPlane",
-    AxisSectionPlane = "AxisSectionPlane",
+    SectionAxis = "SectionAxis",
     BimTree = "BimTree",
     Viewpoint = "Viewpoint",
     Annotation = "Annotation",
@@ -64,7 +64,8 @@ export declare enum ToolbarMenuId {
     Fullscreen = "FullScreen",
     SceneClear = "SceneClear",
     Layers = "Layers",
-    ZoomToRectangle = "ZoomToRectangle"
+    ZoomToRectangle = "ZoomToRectangle",
+    Screenshot = "GetScreenshot"
 }
 /**
  * ToolbarConfig
@@ -89,3 +90,7 @@ export interface ToolbarMenuConfig<T extends BaseViewer> {
 export type ToolbarConfig<T extends BaseViewer> = {
     [key in ToolbarMenuId]?: ToolbarMenuConfig<T>;
 };
+/**
+ * @internal
+ */
+export declare const GROUP_CONFIG: ToolbarMenuId[][];

@@ -1,34 +1,38 @@
-import { Scene, Vector3, WebGLRenderer } from "three";
-import { OrbitControls } from "../controls/OrbitControls";
-import type { BaseViewer } from "../viewers/BaseViewer";
+import * as THREE from "three";
+import { EventInfo, InputManager } from "../../core/input/InputManager";
+import { BaseSection } from "../../core/section/BaseSection";
+import { SectionGizmo } from "../../core/section/SectionGizmo";
+import { SectionPlane } from "../../core/section/SectionPlane";
+import type { BaseViewer } from "../../core/viewers";
 export declare enum AxisType {
-    X = "x",
-    Y = "y",
-    Z = "z"
+    X = "X",
+    Y = "Y",
+    Z = "Z"
 }
-export declare class AxisPlaneSection {
-    private readonly container?;
-    protected viewer: BaseViewer;
-    protected camera: THREE.Camera;
-    protected controls: OrbitControls;
-    protected scene: Scene;
-    protected renderer: WebGLRenderer;
-    protected objectIds: number[];
-    private sectionPlane?;
-    isShowSectionPlane: boolean;
-    private popPanel?;
+export declare class AxisPlaneSection extends BaseSection {
+    protected activeAxis: AxisType;
+    protected gizmo?: SectionGizmo;
+    protected planeMesh?: SectionPlane;
+    protected clipPlane?: THREE.Plane;
+    protected selectedObject?: SectionPlane | THREE.Mesh;
     protected axisInfoMap: {
         [key in AxisType]: {
-            normal: Vector3;
+            normal: THREE.Vector3;
         };
     };
-    constructor(viewer: BaseViewer, objectIds: number[], container?: HTMLElement | undefined);
-    getRotateParam(axisType: AxisType): (number | Vector3)[];
-    initPlane(axisType: AxisType): void;
-    open(): void;
-    close(): void;
-    enableSection(): void;
-    cancelSection(): void;
-    showSectionPlane(): void;
-    hideSectionPlane(): void;
+    protected center: THREE.Vector3;
+    constructor(viewer: BaseViewer, input: InputManager);
+    activate(): void;
+    deactivate(): void;
+    resetSection(): void;
+    setActiveAxis(type: AxisType): void;
+    setSectionVisible(visible: boolean): void;
+    initOrUpdateClipPlane(): void;
+    initOrUpdateSectionPlane(): void;
+    initOrUpdateGizmo(): void;
+    onDragStart(e: EventInfo): void;
+    onDragMove(e: EventInfo): void;
+    onDragEnd(e: EventInfo): void;
+    getIntersectObjects(): THREE.Object3D<THREE.Event>[];
+    activateSelectedObject(active: boolean): void;
 }

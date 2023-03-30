@@ -1,18 +1,16 @@
-import { Emitter } from "mitt";
 import { PopPanel } from "./PopPanel";
-import { AxisType } from "../../core/section/AxisPlaneSection";
-export type Events = {
-    axis: AxisType;
-    visible: boolean;
-};
+import { AxisPlaneSection } from "../../core/section/AxisPlaneSection";
+import type { BaseViewer } from "../../core/viewers/BaseViewer";
 export declare class AxisSectionPopPanel extends PopPanel {
     protected axis: string;
     protected activeItem?: string;
     protected groupSelectNode?: HTMLElement;
     protected activeSelectNode?: HTMLElement;
     protected isVisible: boolean;
-    eventBus: Emitter<Events>;
-    constructor(container?: HTMLElement);
+    protected section: AxisPlaneSection;
+    constructor(viewer: BaseViewer);
+    keydown: (e: KeyboardEvent) => void;
+    destroy(): void;
     createGroupSelectLayout(): void;
     addGroupSelectItems(): void;
     createActiveSelectLayout(): void;

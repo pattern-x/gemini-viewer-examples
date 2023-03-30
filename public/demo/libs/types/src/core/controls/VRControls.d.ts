@@ -1,5 +1,5 @@
 import { EventDispatcher, PerspectiveCamera, Vector3 } from "three";
-import { ControlsHelper } from "../helpers/ControlsHelper";
+import type { ControlsHelper } from "../../core/helpers";
 /**
  * @internal
  */

@@ -1,17 +1,16 @@
-import { Emitter } from "mitt";
 import { PopPanel } from "./PopPanel";
-export type Events = {
-    visible: boolean;
-    reset: void;
-};
+import type { PickPlaneSection } from "../../core/section/PickPlaneSection";
+import type { BaseViewer } from "../../core/viewers/BaseViewer";
 export declare class PickSectionPopPanel extends PopPanel {
-    eventBus: Emitter<Events>;
     protected activeSelectNode?: Element;
     protected isVisible: boolean;
     protected enabled: boolean;
     protected visibleNode?: HTMLElement;
     protected resetNode?: HTMLElement;
-    constructor(container?: HTMLElement);
+    protected section: PickPlaneSection;
+    constructor(viewer: BaseViewer);
+    keydown: (e: KeyboardEvent) => void;
+    destroy(): void;
     createActiveSelectLayout(): void;
     addActiveItems(): void;
     enable(): void;

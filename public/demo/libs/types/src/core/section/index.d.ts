@@ -1,4 +1,5 @@
+export * from "./BaseSection";
 export * from "./AxisPlaneSection";
 export * from "./ObjectsBoxSection";
-export * from "./ObjectsPlaneSection";
 export * from "./PickPlaneSection";
+export * from "./SectionManager";

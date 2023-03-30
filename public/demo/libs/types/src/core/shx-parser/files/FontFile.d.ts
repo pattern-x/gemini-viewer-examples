@@ -1,17 +1,8 @@
 import * as THREE from "three";
 import { FontDataTableRecord } from "../../../core/indexeddb/FontDataTable";
 import { BinaryReader } from "../../helpers/BinaryReader";
+import { Orientation, ShxFontType } from "../Shx.constants";
 import { TextShape } from "../TextShape";
-export declare enum Orientation {
-    Horizontal = 0,
-    Vertical = 1,
-    All = 2
-}
-export declare enum ShxFontType {
-    Shapes = 0,
-    Bigfont = 1,
-    Unifont = 2
-}
 export declare abstract class FontFile {
     type: ShxFontType;
     info: string;

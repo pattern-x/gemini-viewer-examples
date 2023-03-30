@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { BvhParameter } from "../workers/GenerateMeshBvhWorker";
+import { BvhParameter } from "../../core/workers";
 /**
  * Bvh: Bounding volume hierarchy
  */

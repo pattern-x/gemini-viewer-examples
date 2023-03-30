@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { BaseMeasureDrawable } from "./BaseMeasureDrawable";
-import { MeasurementType } from "./BaseMeasurement";
+import { BaseMeasureDrawable } from "../../core/measure/BaseMeasureDrawable";
+import { MeasurementType } from "../../core/measure/BaseMeasurement";
 export declare class CoordinateMeasureDrawable extends BaseMeasureDrawable {
     type: MeasurementType;
     constructor(id: string, points: THREE.Vector3[]);
