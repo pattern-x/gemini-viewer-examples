@@ -8,4 +8,7 @@ export declare class DeviceUtils {
      */
     static isTouchScreenDevice(): boolean;
     static printDeviceInfo(): void;
+    static creatReactNativeCanvas(context: WebGLRenderingContext | WebGL2RenderingContext | CanvasRenderingContext2D): HTMLCanvasElement;
+    static isBrowser: boolean;
+    static isNode: boolean;
 }

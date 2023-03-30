@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { BaseMarkup } from "./BaseMarkup";
-import { MarkupType } from "./Constants";
+import { BaseMarkup } from "../../core/markup/BaseMarkup";
+import { MarkupType } from "../../core/markup/Constants";
 export declare class RectMarkup extends BaseMarkup {
     type: MarkupType;
     constructor(id: string, points: THREE.Vector3[]);

@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { BaseMarkup } from "./BaseMarkup";
-import { MarkupType } from "./Constants";
-import { DrawableData } from "../canvas";
+import { DrawableData } from "../../core/canvas";
+import { BaseMarkup } from "../../core/markup/BaseMarkup";
+import { MarkupType } from "../../core/markup/Constants";
 export interface TextShape extends DrawableData {
     text: string;
     fontSize: number;

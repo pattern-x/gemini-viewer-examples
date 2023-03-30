@@ -1,5 +1,5 @@
-import type { BimViewer, DxfViewer, VRViewer } from "./viewers";
 import { ToolbarMenuConfig, ToolbarMenuId } from "../components/toolbar";
+import type { BimViewer, DxfViewer, VRViewer } from "../core/viewers";
 /**
  * Camera config
  */
@@ -72,6 +72,7 @@ export interface ModelConfig {
     instantiate?: boolean;
     /**
      * If we want to merge meshes/lines/points with the same material
+     * @internal
      * @default false
      */
     merge?: boolean;
@@ -146,6 +147,20 @@ export interface BaseViewerConfig {
      * @internal
      */
     language?: "cn" | "en";
+    /**
+     * @internal
+     */
+    logLevel?: "debug" | "info" | "warn" | "error" | "silent";
+    /**
+     * @description just for react native
+     * @internal
+     */
+    context?: WebGLRenderingContext | WebGL2RenderingContext;
+    /**
+     * @description just for react native
+     * @internal
+     */
+    context2d?: CanvasRenderingContext2D;
 }
 /**
  * This wrappers most config for BimViewer
@@ -211,12 +226,27 @@ export interface BimViewerConfig extends BaseViewerConfig {
  * This wrappers most config for DxfViewer
  */
 export interface DxfViewerConfig extends BaseViewerConfig {
+    /**
+     * @internal
+     */
     enableAxisGizmo?: boolean;
     enableLayoutBar?: boolean;
+    /**
+     * @internal
+     */
     enableStats?: boolean;
     enableToolbar?: boolean;
+    /**
+     * @internal
+     */
     enableSpinner?: boolean;
+    /**
+     * @internal
+     */
     enableProgressBar?: boolean;
+    /**
+     * @internal
+     */
     enableBottomBar?: boolean;
     /**
      * If to cache model into indexeddb (or maybe local storage in future).
@@ -227,6 +257,7 @@ export interface DxfViewerConfig extends BaseViewerConfig {
     enableLocalCache?: boolean;
     /**
      * If user can select an entity by mouse click
+     * @internal
      * @default false
      */
     enableSelection?: boolean;
@@ -242,8 +273,14 @@ export interface DxfViewerConfig extends BaseViewerConfig {
  */
 export interface VRViewerConfig extends BaseViewerConfig {
     autoRotateSpeed?: number;
+    /**
+     * @internal
+     */
     enableAxisGizmo?: boolean;
     enableToolbar?: boolean;
+    /**
+     * @internal
+     */
     enableBottomBar?: boolean;
     /**
      * @internal
@@ -317,4 +354,12 @@ export interface IsolateObjectsParam {
  */
 export interface IsolateObjectsParams {
     familyInstanceIds: IsolateObjectsParam[];
+}
+/**
+ * @internal
+ */
+export interface ScreenshotConfig {
+    type: string;
+    quality: number;
+    includeOverlay: boolean;
 }

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Exploder } from "../exploder/Exploder";
+import { Exploder } from "../../core/exploder";
 /**
  * Util methods about Scene
  * @internal

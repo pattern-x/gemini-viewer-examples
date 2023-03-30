@@ -1,11 +1,14 @@
 import * as THREE from "three";
 import { BaseMarkup } from "./BaseMarkup";
 import { MarkupType } from "./Constants";
-import { DrawableData } from "../canvas";
-import { Event } from "../utils";
-import { BimViewer, DxfViewer } from "../viewers";
-export declare class MarkupManager extends Event {
+import { DrawableData } from "../../core/canvas";
+import type { EventInfo, InputManager } from "../../core/input/InputManager";
+import { Event } from "../../core/utils";
+import type { BaseViewer } from "../../core/viewers";
+type MarkupHandler = {};
+export declare class MarkupManager extends Event<MarkupHandler> {
     private viewer;
+    private inputManager;
     private overlayRender?;
     private drawableList;
     private lineWidth;
@@ -27,11 +30,11 @@ export declare class MarkupManager extends Event {
     private textInput?;
     private actived;
     private undoRedoHelper;
-    constructor(viewer: BimViewer | DxfViewer);
+    constructor(viewer: BaseViewer, input: InputManager);
     get viewerCanvas(): HTMLCanvasElement;
     get camera(): THREE.OrthographicCamera | THREE.PerspectiveCamera;
     get raycaster(): THREE.Raycaster;
-    private removeMarkupEventFromViewer;
+    setMarkupVisibility(id: string, visible: boolean): boolean;
     setMarkupsVisibility(visible: boolean): void;
     clearAll(): void;
     isMarkupActive(): boolean;
@@ -48,11 +51,12 @@ export declare class MarkupManager extends Event {
     setFontSize(fontSize: number): void;
     getFontSize(): number;
     pickPositionByScreenPoint(p: THREE.Vector2): THREE.Vector3;
-    pickThreejsPositionByMouse(e: MouseEvent): THREE.Vector3;
-    mousedown: (e: MouseEvent) => void;
-    mousemove: (e: MouseEvent) => void;
-    mouseup: (e: MouseEvent) => void;
-    keydown: (e: KeyboardEvent) => void;
+    pickThreejsPositionByMouse(e: EventInfo): THREE.Vector3;
+    mousedown: (e: EventInfo) => void;
+    mousemove: (e: EventInfo) => void;
+    mouseup: (e: EventInfo) => void;
+    keydown: (e: EventInfo) => void;
+    confirmToRemove(isConfirm: boolean): void;
     isEditing(): boolean;
     endEdit(selectMarkup: BaseMarkup): void;
     endDraw(createdMarkup?: BaseMarkup): void;
@@ -62,7 +66,7 @@ export declare class MarkupManager extends Event {
     addMarkup(markup: BaseMarkup, needRecord?: boolean): void;
     updateMarkup(markup: BaseMarkup, newData: DrawableData, needRecord?: boolean): void;
     removeMarkup(markup: BaseMarkup, needRecord?: boolean): void;
-    removeMarkupById(id: string, needRecord?: boolean): void;
+    removeMarkupById(id: string, needRecord?: boolean): boolean;
     createMarkup(data: DrawableData): BaseMarkup;
     getMarkupById(id: string): BaseMarkup;
     getMarkupData(): DrawableData[];
@@ -80,3 +84,4 @@ export declare class MarkupManager extends Event {
     clearUndoRedo(): void;
     destroy(): void;
 }
+export {};

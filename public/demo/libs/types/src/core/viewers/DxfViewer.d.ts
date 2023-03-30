@@ -2,32 +2,40 @@ import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
-import { BaseViewer } from "./BaseViewer";
 import { Toolbar } from "../../components/toolbar";
-import { DxfModelConfig, DxfViewerConfig, Hotpoint } from "../Configs";
-import { DrawableData } from "../canvas";
-import { Drawable } from "../canvas/Drawable";
-import { DxfLayer } from "../dxf";
-import { DxfChange } from "../dxf/DxfCompare";
-import { ILayoutObject } from "../dxf-parser";
-import { MarkupType } from "../markup/Constants";
-import { MeasurementData, MeasurementType } from "../measure/";
+import { DxfModelConfig, DxfViewerConfig, Hotpoint } from "../../core/Configs";
+import { Box2, Vector2 } from "../../core/Constants";
+import { DrawableData, Drawable } from "../../core/canvas";
+import { DxfData, DxfLayer, DxfChange } from "../../core/dxf";
+import { ILayoutObject } from "../../core/dxf-parser";
+import { EventInfo } from "../../core/input/InputManager";
+import { MarkupType, MarkupManager } from "../../core/markup";
+import { MeasurementData, MeasurementManager, MeasurementType } from "../../core/measure";
+import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 /**
  * Measurements for DxfViewer contains additional information, e.g. layoutName.
+ *
  * DxfViewer doesn't maintain the relationship between model and measurement data,
  * business logic should knows which model a set of measurement data belong to.
  */
 export interface DxfMeasurementData extends MeasurementData {
+    /**
+     * Dxf layout name
+     */
     layoutName?: string;
 }
 /**
  * Markup for DxfViewer contains additional information, e.g. layoutName.
+ *
  * DxfViewer doesn't maintain the relationship between model and markup data,
  * business logic should knows which model a set of markup data belong to.
  */
 export interface DxfMarkupData extends DrawableData {
     layoutName?: string;
 }
+/**
+ * A group of dxf/dwg layers for a drawing.
+ */
 export interface DxfLayers {
     modelId: string;
     layers: Record<string, DxfLayer>;
@@ -45,6 +53,10 @@ export interface DxfLayers {
  * }
  */
 /**
+ * "dwg" is short for "drawing", it is a file format saved by AutoCAD.
+ * And "dxf" is data exchange format, which can be converted from a dwg file.
+ * We cannot read dwg directly, and need to convert it to dxf first via ODA.
+ *
  * Supported dxf version: AutoCAD 2018. Both binary and ascii are supported.
  *
  * Json Encoding: UTF-8 encoding without BOM
@@ -52,10 +64,10 @@ export interface DxfLayers {
  * Coordinate system: right-handed, y-up
  *
  * About units:
- * - Distance units follows the master dxf file
- * - Area units follows the master dxf file
- * - Angle units is degree, counterclockwise by default
- * - Time unit is Second
+ * - The unit of distance follows the master dxf file's unit
+ * - The unit of area follows the master dxf file's unit
+ * - The unit of angle is "degree", counterclockwise
+ * - The unit of time is "second"
  *
  * Color: use rgb/rgba, values between 0-1
  *
@@ -94,6 +106,10 @@ export interface DxfLayers {
  * ```
  */
 export declare class DxfViewer extends BaseViewer {
+    /**
+     * @internal
+     */
+    name: ViewerName;
     private readonly CAMERA_Z_POSITION;
     private readonly CAMERA_MIN_ZOOM;
     private timer;
@@ -102,7 +118,14 @@ export declare class DxfViewer extends BaseViewer {
     protected enableSelection?: boolean;
     protected selectedObject?: THREE.Object3D | Drawable;
     protected stats?: Stats;
-    private loadedModels;
+    /**
+     * The record "key" is modelId or src.
+     * @internal
+     */
+    loadedModels: Record<string, {
+        dxfData?: DxfData;
+        msTransformMatrix?: THREE.Matrix4;
+    }>;
     private masterModelId;
     private dxfLayoutBar?;
     private raycaster?;
@@ -112,8 +135,10 @@ export declare class DxfViewer extends BaseViewer {
     protected selected: boolean;
     private measurementManager?;
     private markupManager?;
-    private zoomToRect?;
+    private zoomToRectHelper?;
+    private boxSelectHelper?;
     private raf?;
+    private clock;
     protected renderEnabled: boolean;
     private timeoutSymbol?;
     private spinner?;
@@ -142,6 +167,9 @@ export declare class DxfViewer extends BaseViewer {
      * @internal
      */
     protected init(): void;
+    private initInputManager;
+    private initThree;
+    private initDom;
     private initScene;
     private initRenderer;
     protected initCSS2DRenderer(): void;
@@ -161,7 +189,6 @@ export declare class DxfViewer extends BaseViewer {
      * Initialize mouse/pointer events
      */
     private initEvents;
-    protected initMouseWheel(): void;
     protected initOthers(): void;
     private initAxes;
     private initStats;
@@ -204,6 +231,9 @@ export declare class DxfViewer extends BaseViewer {
      * @internal
      */
     getFps(): number;
+    /**
+     * @internal
+     */
     is3d(): boolean;
     /**
      * Destroies DxfViewer
@@ -250,6 +280,7 @@ export declare class DxfViewer extends BaseViewer {
     private compareMode;
     /**
      * If it is under compare mode
+     * @internal
      */
     isCompareMode(): boolean;
     /**
@@ -289,7 +320,7 @@ export declare class DxfViewer extends BaseViewer {
     /**
      * Calculates the boundingBox of objects with child objects in the children of layoutLevelObject
      */
-    private calBoundingBoxOfLayoutChild;
+    private calcBoundingBoxOfLayoutChild;
     /**
      * Gets active layout
      */
@@ -363,6 +394,19 @@ export declare class DxfViewer extends BaseViewer {
      */
     setDisplayPrecision(): void;
     /**
+     * Gets current view extent.
+     * This is useful for user to save this value as a viewpoint, and jump to this viewpoint next time.
+     */
+    getCurrentViewExtent(): Box2;
+    /**
+     * Box selects an area and get the screenshot in format of base64 string.
+     */
+    getScreenshot(): Promise<undefined | string>;
+    /**
+     * @internal
+     */
+    getMeasurementManager(): MeasurementManager | undefined;
+    /**
      * Activates one of "Distance", "Area" or "Angle" measurement
      * @param type "Distance", "Area" or "Angle"
      * @example
@@ -418,12 +462,21 @@ export declare class DxfViewer extends BaseViewer {
      * Removes a measurement
      */
     removeMeasurement(id: string): void;
-    setMeasurementsVisibility(visible: boolean): void;
     /**
-     * Clears all measurement results
+     * Sets a measurement's visibility.
+     * Note that, the markup should belong to active layout. You shouldn't update a markup of an inactive layout.
+     * @internal
+     */
+    setMeasurementVisibility(id: string, visible: boolean): boolean;
+    /**
+     * Clears measurement results for all layouts
      */
     clearMeasurements(): void;
     /** markup start **/
+    /**
+     * @internal
+     */
+    getMarkupManager(): MarkupManager | undefined;
     /**
      * Activates markup feature
      * @param type MarkupType
@@ -484,8 +537,7 @@ export declare class DxfViewer extends BaseViewer {
     getMarkups(): DxfMarkupData[];
     /**
      * Sets markup data.
-     * User can set markup data for all layouts, DxfViewer manages their visibilities
-     * for different layouts.
+     * User can set markup data for all layouts, DxfViewer manages their visibilities for different layouts.
      * @example
      * ``` typescript
      * const markupData = [{
@@ -500,14 +552,25 @@ export declare class DxfViewer extends BaseViewer {
      * viewer.setMarkups(markupData);
      * ```
      */
-    setMarkups(markupData: DxfMarkupData[]): void;
-    setMarkupsVisibility(visible: boolean): void;
+    setMarkups(markupDataArray: DxfMarkupData[]): void;
     /**
-     * Removes a markup
+     * Sets a markup's visibility by id.
+     * Note that, the markup should belong to active layout. You shouldn't update a markup of an inactive layout.
+     * @internal
      */
-    removeMarkup(id: string): void;
+    setMarkupVisibility(id: string, visible: boolean): boolean;
     /**
-     * Clears markups
+     * Updates a markup.
+     * Note that, you are able to update a markup of an inactive layout. But, you can see nothing happen from ui.
+     */
+    updateMarkup(markup: DxfMarkupData): boolean;
+    /**
+     * Removes a markup by markup id.
+     * Note that, you are able to delete a markup of an inactive layout. But, you can see nothing happen from ui.
+     */
+    removeMarkup(id: string): boolean;
+    /**
+     * Clears markups for all layouts
      */
     clearMarkups(): void;
     /** markup end **/
@@ -540,12 +603,23 @@ export declare class DxfViewer extends BaseViewer {
      *     }
      * });
      * ```
+     * @internal
      */
-    getHitResult(event: MouseEvent): {
-        location: number[];
-    } | undefined;
-    activateZoomToRect(): void;
-    deactivateZoomToRect(): void;
+    getHitResult(event: MouseEvent | PointerEvent | EventInfo): Vector2 | undefined;
+    /**
+     * Gets hit result by Normalized Device Coordinates.
+     * Lower left coordinate: (-1, -1)
+     * Upper right coordinate: (1, 1)
+     */
+    protected getHitResultByNdcCoordinate(coord: Vector2): Vector2 | undefined;
+    /**
+     * Asks user to select a box area, and zooms to it.
+     */
+    zoomToRect(): void;
+    /**
+     * @internal
+     */
+    deactivateZoomRect(): void;
     /**
      * draw compare markups
      */
@@ -598,7 +672,7 @@ export declare class DxfViewer extends BaseViewer {
      * Gets raycast-able objects by mouseEvent.
      * @internal
      */
-    getRaycastableObjectsByMouse(event?: MouseEvent): THREE.Object3D<THREE.Event>[];
+    getRaycastableObjectsByMouse(event?: EventInfo): THREE.Object3D<THREE.Event>[];
     /**
      * Gets intersections by given mouse location.
      * If no MouseEvent is passed in, use (0, 0) as the raycaster's origin.
@@ -608,6 +682,7 @@ export declare class DxfViewer extends BaseViewer {
      * Handles mouse click event
      */
     private handleMouseClick;
+    private selectDrawableByEvent;
     /**
      * Select or unselect an object.
      */
@@ -639,13 +714,14 @@ export declare class DxfViewer extends BaseViewer {
      * @param position camera's target position
      * @param lookAt camera's new lookAt position
      * @param targetCameraZoom camera's target zoom value
+     * @internal
      */
     flyTo(position: THREE.Vector3, lookAt: THREE.Vector3, targetCameraZoom?: number, animate?: boolean): void;
     /**
      * Moves camera to target position
      * @param position 2d position
      */
-    protected goTo(position: THREE.Vector2 | THREE.Vector3, targetCameraZoom?: number, animate?: boolean): void;
+    goTo(position: Vector2, targetCameraZoom?: number, animate?: boolean): void;
     /**
      * Moves camera to home view
      */
@@ -654,12 +730,16 @@ export declare class DxfViewer extends BaseViewer {
      * Zooms to specific bounding box
      * @internal
      */
-    zoomToBBox(bbox: THREE.Box3): void;
+    zoomToBBox(bbox: Box2): void;
+    /**
+     * Zooms to view extent
+     */
+    zoomToExtent(): void;
     /**
      * Zooms to a compare change
-     * @param id a chang data id
+     * @param changeId Change data id
      */
-    zoomToCompareChange(id: number): void;
+    zoomToCompareChange(changeId: number): void;
     /**
      * Gets compare changes
      */
@@ -697,7 +777,7 @@ export declare class DxfViewer extends BaseViewer {
      */
     private updateGroundPlane;
     /**
-     * Compute bounding box of loaded models
+     * Compute bounding box of loaded models for active layout
      * @internal
      */
     computeBoundingBox(): THREE.Box3;
@@ -722,7 +802,7 @@ export declare class DxfViewer extends BaseViewer {
      */
     private updateRaycasterThreshold;
     /**
-     * Updates camera zoom value for shader materials, which are created in DXFLoader
+     * Updates camera zoom value for shader materials, which are created in DxfLoader
      */
     private updateCameraZoomUniform;
 }

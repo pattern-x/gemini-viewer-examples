@@ -6,7 +6,7 @@
 .pnp.js
 package-lock.json
 .idea
-/public/demo/projects
+/public/demo/libs
 
 # testing
 /coverage

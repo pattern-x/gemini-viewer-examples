@@ -1,8 +1,13 @@
 import * as THREE from "three";
-import { DxfEntity } from "./DXFLoader";
-import { IDxf } from "../dxf-parser";
+import type { DxfEntity } from "./DxfLoader";
+import { IDxf } from "../../core/dxf-parser";
 /**
- * Dxf change type
+ * Dxf change type, which can be "Added", "Removed" or "Modified".
+ *
+ * Note that a "Modified" change can be represented as a "Removed" and an "Added" types.
+ *
+ * The system can display "Added" object in a specific color (green, etc.),
+ * and "Removed" in another color (red, etc.).
  */
 export declare enum DxfChangeType {
     Added = "Added",
@@ -11,12 +16,24 @@ export declare enum DxfChangeType {
     NoChange = "NoChange"
 }
 /**
- * Dxf change
+ * Describes a dxf change
  */
 export interface DxfChange {
+    /**
+     * An integer type id. It is unique in the lifecycle of a DxfViewer.
+     */
     id: number;
+    /**
+     * Change type, which can be "Added", "Removed", "Modified" or "NoChange".
+     */
     type: DxfChangeType;
+    /**
+     * AutoCAD entity handle
+     */
     handle: string;
+    /**
+     * @internal
+     */
     parentHandles?: string[];
     /**
      * @internal

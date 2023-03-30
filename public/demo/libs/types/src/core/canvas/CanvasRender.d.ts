@@ -1,10 +1,16 @@
 import * as THREE from "three";
 import { DrawableData } from "./Constants";
 import { Drawable } from "./Drawable";
-import { DrawableList } from "./DrawableList";
-import { Event } from "../utils";
-import type { BimViewer, DxfViewer } from "../viewers";
+import type { DrawableList } from "./DrawableList";
+import { Event } from "../../core/utils";
+import type { BimViewer, DxfViewer } from "../../core/viewers";
+/**
+ * @internal
+ */
 export type constructorReturnType<T> = new (...arg: any) => T;
+/**
+ * @internal
+ */
 export declare class CanvasRender extends Event {
     private viewer;
     private drawableLists;
@@ -33,5 +39,10 @@ export declare class CanvasRender extends Event {
         type: string;
         quality: number;
     }): Promise<string | undefined>;
+    getImage(option?: {
+        type: string;
+        quality: number;
+    }): string | undefined;
+    getCanvas(): HTMLCanvasElement | undefined;
     destroy(): void;
 }

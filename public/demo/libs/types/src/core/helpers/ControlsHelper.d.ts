@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { VRControls } from "../controls/VRControls";
+import type { VRControls } from "../../core/controls";
 /**
  * @internal
  */

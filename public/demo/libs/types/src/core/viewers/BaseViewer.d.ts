@@ -1,15 +1,34 @@
 import type { TFunction } from "i18next";
 import * as THREE from "three";
-import { OrbitControls as ThreeJsOrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { BaseViewerConfig, CameraConfig } from "../Configs";
-import { CanvasRender } from "../canvas";
-import { VRControls } from "../controls";
-import { OrbitControls } from "../controls/OrbitControls";
-import { Event } from "../utils";
+import { ViewerEvent } from "./ViewerEvent";
+import type { BaseViewerConfig, CameraConfig } from "../../core/Configs";
+import type { CanvasRender } from "../../core/canvas";
+import type { CameraControlsEx, VRControls } from "../../core/controls";
+import { EventInfo, InputManager } from "../../core/input/InputManager";
+import type { MarkupManager } from "../../core/markup";
+import type { MeasurementManager } from "../../core/measure";
+import type { BaseSection } from "../../core/section";
+import { Event } from "../../core/utils";
 /**
  * @internal
  */
-export declare abstract class BaseViewer extends Event {
+export declare enum ViewerName {
+    BaseViewer = "BaseViewer",
+    BimViewer = "BimViewer",
+    DxfViewer = "DxfViewer",
+    VRViewer = "BaseViewer"
+}
+type ViewerEventType = {
+    [K in ViewerEvent]: any;
+};
+/**
+ * @internal
+ */
+export declare abstract class BaseViewer<BaseViewerEvents extends Record<string, any> = ViewerEventType> extends Event<BaseViewerEvents> {
+    /**
+     * @internal
+     */
+    name: ViewerName;
     /**
      * @internal
      */
@@ -18,6 +37,7 @@ export declare abstract class BaseViewer extends Event {
      * @internal
      */
     viewerContainer?: HTMLElement;
+    protected inputManager?: InputManager;
     /**
      * @internal
      */
@@ -29,11 +49,11 @@ export declare abstract class BaseViewer extends Event {
     /**
      * @internal
      */
-    camera?: THREE.Camera;
+    camera?: THREE.PerspectiveCamera | THREE.OrthographicCamera;
     /**
      * @internal
      */
-    controls?: OrbitControls | ThreeJsOrbitControls | VRControls;
+    controls?: CameraControlsEx | VRControls;
     protected height: number;
     protected width: number;
     /**
@@ -41,6 +61,9 @@ export declare abstract class BaseViewer extends Event {
      */
     widgetContainer?: HTMLElement;
     protected viewerCfg: BaseViewerConfig;
+    /**
+     * @internal
+     */
     cameraCfg?: CameraConfig;
     /**
      * @internal
@@ -51,8 +74,17 @@ export declare abstract class BaseViewer extends Event {
      * @internal
      */
     overlayRender?: CanvasRender;
+    /**
+     * @internal
+     */
+    loadedModels?: any;
     protected enableOverlayRenderer: boolean;
+    /**
+     * @internal
+     */
+    protected requestAnimationFrameHandle?: number;
     constructor(viewerCfg: BaseViewerConfig);
+    private initLogLevel;
     private initLocalization;
     /**
      * Creates a viewerContainer under the container that user passed in.
@@ -62,16 +94,64 @@ export declare abstract class BaseViewer extends Event {
     private initViewerContainer;
     private initWidgetContainer;
     destroy(): void;
+    /**
+     * @internal
+     */
+    getInputManager(): InputManager | undefined;
+    /**
+     * @internal
+     */
+    getViewConfig(): BaseViewerConfig;
+    /**
+     * @internal
+     */
     enableRender(): void;
+    /**
+     * @internal
+     */
     getRaycaster(): THREE.Raycaster | undefined;
-    getRaycastableObjectsByMouse(event?: MouseEvent | TouchEvent): THREE.Object3D[];
+    /**
+     * @internal
+     */
+    getRaycastableObjectsByMouse(event?: EventInfo): THREE.Object3D[];
+    /**
+     * Gets all objects' bounding box in viewer.
+     * @internal
+     */
     getBBox(): THREE.Box3 | undefined;
+    /**
+     * @internal
+     */
+    getActiveSection(): BaseSection | undefined;
     flyTo(position: THREE.Vector3, lookAt: THREE.Vector3): void;
     /**
      * If it is a 3d viewer.
      * DxfViewer is 2d, thus returns false.
      * @default true
+     * @internal
      */
     is3d(): boolean;
+    /**
+     * @internal
+     */
+    getMeasurementManager(): MeasurementManager | undefined;
+    /**
+     * @internal
+     */
+    getMarkupManager(): MarkupManager | undefined;
     deactivateMeasurement(): void;
+    setMeasurementVisibility(id: string, visible: boolean): boolean;
+    /**
+     * @internal
+     */
+    screenshot(config: any): Promise<undefined | string>;
+    /**
+     * @internal
+     */
+    showStats(): void;
+    /**
+     * @internal
+     */
+    hideStats(): void;
 }
+export {};

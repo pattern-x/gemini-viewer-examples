@@ -1,6 +1,6 @@
 import * as dat from "dat.gui";
 import { Exploder } from "../../core/exploder/Exploder";
-import { BimViewer } from "../../core/viewers";
+import type { BimViewer } from "../../core/viewers";
 /**
  * @internal
  */

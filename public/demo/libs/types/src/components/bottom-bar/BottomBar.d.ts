@@ -1,6 +1,6 @@
-import { IconClass } from "../../core/utils/CommonUtils";
-import { BimViewer, DxfViewer, VRViewer } from "../../core/viewers";
-import { Tooltip } from "../tool-tip/Tooltip";
+import { Tooltip } from "../../components/tool-tip";
+import { IconClass } from "../../core/utils";
+import { BaseViewer } from "../../core/viewers/BaseViewer";
 declare enum BottomBarItemId {
     statistics = "statistics",
     cameraInfo = "cameraInfo",
@@ -16,16 +16,16 @@ interface BottomBarItemConfig {
     onUpdate?: (item: BottomBarItem) => void;
 }
 export declare class BottomBar {
-    protected readonly viewer: BimViewer | DxfViewer | VRViewer;
+    protected readonly viewer: BaseViewer;
     private element;
     itemList: Map<string, BottomBarItem>;
-    constructor(viewer: BimViewer | DxfViewer | VRViewer);
+    constructor(viewer: BaseViewer);
     update(): void;
     private init;
     private createItem;
 }
 declare class BottomBarItem {
-    readonly viewer: BimViewer | DxfViewer | VRViewer;
+    readonly viewer: BaseViewer;
     private readonly bottomBar;
     protected readonly menuId: string;
     protected cfg: BottomBarItemConfig;
@@ -34,7 +34,7 @@ declare class BottomBarItem {
     tooltip: Tooltip;
     element: HTMLElement;
     active: boolean;
-    constructor(viewer: BimViewer | DxfViewer | VRViewer, bottomBar: BottomBar, menuId: string, cfg: BottomBarItemConfig);
+    constructor(viewer: BaseViewer, bottomBar: BottomBar, menuId: string, cfg: BottomBarItemConfig);
     private createButton;
     setActive(active: boolean): void;
     update(): void;

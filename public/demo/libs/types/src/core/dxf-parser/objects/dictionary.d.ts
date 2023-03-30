@@ -1,5 +1,5 @@
-import { IObject, IObjectParser } from "./common";
 import { DxfBaseReader, IGroup } from "../DxfBaseReader";
+import { IObject, IObjectParser } from "./common";
 export declare enum DictionaryCloningFlags {
     NotApplicable = 0,
     KeepExisting = 1,

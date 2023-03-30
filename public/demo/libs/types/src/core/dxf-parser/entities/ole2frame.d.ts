@@ -1,5 +1,5 @@
-import IGeometry, { IEntity } from "./geomtry";
 import { DxfBaseReader, IGroup } from "../DxfBaseReader";
+import IGeometry, { IEntity } from "./geomtry";
 export interface IOleEntity extends IEntity {
     documentType: string;
     version: number;

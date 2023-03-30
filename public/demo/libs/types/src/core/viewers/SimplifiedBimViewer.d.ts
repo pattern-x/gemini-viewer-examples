@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { IsolateObjectsParam, ModelConfig } from "../Configs";
+import { IsolateObjectsParam, ModelConfig } from "../../core/Configs";
+import { CameraControlsEx } from "../../core/controls/CameraControlsEx";
 /**
  * @internal
  */
@@ -19,7 +19,7 @@ export declare class SimplifiedBimViewer {
     scene: THREE.Scene;
     renderer?: THREE.WebGLRenderer;
     renderTarget?: THREE.WebGLRenderTarget;
-    controls?: OrbitControls;
+    controls?: CameraControlsEx;
     selectedObject: any | undefined;
     loadedModels: {
         [src: string]: {
@@ -28,6 +28,7 @@ export declare class SimplifiedBimViewer {
         };
     };
     pmremGenerator?: THREE.PMREMGenerator;
+    private clock;
     private viewerMode;
     private raycaster?;
     private savedMaterialsForOpacity?;
@@ -36,6 +37,7 @@ export declare class SimplifiedBimViewer {
     private outlineMaterial;
     private outlineRoot;
     private transparentObjectIds;
+    private requestAnimationFrameHandle?;
     constructor(containerOrCanvas: HTMLDivElement | any, viewerMode?: ViewerMode, glContext?: WebGLRenderingContext | WebGL2RenderingContext);
     /**
      * Initialize everything it needs
@@ -137,4 +139,5 @@ export declare class SimplifiedBimViewer {
         y: number;
         z: number;
     };
+    setFov(fov: number): void;
 }

@@ -1,6 +1,6 @@
 import { Box3, OrthographicCamera, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { CameraControlsEx } from "../controls/CameraControlsEx";
 import { BasePlaneSection } from "./BasePlaneSection";
-import { OrbitControls } from "../controls/OrbitControls";
 /**
  * GlobalPlaneSection section
  */
@@ -8,7 +8,7 @@ export declare class GlobalPlaneSection extends BasePlaneSection {
     /**
      * Constructor
      */
-    constructor(sectionBox: Box3, scene: Scene, camera: PerspectiveCamera | OrthographicCamera, renderer: WebGLRenderer, controls: OrbitControls);
+    constructor(sectionBox: Box3, scene: Scene, camera: PerspectiveCamera | OrthographicCamera, renderer: WebGLRenderer, controls: CameraControlsEx);
     /**
      * Initialize section box
      */

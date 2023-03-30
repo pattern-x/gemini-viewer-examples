@@ -1,5 +1,5 @@
 import { BaseTable } from "./BaseTable";
-import type { Orientation, ShxFontType } from "../shx-parser/files/FontFile";
+import type { Orientation, ShxFontType } from "../../core/shx-parser";
 export interface FontDataTableRecord {
     url: string;
     type: ShxFontType;

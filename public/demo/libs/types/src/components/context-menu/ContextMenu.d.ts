@@ -1,9 +1,9 @@
+import { Toolbar } from "../../components/toolbar";
 import { Context as ContextFromConfigs, ContextMenuConfig as ContextMenuConfigFromConfigs, ContextMenuItem } from "../../core/Configs";
-import { AxisPlaneSection, ObjectsBoxSection, ObjectsPlaneSection, PickPlaneSection } from "../../core/section";
-import { BimViewer } from "../../core/viewers";
-import { Toolbar } from "../toolbar";
+import type { AxisPlaneSection, ObjectsBoxSection, PickPlaneSection } from "../../core/section";
+import type { BimViewer } from "../../core/viewers";
 export interface Context extends ContextFromConfigs {
-    section?: ObjectsBoxSection | ObjectsPlaneSection | PickPlaneSection | AxisPlaneSection;
+    section?: ObjectsBoxSection | PickPlaneSection | AxisPlaneSection;
     toolbar?: Toolbar<BimViewer>;
 }
 export interface ContextMenuConfig extends ContextMenuConfigFromConfigs {

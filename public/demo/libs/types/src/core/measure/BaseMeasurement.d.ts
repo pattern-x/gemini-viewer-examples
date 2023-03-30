@@ -1,11 +1,14 @@
 import * as THREE from "three";
-import { BaseMeasureDrawable } from "./BaseMeasureDrawable";
-import { Tooltip } from "../../components/tool-tip/Tooltip";
-import { DrawableData } from "../canvas";
-import { DrawableList } from "../canvas/DrawableList";
-import { OSnapHelper } from "../helpers/OSnapHelper";
-import { Event } from "../utils";
-import type { BaseViewer } from "../viewers/BaseViewer";
+import { Tooltip } from "../../components/tool-tip";
+import { DrawableData, DrawableList } from "../../core/canvas";
+import { OSnapHelper } from "../../core/helpers";
+import { EventInfo, InputManager } from "../../core/input/InputManager";
+import type { BaseMeasureDrawable } from "../../core/measure/BaseMeasureDrawable";
+import { Event } from "../../core/utils";
+import type { BaseViewer } from "../../core/viewers";
+/**
+ * Measurement type. e.g. distance measurement, area measurement, etc.
+ */
 export declare enum MeasurementType {
     Distance = "Distance",
     Area = "Area",
@@ -26,23 +29,43 @@ export interface MeasurementData extends DrawableData {
     id: string;
     /**
      * Two dimension float array stores 2d or 3d points.
-     * e.g. [[1, 1, 1], [2.5, 3, 5]]
+     * e.g., You can use "[[1, 1], [2.5, 3]]" to represent a distance measurement result
+     * "[1, 1]" is the first point, and "[2.5, 3]" is the second point.
      */
     points: number[][];
 }
+type MeasureHandler = {
+    /**
+     * click measure
+     */
+    clickedonmeasurement: BaseMeasureDrawable;
+    /**
+     * draw measure complete
+     */
+    complete: BaseMeasureDrawable;
+    /**
+     * deactivate measure
+     */
+    deactivate: MeasurementType;
+    /**
+     * draw first point
+     */
+    firstpointpicked: BaseMeasureDrawable;
+};
 /**
  * BaseMeasurement class
  */
-export declare abstract class BaseMeasurement extends Event {
+export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
     static MAX_DISTANCE: number;
     protected type: MeasurementType;
     protected viewer: BaseViewer;
+    private inputManager;
     protected drawList: DrawableList;
     protected osnapHelper: OSnapHelper;
     protected raycaster?: THREE.Raycaster;
     protected mouseMoved: boolean;
     protected mouseDowned: boolean;
-    protected lastMoveEvent?: MouseEvent;
+    protected lastMoveEvent?: EventInfo;
     protected mouseDownPositionX: number;
     protected mouseDownPositionY: number;
     protected currentMeasureDrawable?: BaseMeasureDrawable;
@@ -53,9 +76,10 @@ export declare abstract class BaseMeasurement extends Event {
     protected snapPoint?: THREE.Vector3 | undefined;
     protected completed?: boolean;
     protected clickedOnMeasurementDrawable?: BaseMeasureDrawable;
-    constructor(type: MeasurementType, viewer: BaseViewer, drawList: DrawableList, osnapHelper: OSnapHelper);
+    constructor(type: MeasurementType, viewer: BaseViewer, input: InputManager, drawList: DrawableList, osnapHelper: OSnapHelper);
     get canvas(): HTMLCanvasElement;
     get camera(): THREE.Camera;
+    get renderer(): THREE.WebGLRenderer;
     /**
      * If measurement is active.
      * Here let's use raycaster to identify whether this measurement is active.
@@ -69,12 +93,12 @@ export declare abstract class BaseMeasurement extends Event {
     deactivate(): void;
     protected removeDrawable(drawable: BaseMeasureDrawable): void;
     clearClickedDrawable(): void;
-    mousedown: (e: MouseEvent) => void;
-    mousemove: (e: MouseEvent) => void;
-    mouseup: (e: MouseEvent) => void;
+    mousedown: (e: EventInfo) => void;
+    mousemove: (e: EventInfo) => void;
+    mouseup: (e: EventInfo) => void;
     dblclick: () => void;
-    protected onMouseClick(e: MouseEvent): void;
-    keydown: (e: KeyboardEvent) => void;
+    protected onMouseClick(e: EventInfo): void;
+    keydown: (e: EventInfo) => void;
     protected abstract complete(): void;
     abstract cancel(): void;
     protected abstract setTooltipContent(): void;
@@ -83,8 +107,9 @@ export declare abstract class BaseMeasurement extends Event {
      * The closest intersection
      * @param e
      */
-    getIntersections: (e: MouseEvent) => THREE.Intersection[];
+    getIntersections: (e: EventInfo) => THREE.Intersection[];
     private getIntersectsOutline;
     lastMouseDownPosition?: THREE.Vector3;
     private handleSnap;
 }
+export {};

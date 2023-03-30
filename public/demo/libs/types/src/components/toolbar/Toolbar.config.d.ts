@@ -1,16 +1,9 @@
-import { ToolbarConfig, ToolbarMenuId } from "./Toolbar.constants";
-import { BimViewer, DxfViewer, VRViewer } from "../../core/viewers";
-/**
- * Toolbar.config
- **/
+import { ToolbarConfig } from "./Toolbar.constants";
+import type { BimViewer, DxfViewer, VRViewer } from "../../core/viewers";
 /**
  * @internal
  */
 export declare const DEFAULT_BIMVIEWER_TOOLBAR_CONFIG: ToolbarConfig<BimViewer>;
-/**
- * @internal
- */
-export declare const GROUP_CONFIG: ToolbarMenuId[][];
 /**
  * @internal
  */

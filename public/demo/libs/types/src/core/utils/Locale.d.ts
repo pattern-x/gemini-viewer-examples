@@ -79,11 +79,13 @@ export declare const en: {
         fullscreen: string;
         layers: string;
         zoomToRectangle: string;
+        screenshot: string;
     };
     Tooltip: {
         measure: string;
         areaMeasurement: string;
         section: string;
+        boxSelect: string;
     };
     PopPanel: {
         reset: string;
@@ -170,11 +172,13 @@ export declare const cn: {
         fullscreen: string;
         layers: string;
         zoomToRectangle: string;
+        screenshot: string;
     };
     Tooltip: {
         measure: string;
         areaMeasurement: string;
         section: string;
+        boxSelect: string;
     };
     PopPanel: {
         reset: string;

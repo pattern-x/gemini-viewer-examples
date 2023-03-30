@@ -1,6 +1,6 @@
-import { IObject, IObjectParser } from "./common";
 import { DxfBaseReader, IGroup } from "../DxfBaseReader";
 import { IPoint } from "../entities/geomtry";
+import { IObject, IObjectParser } from "./common";
 export interface ISpatialFilterObject extends IObject {
     origin: IPoint;
     numberOfPointsOnClipBoundary: number;

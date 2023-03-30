@@ -1,5 +1,5 @@
-import { MeasurementManager } from "./MeasurementManager";
-import { OperationRecord, UndoRedoHelper } from "../helpers/UndoRedoHelper";
+import { OperationRecord, UndoRedoHelper } from "../../core/helpers";
+import type { MeasurementManager } from "../../core/measure/MeasurementManager";
 export declare enum MeasurementState {
     Add = "ADD",
     Remove = "REMOVE"

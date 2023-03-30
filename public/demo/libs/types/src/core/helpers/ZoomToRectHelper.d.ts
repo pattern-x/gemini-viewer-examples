@@ -1,30 +1,15 @@
 import * as THREE from "three";
-import { BimViewer, DxfViewer } from "../viewers";
+import type { BimViewer, DxfViewer } from "../../core/viewers";
 export declare class ZoomToRectHelper {
-    private viewer;
-    protected mouseDown: boolean;
-    protected mouseMove: boolean;
-    protected mouseDownPositionX: number;
-    protected mouseDownPositionY: number;
-    protected tempKey?: number;
-    protected tempEnableRotate: boolean;
-    protected rectDom?: HTMLDivElement;
-    private actived;
-    static readonly BORDER_COLOR = "#fff000";
-    static readonly BORDER_WIDTH = "2px";
+    protected viewer: DxfViewer | BimViewer;
+    private boxSelectHelper?;
     constructor(viewer: DxfViewer | BimViewer);
-    get viewerContainer(): HTMLCanvasElement;
+    private get viewerContainer();
     get camera(): THREE.OrthographicCamera | THREE.PerspectiveCamera;
     get raycaster(): THREE.Raycaster;
-    isActived(): boolean;
     activate(): void;
     deactivate(): void;
-    mousedown: (e: MouseEvent) => void;
-    mousemove: (e: MouseEvent) => void;
-    mouseup: (e: MouseEvent) => void;
-    private pickPositionByScreenPoint;
-    private handleZoomToRect;
-    drawRect(leftTop: THREE.Vector2, rightBottom: THREE.Vector2): void;
-    setRectDomVisible(visible: boolean): void;
+    protected pickPositionByScreenPoint(p: THREE.Vector2): THREE.Vector3 | undefined;
+    protected handleZoomToRect(leftTop: THREE.Vector2, rightBottom: THREE.Vector2): void;
     destroy(): void;
 }

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Drawable } from "../canvas";
+import { Drawable } from "../../core/canvas";
 /**
  * @internal
  */

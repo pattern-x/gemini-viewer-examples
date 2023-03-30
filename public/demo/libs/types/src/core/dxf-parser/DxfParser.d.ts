@@ -89,7 +89,7 @@ export interface ILineTypeTableDefinition {
     parseTableRecords(): Record<string, ILineType>;
 }
 /**
- * @internal
+ * dwg layer
  */
 export interface ILayer {
     name: string;
@@ -302,4 +302,9 @@ export default class DxfParser {
     parseSync(source: string | ArrayBuffer): IDxf;
     parseStream(stream: Readable): Promise<IDxf>;
     private _parse;
+    /**
+     * Splits a string to string array by line separator, "\r\n", "\r", "\n", etc.
+     * We do this instead of using "String.prototype.split(/\r\n|\r|\n/g)", because it is extreamly slow!
+     */
+    private splitByLineSeparator;
 }

@@ -1,5 +1,5 @@
-import type { BimViewer, DxfViewer, VRViewer } from "../viewers";
-import type { ModelConfig } from "@";
+import type { ModelConfig } from "../..";
+import type { BimViewer, DxfViewer, VRViewer } from "../../core/viewers";
 /**
  * @internal
  */

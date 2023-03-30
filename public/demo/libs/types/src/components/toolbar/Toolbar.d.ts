@@ -44,9 +44,13 @@ declare class Toolbar<T extends BaseViewer> {
     readonly menuConfig: ToolbarConfig<T>;
     groupConfig: ToolbarMenuId[][] | string[][];
     private element;
+    private visible;
+    activateMenuId?: string;
     menuList: Map<string, ToolbarMenu<T>>;
     constructor(bimViewer: T, menuConfig: ToolbarConfig<T>, groupConfig?: ToolbarMenuId[][] | string[][]);
     private init;
+    keydown: (e: KeyboardEvent) => void;
+    clearActive(): void;
     private createToolbarMenu;
     /**
      * @description Modify the menu configuration and update the toolbar.

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
-import { DxfData } from "../dxf";
-import { ShxFont } from "../shx-parser/ShxFont";
+import type { DxfData } from "../../core/dxf";
+import type { ShxFont } from "../../core/shx-parser";
 export declare class LoadingHelper {
     private gltfLoader?;
     private font?;

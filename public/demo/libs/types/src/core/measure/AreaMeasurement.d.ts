@@ -1,12 +1,13 @@
 import * as THREE from "three";
-import { BaseMeasurement } from "./BaseMeasurement";
-import { DrawableList } from "../canvas/DrawableList";
-import { OSnapHelper } from "../helpers/OSnapHelper";
-import type { BaseViewer } from "../viewers/BaseViewer";
+import { DrawableList } from "../../core/canvas";
+import { OSnapHelper } from "../../core/helpers";
+import { EventInfo, InputManager } from "../../core/input/InputManager";
+import { BaseMeasurement } from "../../core/measure/BaseMeasurement";
+import type { BaseViewer } from "../../core/viewers";
 export declare class AreaMeasurement extends BaseMeasurement {
-    constructor(viewer: BaseViewer, drawList: DrawableList, osnapHelper: OSnapHelper);
+    constructor(viewer: BaseViewer, input: InputManager, drawList: DrawableList, osnapHelper: OSnapHelper);
     protected onMouseMove(position: THREE.Vector3): void;
-    protected onMouseClick(e: MouseEvent): void;
+    protected onMouseClick(e: EventInfo): void;
     protected complete(): void;
     cancel(): void;
     deactivate(): void;

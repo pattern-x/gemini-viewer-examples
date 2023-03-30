@@ -1,6 +1,6 @@
 import { Box3, Group, Plane, Scene, Vector3 } from "three";
-import { BoxFace, BoxLine } from "./BaseBoxSection";
 import { Views } from "../utils/Viewer3DUtils";
+import { BoxFace, BoxLine } from "./BaseBoxSection";
 /**
  * For dxf viewport section, only 4 section planes are required.
  */
