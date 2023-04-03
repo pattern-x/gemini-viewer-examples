@@ -207,14 +207,14 @@
 
             // create hotpoint...
             if (addingHotpoint && target instanceof HTMLCanvasElement) {
-                const result = viewer.getHitResult(event);
-                if (!result || !result.location) {
+                const location = viewer.getHitResult(event);
+                if (!location) {
                     return;
                 }
                 const hotpointId = `hotpoint_${hotpointCount}`;
                 const hotpoint = {
                     hotpointId,
-                    anchorPosition: [result.location[0], result.location[1]],
+                    anchorPosition: [location.x, location.y],
                     visible: true,
                     html: `<div class="hotpoint" id="hotpoint_${hotpointId}">
                                 <div class="hotpoint-dot" id="hotpoint-dot_${hotpointId}"></div>
