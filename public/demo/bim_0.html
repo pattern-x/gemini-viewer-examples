@@ -25,6 +25,49 @@
     <script type="module">
         import { BimViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
 
+        // get model tree view from threejs scene
+        const getModelTreeView = (scene, loadedModels) => {
+            // create TreeViewNode for an object
+            const createNodeRecursive = (object) => {
+                if (object.children.length === 0 && !object.geometry) {
+                    return undefined;
+                }
+                // ignore outlines
+                if (object.userData.isOutline) {
+                    return undefined;
+                }
+                const children = [];
+                for (const child of object.children) {
+                    const childNode = createNodeRecursive(child);
+                    if (childNode) {
+                        children.push(childNode);
+                    }
+                }
+                if (children.length > 0 || object.geometry) {
+                    const objectId = object.id;
+                    const name = object.name;
+                    const type = object.type;
+                    return { objectId, name, type, children };
+                }
+                return undefined;
+            };
+
+            const nodes = [];
+            const modelIds = Object.keys(loadedModels);
+            for (const modelId of modelIds) {
+                const objectId = loadedModels[modelId].id;
+                const object = scene.getObjectById(objectId);
+                if (object) {
+                    const node = createNodeRecursive(object);
+                    if (node) {
+                        node.name = node.name || modelId;
+                        nodes.push(node);
+                    }
+                }
+            }
+            return nodes;
+        }
+
         const project = {
             "id": "rac_basic_sample_project",
             "name": "Rac basic sample project",
@@ -63,7 +106,9 @@
             }, (event) => {
                 console.error("[Demo] Failed to load " + modelCfg.src + ". " + event.message);
             }).then(() => {
-                    console.log(`[Demo] Loaded model ${modelCfg.src}`);
+                console.log(`[Demo] Loaded model ${modelCfg.src}`);
+                const nodes = getModelTreeView(viewer.scene, viewer.loadedModels);
+                console.log("Model tree view:", nodes);
             });
         });
     </script>
