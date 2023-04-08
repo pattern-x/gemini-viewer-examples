@@ -30,11 +30,11 @@
             "name": "buiding1 project",
             "models": [{
                 "name": "buiding1",
-                "src": "./demo/models/gltf/buiding1.gltf",
+                "src": "./demo/models/gltf/buiding1.glb",
                 "position": [0, 0, 0],
                 "rotation": [0, 0, 0],
                 "scale": [1, 1, 1],
-                "edges": true,
+                "edges": false,
                 "visible": true
             }, {
                 "name": "立面 - 东",
@@ -42,14 +42,14 @@
                 "position": [-30, 0, 0],
                 "rotation": [0, 90, 0],
                 "scale": [0.001, 0.001, 0.001],
-                "visible": true
+                "visible": false
             }, {
                 "name": "楼层平面 - 1F",
                 "src": "./demo/models/dxf/buiding1-1F.dxf",
                 "position": [0, -10, -170],
                 "rotation": [90, 0, 0],
                 "scale": [0.001, 0.001, 0.001],
-                "visible": true
+                "visible": false
             }]
         }
         const viewer = new BimViewer({
@@ -57,6 +57,10 @@
         }, project.camera);
         const toolbar = viewer.toolbar;
         toolbar.updateMenu(ToolbarMenuId.BimTree, { visible: false });
+        // draco decoder path is needed to load draco encoded models.
+        // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.
+        const decoderPath = "demo/three/js/libs/draco/gltf/";
+        viewer.setDracoDecoderPath(decoderPath);
 
         // loadProjectModel
         let counter = 0; // to indicate how many models are loading
