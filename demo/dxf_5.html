@@ -1,0 +1,257 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css">
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css">
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
+    <style>
+        /* #myCanvas {
+            position: absolute;
+            width: calc(100% - 100px);
+            width: -moz-calc(100% - 100px);
+            width: -webkit-calc(100% - 100px);
+            height: calc(100% - 80px);
+            height: -moz-calc(100% - 80px);
+            height: -webkit-calc(100vh - 80px);
+            left: 50px;
+            top: 40px;
+        } */
+        .markup-toolbar {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
+        .markup-toolbar-btn {
+            min-width: 50px;
+            height: 30px;
+            cursor: pointer;
+            padding: 2px;
+            border: 1px solid cornflowerblue;
+        }
+        .markup-toolbar-btn:hover {
+            border: 1px solid peru;
+        }
+        .btn-active {
+            background-color: cornflowerblue;
+        }
+        .markup-manager {
+            width: 400px;
+            height: 400px;
+            right: 20px;
+            top: 60px;
+            position: absolute;
+            background: white;
+        }
+        .markup-manager-text {
+            width: 398px;
+            height: calc(100% - 40px);
+            font-size: 10px;
+            background-color: #eeeeee;
+            position: absolute;
+            margin: 1px;
+        }
+        .markup-manager-bottom {
+            position: absolute;
+            width: 100%;
+            bottom: 3px;
+            margin-left: 5px;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+        <div class="markup-toolbar">
+            <button id="ArrowMarkup" class="markup-toolbar-btn">Arrow</button>
+            <button id="RectMarkup" class="markup-toolbar-btn">Rect</button>
+            <button id="CircleMarkup" class="markup-toolbar-btn">Circle</button>
+            <button id="DotMarkup" class="markup-toolbar-btn">Dot</button>
+            <button id="ClearMarkups" class="markup-toolbar-btn" title="Clear all markups">Clear</button>
+            <button id="ManageMarkups" class="markup-toolbar-btn" title="View and manage markup data">View data</button>
+        </div>
+        <div class="markup-manager hide">
+            <textarea id="MarkupData" class="markup-manager-text"></textarea>
+            <div class="markup-manager-bottom">
+                <button id="GetMarkupData" class="markup-toolbar-btn" title="Get all markups">Get</button>
+                <button id="SetMarkupData" class="markup-toolbar-btn" title="Reset markups">Set</button>
+                <button id="UpdateMarkupData" class="markup-toolbar-btn" title="Update one or more markups">Update</button>
+                <button id="RemoveMarkupData" class="markup-toolbar-btn" title="Remove one or more markups">Remove</button>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { DxfViewer, ViewerEvent, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
+        import LayerManager from './demo/layerManager/LayerManager.js';
+
+        const filename = "rac_basic_sample_project";
+        const modelCfg = {
+            modelId: filename,
+            name: filename,
+            src: `./demo/models/dxf/${filename}.dxf`,
+            merge: true,
+        };
+        const viewerCfg = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableLayoutBar: true,
+            toolbarMenuConfig: {
+                [ToolbarMenuId.Settings]: {
+                    onActive: () => {
+                        console.log("[Toolbar]", "Activate Settings");
+                        if (!window.dxfSettingsPanel) {
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                        }
+                        window.dxfSettingsPanel.show();
+                    },
+                    onDeactive: () => {
+                        console.log("[Toolbar]", "Deactivate Settings");
+                        if (!window.dxfSettingsPanel) {
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                        }
+                        window.dxfSettingsPanel.hide();
+                    },
+                },
+                [ToolbarMenuId.Layers]: {
+                    onActive: () => {
+                        console.log("[Toolbar]", "Activate Layers");
+                        if (!window.layerManager) {
+                            window.layerManager = new LayerManager(window.viewer);
+                        }
+                        window.layerManager.show();
+                    },
+                    onDeactive: () => {
+                        console.log("[Toolbar]", "Deactivate Layers");
+                        if (!window.layerManager) {
+                            window.layerManager = new LayerManager(window.viewer);
+                        }
+                        window.layerManager.hide();
+                    },
+                },
+            },
+        };
+        const viewer = new DxfViewer(viewerCfg);
+        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+        await viewer.setFont(fontFiles);
+        window.viewer = viewer;
+
+        const onProgress = (event) => {
+            const progress = ((event.loaded * 100) / event.total).toFixed(1);
+            console.log(`[Demo] Loading progress: ${progress}%`);
+        };
+        await viewer.loadModelAsync(modelCfg, onProgress);
+        console.log(`[Demo] Loaded model ${modelCfg.src}`);
+
+        const markupButtonClicked = (markupType, btn) => {
+            if (markupType === "ManageMarkups") {
+                const mgr = document.getElementsByClassName("markup-manager")[0];
+                if (mgr.classList.contains("hide")) {
+                    mgr.classList.remove("hide");
+                    btn.classList.add("btn-active");
+                } else {
+                    mgr.classList.add("hide");
+                    btn.classList.remove("btn-active");
+                }
+                return;
+            }
+            // deactive current markup
+            const activeMarkupType = viewer.getActiveMarkupType();
+            if (activeMarkupType) {
+                let activeBtn = document.getElementById(activeMarkupType);
+                activeBtn.classList.remove("btn-active");
+                viewer.deactivateMarkup(activeMarkupType);
+            }
+            if (markupType === "ClearMarkups") {
+                viewer.clearMarkups();
+                return;
+            }
+            // active new markup if a different type is clicked
+            if (activeMarkupType !== markupType) {
+                btn.classList.add("btn-active");
+                viewer.activateMarkup(markupType);
+            }
+        };
+        const registerClickEvent = (markupType) => {
+            let btn = document.getElementById(markupType);
+            btn.onclick = () => markupButtonClicked(markupType, btn);
+        };
+
+        registerClickEvent("ArrowMarkup");
+        registerClickEvent("RectMarkup");
+        registerClickEvent("CircleMarkup");
+        registerClickEvent("DotMarkup");
+        registerClickEvent("ClearMarkups");
+        registerClickEvent("ManageMarkups");
+
+        viewer.addEventListener(ViewerEvent.MarkupClicked, (data) => {
+            if (data.markup) {
+                console.log("[Demo] Clicked on markup:", data);
+            }
+        });
+
+        const getMarkupDataBtn = document.getElementById("GetMarkupData");
+        const setMarkupDataBtn = document.getElementById("SetMarkupData");
+        const updateMarkupDataBtn = document.getElementById("UpdateMarkupData");
+        const removeMarkupDataBtn = document.getElementById("RemoveMarkupData");
+        const markupDataTxt = document.getElementById("MarkupData");
+        getMarkupDataBtn.onclick = () => {
+            const markups = viewer.getMarkups();
+            // format the data a bit, so it looks better
+            let val = "[";
+            for (let i = 0; i < markups.length; ++i) {
+                val += i > 0 ? ",\n" : "\n";
+                val += JSON.stringify(markups[i]);
+            }
+            val += "\n]";
+            markupDataTxt.value = val;
+            console.log(val);
+        };
+        setMarkupDataBtn.onclick = () => {
+            try {
+                const markups = JSON.parse(markupDataTxt.value);
+                console.log(markups);
+                viewer.setMarkups(markups);
+            } catch (ex) {
+                console.warn(ex);
+            }
+        };
+        updateMarkupDataBtn.onclick = () => {
+            try {
+                const markups = JSON.parse(markupDataTxt.value);
+                console.log(markups);
+                // update markups one by one
+                for (let i = 0; i < markups.length; ++i) {
+                    const ret = viewer.updateMarkup(markups[i]);
+                    const str = `[Demo] ${ret ? "Updated" : "Failed to update"} markup with id: ${markups[i].id}`;
+                    console.log(str);
+                }
+            } catch (ex) {
+                console.warn(ex);
+            }
+        };
+        removeMarkupDataBtn.onclick = () => {
+            try {
+                const markups = JSON.parse(markupDataTxt.value);
+                console.log(markups);
+                // remove markups one by one
+                for (let i = 0; i < markups.length; ++i) {
+                    const ret = viewer.removeMarkup(markups[i].id);
+                    const str = `[Demo] ${ret ? "Removed" : "Failed to remove"} markup with id: ${markups[i].id}`;
+                    console.log(str);
+                }
+            } catch (ex) {
+                console.warn(ex);
+            }
+        };
+    </script>
+</body>
+
+</html>

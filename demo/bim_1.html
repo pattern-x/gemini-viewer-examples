@@ -1,0 +1,73 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <script type="module">
+        import { BimViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const project = {
+            id: "Duplex",
+            name: "Duplex",
+            models: [
+                {
+                    name: "Duplex",
+                    src: "./demo/models/gltf/Duplex.gltf",
+                    position: [0, 0, 0],
+                    rotation: [0, 0, 0],
+                    scale: [1, 1, 1],
+                    instantiate: false,
+                    merge: false,
+                    edges: true,
+                    visible: true,
+                },
+            ],
+        };
+        const viewer = new BimViewer(
+            {
+                containerId: "myCanvas",
+                language: "en",
+                enableAxisGizmo: true,
+                toolbarMenuConfig: {
+                    [ToolbarMenuId.Measure]: { visible: false },
+                    [ToolbarMenuId.Fullscreen]: { visible: false },
+                    [ToolbarMenuId.BimTree]: { visible: false },
+                },
+                enableBottomBar: true,
+                enableNavCube: true,
+                enableContextMenu: true,
+            },
+            project.camera
+        );
+        // draco decoder path is needed to load draco encoded models.
+        // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.
+        const decoderPath = "demo/three/js/libs/draco/gltf/";
+        viewer.setDracoDecoderPath(decoderPath);
+
+        // loadProjectModel
+        let counter = 0; // to indicate how many models are loading
+        project.models.forEach((modelCfg) => {
+            if (modelCfg.visible === false) {
+                // visible is true by default
+                return; // only load visible ones
+            }
+            counter++;
+            viewer.loadModel(modelCfg, (event) => {
+                    console.log(`[Demo] Loading model ${modelCfg.src}`);
+                }, (event) => {
+                    console.error("[Demo] Failed to load " + modelCfg.src + ". " + event.message);
+                }
+            ).then(() => {
+                    console.log(`[Demo] Loaded model ${modelCfg.src}`);
+            });
+        });
+    </script>
+</body>
+
+</html>

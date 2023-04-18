@@ -1,0 +1,80 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+    <style>
+        .upload-btn {
+            margin-top: 2em;
+        }
+
+        .upload-btn button {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .upload-btn label {
+            color: #353535;
+            border: 0;
+            border-radius: 3px;
+            transition: ease 0.2s background;
+            font-size: 1rem;
+            font-weight: 700;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: pointer;
+            display: inline-block;
+            overflow: hidden;
+            padding: 0.625rem 1.25rem;
+        }
+
+        .upload-btn label:hover {
+            background: #DDD;
+        }
+
+        .upload-btn svg {
+            width: 1em;
+            height: 1em;
+            vertical-align: middle;
+            fill: currentColor;
+            margin-top: -0.25em;
+            margin-right: 0.25em;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <div style="position: absolute; top: 10px; opacity: 0.6; width: 100%;text-align: center;">
+        <div class="upload-btn" id="uploadBtn">
+            <button id="uploadImage" type="button">点此上传本地图片文件</button>
+            <label for="uploadImage" title="支持 png, jpg 等；请选择 1 张鱼眼图或 6 张图，若为 6 张，图片名须为 right/r, left/l, up/u, down/d, front/f, back/b">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
+                <span>Upload image</span>
+            </label>
+        </div>
+    </div>
+    <script type="module">
+        import { VRViewer, LocalImageUploader } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableBottomBar: true,
+        }
+        const vrViewer = new VRViewer(config);
+
+        const imageUploader = new LocalImageUploader(vrViewer);
+        document.getElementById("uploadImage").onclick = function() {
+            imageUploader.openFileBrowserToUpload();
+        }
+    </script>
+</body>
+
+</html>

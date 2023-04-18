@@ -1,0 +1,143 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <style>
+        .hotpoint {
+            opacity: 0.8;
+            cursor: pointer;
+            top: 10px;
+            left: 10px;
+        }
+        .dot:hover {
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+            border: 1px solid rgba(127,255,255,0.75);
+        }
+        .dot {
+            width: 15px;
+            height: 15px;
+            opacity: 0.8;
+            cursor: pointer;
+            top: 10px;
+            left: 10px;
+            background-color: yellow;
+            border-width: 3px;
+            border-style: dotted;
+            border-color: red;
+            border-radius: 50%;
+        }
+        .label {
+            width: 120px;
+            height: 30px;
+            opacity: 0.8;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            left: -50px;
+            color: white;
+            background-color: #000000bb;
+            border-radius: 5px;
+            /* border: 1px solid white; */
+            border: 1px solid rgba(127,255,255,0.25);
+            box-shadow: 0px 0px 3px rgba(0,255,255,0.5);
+            text-align: center;
+            vertical-align: middle;
+            font-size: 12px;
+            padding-top: 8px;
+        }
+        .label:hover {
+            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
+            border: 1px solid rgba(127,255,255,0.75);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <script type="module">
+        import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const viewpointIds = ["viewpoint_1"];
+        const panoramaIds = ["panorama_1", "panorama_2"];
+        let activePanoramaIdIndex = 0; // used to switch between panoramas
+        // in order of right, left, up/top, down/bottom, front, back
+        const viewpoints = [{
+            panoramas: [{
+                id: panoramaIds[0],
+                images: ["./demo/images/vr/vr_4/vr_1.jpg"],
+                thumbnails: [],
+            }],
+            id: viewpointIds[0],
+            name: "视点1",
+            position: [0, 1, 0],
+            initialDirection: [0, 0, 1],
+            hotpoints: [{
+                usedForSwitchingPanoramas: true, // demo page manage this, rather than VRViewer
+                hotpointId: "hotpoint_1",
+                anchorPosition: [-2.47, -1.63, 9.32],
+                html: "",
+            }, {
+                hotpointId: "hotpoint_2",
+                anchorPosition: [3.55, -1.48, 9.01],
+                html: "",
+            }],
+        }];
+        // we'll dynamically add this viewpoint and switch to it
+        const panoramaNoDecoration = {
+            id: panoramaIds[1],
+            images: ["./demo/images/vr/vr_4/vr_2.jpg"],
+            thumbnails: [],
+        };
+        const hotpoints = [{
+            hotpointId: "hotpoint_1",
+            html: `<div class="hotpoint">
+                        <div class="dot"></div>
+                        <div class="label">点击隐藏软装</div>
+                    </div>`,
+        }, {
+            hotpointId: "hotpoint_2",
+            html: `<div class="label">床头柜价格：3980¥</div>`,
+        }];
+        viewpoints.forEach(viewpoint => {
+            viewpoint.hotpoints.forEach(hotpoint => {
+                if (!hotpoint.html) {
+                    const linkedHotpoint = hotpoints.find(hp => hp.hotpointId === hotpoint.hotpointId);
+                    hotpoint.html = (linkedHotpoint && linkedHotpoint.html) || "";
+                }
+            });
+        });
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableBottomBar: true,
+        }
+        const viewer = new VRViewer(config);
+        viewer.onHotpointClicked = (hotpoint) => {
+            // there can be a better way to distinguish if a hotpoint is a viewpoint!
+            if (hotpoint.usedForSwitchingPanoramas) {
+                // find the target panoramaId
+                const targetPanoramaIdIndex = (++activePanoramaIdIndex) % 2;
+                const panoramaId = panoramaIds[targetPanoramaIdIndex];
+                if (!viewer.findPanorama(viewpointIds[0], panoramaId)) {
+                    viewer.addPanorama(viewpointIds[0], panoramaNoDecoration);
+                }
+                // If it's gonna adjust camera direction by viewpoint's initialDirection when switching viewpoints.
+                // Set it to false in case we want to keep camera direction unchanged.
+                // Switching between panoramas of the same viewpoint won't trigger camera direction reset.
+                const setCameraToInitialDirection = false;
+                viewer.activatePanoramaById(viewpointIds[0], panoramaId, setCameraToInitialDirection, (viewpoint) => {
+                    console.log(`[Demo] Swithced to viewpoint '${viewpoint.name}', panorama '${panoramaId}'`);
+                });
+            } else if (hotpoint.anchorPosition) {
+                viewer.lookToPosition(hotpoint.anchorPosition);
+            }
+        };
+        viewer.setViewpoints(viewpoints);
+        viewer.activatePanoramaById(viewpoints[0].id, viewpoints[0].panoramas[0].id);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <script type="module">
+        import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const viewpoints = [{
+            panoramas: [{
+                id: "panorama_1",
+                images: [
+                    "./demo/images/vr/vr_2/right.jpg",
+                    "./demo/images/vr/vr_2/left.jpg",
+                    "./demo/images/vr/vr_2/top.jpg",
+                    "./demo/images/vr/vr_2/bottom.jpg",
+                    "./demo/images/vr/vr_2/front.jpg",
+                    "./demo/images/vr/vr_2/back.jpg",
+                ],
+                thumbnails: [
+                    "./demo/images/vr/vr_2/thumbnail/right.jpg",
+                    "./demo/images/vr/vr_2/thumbnail/left.jpg",
+                    "./demo/images/vr/vr_2/thumbnail/top.jpg",
+                    "./demo/images/vr/vr_2/thumbnail/bottom.jpg",
+                    "./demo/images/vr/vr_2/thumbnail/front.jpg",
+                    "./demo/images/vr/vr_2/thumbnail/back.jpg",
+                ],
+            }],
+            id: "viewpoint_1",
+            name: "客厅",
+            position: [0, 1, 0],
+            initialDirection: [0, 0, 1],
+        }];
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: false,
+            enableBottomBar: false,
+        }
+        const viewer = new VRViewer(config);
+        viewer.setViewpoints(viewpoints);
+        viewer.activatePanoramaById(viewpoints[0].id, viewpoints[0].panoramas[0].id);
+    </script>
+</body>
+
+</html>

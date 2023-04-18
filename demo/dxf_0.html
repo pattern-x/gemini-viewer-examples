@@ -1,0 +1,147 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css">
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css">
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
+    <!-- <style>
+        #myCanvas {
+            position: absolute;
+            width: calc(100% - 100px);
+            width: -moz-calc(100% - 100px);
+            width: -webkit-calc(100% - 100px);
+            height: calc(100% - 80px);
+            height: -moz-calc(100% - 80px);
+            height: -webkit-calc(100vh - 80px);
+            left: 50px;
+            top: 40px;
+        }
+    </style> -->
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <script type="module">
+        import { DxfViewer, ViewerEvent,ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
+        import LayerManager from './demo/layerManager/LayerManager.js';
+
+        const filename = "rac_basic_sample_project";
+        const modelCfg = {
+            modelId: filename,
+            name: filename,
+            src: `./demo/models/dxf/${filename}.dxf`,
+            merge: true,
+        };
+        const viewerCfg = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableToolbar: true,
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableLayoutBar: true,
+            toolbarMenuConfig: {
+                [ToolbarMenuId.Settings]: {
+                    onActive: () => {
+                        console.log("[Toolbar]", "Activate Settings");
+                        if (!window.dxfSettingsPanel) {
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                        }
+                        window.dxfSettingsPanel.show();
+                    },
+                    onDeactive: () => {
+                        console.log("[Toolbar]", "Deactivate Settings");
+                        if (!window.dxfSettingsPanel) {
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                        }
+                        window.dxfSettingsPanel.hide();
+                    },
+                },
+                [ToolbarMenuId.Layers]: {
+                    onActive: () => {
+                        console.log("[Toolbar]", "Activate Layers");
+                        if (!window.layerManager) {
+                            window.layerManager = new LayerManager(window.viewer);
+                        }
+                        window.layerManager.show();
+                    },
+                    onDeactive: () => {
+                        console.log("[Toolbar]", "Deactivate Layers");
+                        if (!window.layerManager) {
+                            window.layerManager = new LayerManager(window.viewer);
+                        }
+                        window.layerManager.hide();
+                    },
+                },
+            },
+        };
+        const viewer = new DxfViewer(viewerCfg);
+        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+        await viewer.setFont(fontFiles);
+        window.viewer = viewer;
+
+        const onProgress = (event) => {
+            const progress = ((event.loaded * 100) / event.total).toFixed(1);
+            console.log(`[Demo] Loading progress: ${progress}%`);
+        };
+        await viewer.loadModelAsync(modelCfg, onProgress);
+        console.log(`[Demo] Loaded model ${modelCfg.src}`);
+       
+        const measurementData = [{
+            type: "Distance",
+            id: "measure_data_id_1",
+            layoutName: "Model",
+            points: [[0, -22000], [6000, -22000]],
+        }, {
+            type: "Area",
+            id: "measure_data_id_2",
+            layoutName: "Model",
+            points: [[0, -23000], [6000, -23000], [6000, -25000], [0, -25000], [0, -23000]],
+        }, {
+            type: "Angle",
+            id: "measure_data_id_3",
+            layoutName: "Model",
+            points: [[0, -26000], [6000, -26000], [4000, -29000]],
+        }, {
+            type: "Distance",
+            id: "measure_data_id_4",
+            layoutName: "Layout1",
+            points: [[0, 0], [0, 200]],
+        }];
+
+        const markupData = [{
+            type: "ArrowMarkup",
+            id: "c6ea70a3-ddb0-4dd0-87c8-bd2491936428",
+            lineWidth: 2,
+            lineColor: "#ff0000",
+            fillColor: "#ff000030",
+            layoutName: "Model",
+            points: [[-15000, -9000], [-11000, -4000]],
+        }, {
+            type: "RectMarkup",
+            id: "82aba74f-7cd6-40e7-bac0-78d95a7bbecd",
+            lineWidth: 2,
+            lineColor: "#ff0000",
+            fillColor: "#ff000030",
+            layoutName: "Model",
+            points: [[-7000, -1800], [-1000, -5000]],
+        }, {
+            type: "DotMarkup",
+            id: "82aba74f-7cd6-40e7-bac0-78d95a7bbece",
+            lineWidth: 2,
+            lineColor: "#ff0000",
+            fillColor: "#ff000030",
+            layoutName: "Model",
+            points: [[-7000, -8000]],
+        }];
+
+        viewer.setMeasurements(measurementData);
+        viewer.setMarkups(markupData);
+    </script>
+</body>
+
+</html>

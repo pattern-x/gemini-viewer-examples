@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <script type="module">
+        import { VRViewer } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        // in order of right, left, up/top, down/bottom, front, back
+        const image24 = [
+            "./demo/images/vr/vr_3/l4_r_1_1.jpg",
+            "./demo/images/vr/vr_3/l4_r_1_2.jpg",
+            "./demo/images/vr/vr_3/l4_r_2_1.jpg",
+            "./demo/images/vr/vr_3/l4_r_2_2.jpg",
+            "./demo/images/vr/vr_3/l4_l_1_1.jpg",
+            "./demo/images/vr/vr_3/l4_l_1_2.jpg",
+            "./demo/images/vr/vr_3/l4_l_2_1.jpg",
+            "./demo/images/vr/vr_3/l4_l_2_2.jpg",
+            "./demo/images/vr/vr_3/l4_u_1_1.jpg",
+            "./demo/images/vr/vr_3/l4_u_1_2.jpg",
+            "./demo/images/vr/vr_3/l4_u_2_1.jpg",
+            "./demo/images/vr/vr_3/l4_u_2_2.jpg",
+            "./demo/images/vr/vr_3/l4_d_1_1.jpg",
+            "./demo/images/vr/vr_3/l4_d_1_2.jpg",
+            "./demo/images/vr/vr_3/l4_d_2_1.jpg",
+            "./demo/images/vr/vr_3/l4_d_2_2.jpg",
+            "./demo/images/vr/vr_3/l4_f_1_1.jpg",
+            "./demo/images/vr/vr_3/l4_f_1_2.jpg",
+            "./demo/images/vr/vr_3/l4_f_2_1.jpg",
+            "./demo/images/vr/vr_3/l4_f_2_2.jpg",
+            "./demo/images/vr/vr_3/l4_b_1_1.jpg",
+            "./demo/images/vr/vr_3/l4_b_1_2.jpg",
+            "./demo/images/vr/vr_3/l4_b_2_1.jpg",
+            "./demo/images/vr/vr_3/l4_b_2_2.jpg",
+        ];
+        const image6 = [
+            "./demo/images/vr/vr_3/l1_r.jpg",
+            "./demo/images/vr/vr_3/l1_l.jpg",
+            "./demo/images/vr/vr_3/l1_u.jpg",
+            "./demo/images/vr/vr_3/l1_d.jpg",
+            "./demo/images/vr/vr_3/l1_f.jpg",
+            "./demo/images/vr/vr_3/l1_b.jpg",
+        ];
+        const viewpoints = [{
+            panoramas: [{
+                id: "panorama_1",
+                images: image24,
+                thumbnails: image6,
+            }],
+            id: "viewpoint_1",
+            name: "客厅",
+            position: [0, 1, 0],
+            initialDirection: [0, 0, -1],
+        }];
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: false,
+            enableBottomBar: false,
+        }
+        const viewer = new VRViewer(config);
+        viewer.setViewpoints(viewpoints);
+        viewer.activatePanoramaById(viewpoints[0].id, viewpoints[0].panoramas[0].id);
+    </script>
+</body>
+
+</html>

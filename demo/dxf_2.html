@@ -1,0 +1,83 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css" />
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <script type="module">
+        import { DxfViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
+        import LayerManager from "./demo/layerManager/LayerManager.js";
+
+        const filename = "doors_and_windows";
+        const modelCfg = {
+            modelId: filename,
+            name: filename,
+            src: `./demo/models/dxf/${filename}.dxf`,
+            merge: true,
+        };
+        const viewerCfg = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableToolbar: true,
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableLayoutBar: true,
+            toolbarMenuConfig: {
+                [ToolbarMenuId.Settings]: {
+                    onActive: () => {
+                        console.log("[Toolbar]", "Activate Settings");
+                        if (!window.dxfSettingsPanel) {
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                        }
+                        window.dxfSettingsPanel.show();
+                    },
+                    onDeactive: () => {
+                        console.log("[Toolbar]", "Deactivate Settings");
+                        if (!window.dxfSettingsPanel) {
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                        }
+                        window.dxfSettingsPanel.hide();
+                    },
+                },
+                [ToolbarMenuId.Layers]: {
+                    onActive: () => {
+                        console.log("[Toolbar]", "Activate Layers");
+                        if (!window.layerManager) {
+                            window.layerManager = new LayerManager(window.viewer);
+                        }
+                        window.layerManager.show();
+                    },
+                    onDeactive: () => {
+                        console.log("[Toolbar]", "Deactivate Layers");
+                        if (!window.layerManager) {
+                            window.layerManager = new LayerManager(window.viewer);
+                        }
+                        window.layerManager.hide();
+                    },
+                },
+            },
+        };
+        const viewer = new DxfViewer(viewerCfg);
+        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+        await viewer.setFont(fontFiles);
+        window.viewer = viewer;
+
+        const onProgress = (event) => {
+            const progress = ((event.loaded * 100) / event.total).toFixed(1);
+            console.log(`[Demo] Loading progress: ${progress}%`);
+        };
+        await viewer.loadModelAsync(modelCfg, onProgress);
+        console.log(`[Demo] Loaded model ${modelCfg.src}`);
+    </script>
+</body>
+
+</html>
