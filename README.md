@@ -92,3 +92,5 @@ viewer.goToHomeView();
 ![bim_dist_measure.gif](public/demo/images/snapshots/bim_dist_measure.gif)
 - Section
 ![bim_section_plane.png](public/demo/images/snapshots/bim_section_plane.png)
+- Overlay 3d model with dxf
+![overlay_3d_model_with_dxf.gif](public/demo/images/snapshots/overlay_3d_model_with_dxf.gif)
