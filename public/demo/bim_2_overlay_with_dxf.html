@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <!-- <style>
+        #myCanvas {
+            position: absolute;
+            width: calc(100% - 100px);
+            width: -moz-calc(100% - 100px);
+            width: -webkit-calc(100% - 100px);
+            height: calc(100% - 80px);
+            height: -moz-calc(100% - 80px);
+            height: -webkit-calc(100vh - 80px);
+            left: 50px;
+            top: 40px;
+        }
+    </style> -->
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <script type="module">
+        import { BimViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const project = {
+            "id": "building1",
+            "name": "building1",
+            "models": [{
+                "name": "building1",
+                "src": "./demo/models/gltf/building1.gltf",
+                "edges": true,
+                "visible": true
+            }, {
+                "id": "building1_dxf",
+                "name": "building1 plan drawing",
+                "src": "./demo/models/dxf/building1.dxf",
+                "matrix": [
+                    0.001, 0, 0, 0, // the dxf is in "mm", and gltf is in "meter", so need to set scale 0.001
+                    0, 0, -0.001, 0,
+                    0, 0.001, 0, 0,
+                    -1831.340, 17, 456.910, 1 // also need to consider the base point
+                ],
+                "edges": true,
+                "visible": true
+            }]
+        }
+        const viewer = new BimViewer({
+            containerId: "myCanvas",
+        }, project.camera);
+        const toolbar = viewer.toolbar;
+        toolbar.updateMenu(ToolbarMenuId.BimTree, { visible: false });
+
+        // font file is needed for loading dxf
+        // const fontFiles = ["three/fonts/Microsoft_YaHei_Regular.typeface.json"];
+        const fontFiles = ["three/fonts/hztxt.shx", "three/fonts/simplex.shx"];
+        await viewer.setFont(fontFiles);
+
+        // draco decoder path is needed to load draco encoded models.
+        // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.
+        const decoderPath = "demo/three/js/libs/draco/gltf/";
+        viewer.setDracoDecoderPath(decoderPath);
+
+        // loadProjectModel
+        let counter = 0; // to indicate how many models are loading
+        project.models.forEach((modelCfg) => {
+            if (modelCfg.visible === false) {
+                // visible is true by default
+                return; // only load visible ones
+            }
+            counter++;
+            viewer.loadModel(modelCfg, (event) => {
+                console.log(`[Demo] Loading model ${modelCfg.src}`);
+            }, (event) => {
+                console.error("[Demo] Failed to load " + modelCfg.src + ". " + event.message);
+            }).then(() => {
+                console.log(`[Demo] Loaded model ${modelCfg.src}`);
+                viewer.setToOrthographicCamera(false);
+            });
+        });
+    </script>
+</body>
+
+</html>
