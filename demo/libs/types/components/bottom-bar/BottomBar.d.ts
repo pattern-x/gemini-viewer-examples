@@ -2,10 +2,10 @@ import { Tooltip } from "../../components/tool-tip";
 import { IconClass } from "../../core/utils";
 import { BaseViewer } from "../../core/viewers/BaseViewer";
 declare enum BottomBarItemId {
-    statistics = "statistics",
-    cameraInfo = "cameraInfo",
-    stats = "stats",
-    tips = "tips"
+    statistics = "gemini-viewer-threejs-statistics",
+    cameraInfo = "gemini-viewer-threejs-cameraInfo",
+    stats = "gemini-viewer-threejs-stats",
+    tips = "gemini-viewer-threejs-tips"
 }
 interface BottomBarItemConfig {
     icon: IconClass;

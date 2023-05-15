@@ -1,5 +1,5 @@
-import { OperationRecord, UndoRedoHelper } from "../../core/helpers";
-import type { MarkupManager } from "../../core/markup";
+import { OperationRecord, UndoRedoHelper } from "../helpers/UndoRedoHelper";
+import { MarkupManager } from "./MarkupManager";
 export declare enum MarkupState {
     Add = "Add",
     Update = "Update",

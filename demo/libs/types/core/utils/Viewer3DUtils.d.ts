@@ -24,13 +24,4 @@ export declare class Viewer3DUtils {
      */
     static getCameraPositionByBboxAndDirection(bbox: THREE.Box3, eye: THREE.Vector3, look: THREE.Vector3, cameraProjectionMatrix?: THREE.Matrix4, targetDir?: THREE.Vector3): void;
     static getCameraDirectionByView(view: Views | string): THREE.Vector3;
-    /**
-     * Sleep a while
-     */
-    static sleep(ms: number): Promise<void>;
-    private static twinklingObjectIds;
-    /**
-     * Twinkle the object several times
-     */
-    static twinkle(obj: THREE.Object3D, ms?: number): Promise<void>;
 }

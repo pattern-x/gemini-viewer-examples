@@ -83,6 +83,15 @@ export declare class CommonUtils {
      */
     static printMemory(title: string): void;
     static printGpuInfo(webgl: WebGLRenderingContext): void;
+    /**
+     * Sleep a while
+     */
+    static sleep(ms: number): Promise<void>;
+    private static twinklingObjectIds;
+    /**
+     * Twinkle the object several times
+     */
+    static twinkle(obj: THREE.Object3D, ms?: number): Promise<void>;
 }
 /**
  * @internal

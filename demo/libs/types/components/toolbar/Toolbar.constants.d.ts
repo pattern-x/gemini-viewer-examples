@@ -73,13 +73,13 @@ export declare enum ToolbarMenuId {
  * @internal
  */
 export interface ToolbarMenuConfig<T extends BaseViewer> {
-    menuName: string;
-    icon: IconClass;
+    menuName?: string;
+    icon?: IconClass;
     children?: ToolbarConfig<T>;
     visible?: boolean;
     mutexIds?: ToolbarMenuId[];
     defaultActive?: boolean;
-    type: MenuTypeEnums;
+    type?: MenuTypeEnums;
     customElement?: (bimViewer: T, menuId: string, cfg: ToolbarMenuConfig<T>) => HTMLDivElement;
     onActive?: (bimViewer: T) => void;
     onDeactive?: (bimViewer: T) => void;

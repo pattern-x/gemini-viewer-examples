@@ -152,6 +152,10 @@ export interface BaseViewerConfig {
      */
     logLevel?: "debug" | "info" | "warn" | "error" | "silent";
     /**
+     * @internal
+     */
+    enableSpinner?: boolean;
+    /**
      * @description just for react native
      * @internal
      */
@@ -172,6 +176,11 @@ export interface BimViewerConfig extends BaseViewerConfig {
      */
     enableNavCube?: boolean;
     /**
+     * Shows the ViewCube.
+     * @internal
+     */
+    enableViewCube?: boolean;
+    /**
      * Shows the AxisGizmo.
      * @internal
      */
@@ -187,8 +196,9 @@ export interface BimViewerConfig extends BaseViewerConfig {
      */
     enableDatGui?: boolean;
     /**
-     * Shows the toolbar.
-     * @description Default is `true`.
+     * Enables toolbar.
+     * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
+     * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
      */
     enableToolbar?: boolean;
     /**
@@ -200,11 +210,6 @@ export interface BimViewerConfig extends BaseViewerConfig {
      * Shows the context-menu.
      */
     enableContextMenu?: boolean;
-    /**
-     * Enables spinner
-     * @internal
-     */
-    enableSpinner?: boolean;
     /**
      * Default is `meters`
      * @internal
@@ -230,16 +235,22 @@ export interface DxfViewerConfig extends BaseViewerConfig {
      * @internal
      */
     enableAxisGizmo?: boolean;
+    /**
+     * Enables layout bar so we can switch to other layouts.
+     * The default layout bar is an example UI of the viewer, since plenty of APIs are exposed,
+     * you are recommended to create your own layout bar with customized style, location, etc.
+     */
     enableLayoutBar?: boolean;
     /**
      * @internal
      */
     enableStats?: boolean;
-    enableToolbar?: boolean;
     /**
-     * @internal
+     * Enables toolbar.
+     * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
+     * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
      */
-    enableSpinner?: boolean;
+    enableToolbar?: boolean;
     /**
      * @internal
      */
@@ -277,6 +288,11 @@ export interface VRViewerConfig extends BaseViewerConfig {
      * @internal
      */
     enableAxisGizmo?: boolean;
+    /**
+     * Enables toolbar.
+     * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
+     * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
+     */
     enableToolbar?: boolean;
     /**
      * @internal

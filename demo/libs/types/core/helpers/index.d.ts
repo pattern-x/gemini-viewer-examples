@@ -7,5 +7,5 @@ export * from "./MeshBvhHelper";
 export * from "./ObjectPixelSizeHelper";
 export * from "./OSnapHelper";
 export * from "./BoxSelectHelper";
-export * from "./UndoRedoHelper";
 export * from "./ZoomToRectHelper";
+export * from "./MobileTouchHelperDrawable";

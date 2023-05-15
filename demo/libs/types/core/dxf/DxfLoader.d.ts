@@ -2,7 +2,8 @@ import * as THREE from "three";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { DxfChange, DxfChangeType } from "./DxfCompare";
 import { Units } from "../../core/Units";
-import { IBlock, IDxf, IEntity, ILayer, ILayoutObject, IPoint, IViewPort, IViewportEntity } from "../../core/dxf-parser";
+import { IBlock, IDxf, IEntity, ILayer, ILayoutObject, IPoint, IViewport, IViewportEntity } from "../../core/dxf-parser";
+import { ImageFlags } from "../../core/dxf-parser/entities/image";
 import { IMLeaderContextData } from "../../core/dxf-parser/entities/mleader";
 import { ISpatialFilterObject } from "../../core/dxf-parser/objects/spatialfilter";
 import { ShxFont } from "../../core/shx-parser";
@@ -24,6 +25,7 @@ export interface DxfData extends IDxf {
  */
 export type DxfLayer = ILayer;
 /**
+ * Dxf entity, which can be an arc, circle, attach, line, insert, text, etc.
  * @internal
  */
 export interface DxfEntity extends IEntity {
@@ -112,21 +114,36 @@ export interface DxfEntity extends IEntity {
     viewportThreejsObject?: THREE.Object3D;
     associatedLeafObjectSet?: Set<THREE.Object3D>;
     associatedSpatialFilter?: DxfSpatialFilter;
+    imageSize?: IPoint;
+    imageDefHandle?: string;
+    uPixel?: IPoint;
+    vPixel?: IPoint;
+    flags?: ImageFlags;
     compareChangeType?: DxfChangeType;
 }
 /**
+ * Dxf block.
  * @internal
  */
 export interface DxfBlock extends IBlock {
+    /**
+     * References to corresponding threejs object
+     */
     threejsObject?: THREE.Object3D;
 }
 /**
+ * Dxf layout.
  * @internal
  */
 export interface DxfLayout extends ILayoutObject {
+    /**
+     * A collection of leaf objects directly associated with the layout, used for subsequent selection and measurement, etc.
+     * "Model" space doesn't need it for now.
+     */
     directAssociatedLeafObjectSet?: Set<THREE.Object3D>;
 }
 /**
+ * Spatial filter clip polyline.
  * @internal
  */
 export interface DxfSpatialFilterClipPolyline {
@@ -135,24 +152,24 @@ export interface DxfSpatialFilterClipPolyline {
     bReversed: boolean;
 }
 /**
+ * Spatial filter.
  * @internal
  */
 export interface DxfSpatialFilter extends ISpatialFilterObject {
+    /**
+     * References to corresponding threejs object
+     */
     threejsObject?: THREE.Object3D;
     localMatrix?: THREE.Matrix4;
     clipPolylines: DxfSpatialFilterClipPolyline[];
 }
 /**
- * THREE.Loader implementation for DXF files
- *
- * @param {*} manager THREE.LoadingManager
- *
- * @see https://threejs.org/docs/#api/en/loaders/Loader
- * @author Sourabh Soni / https://www.prolincur.com
+ * Dxf file loader.
  * @internal
  */
 export declare class DxfLoader extends THREE.Loader {
     static readonly MODEL_LAYOUT_NAME = "Model";
+    static readonly SNAP_GROUP_NAME = "InvisibleObjectGroupForOSnap";
     private timer;
     private ignorePaperSpace;
     font?: Font | ShxFont;
@@ -172,7 +189,6 @@ export declare class DxfLoader extends THREE.Loader {
     private enableLocalCache;
     private enableReleaseData;
     private enableMerge;
-    private enableSimplify;
     private enableRTC;
     private enablePlineWidth;
     private dxfDataId;
@@ -215,9 +231,13 @@ export declare class DxfLoader extends THREE.Loader {
     private entityThreejsCache;
     private entityTypesAndTimes;
     private nonSnapableTypes;
+    private layoutsSnapObjectsMap;
     static cameraZoomUniform: {
         value: number;
     };
+    /**
+     * Used for drawing dashed lines properly in a viewport.
+     */
     static viewportScaleUniform: {
         value: number;
     };
@@ -227,45 +247,67 @@ export declare class DxfLoader extends THREE.Loader {
     static resolutionUniform: {
         value: THREE.Vector2;
     };
+    /**
+     * WebGL has a limited capability for FragmentUniforms. Thus, cannot have as many
+     * clippingPlanes as expected.
+     */
     static maxFragmentUniforms: number;
+    /**
+     * A global flag to abort loading any dxf files, it aborts dxf compare progress too.
+     * It doesn't support to abort one of the loader for now.
+     */
     static abortJobs: boolean;
     /**
      * @param ignorePaperSpace if true, only load model space
+     * @param enableLocalCache if true, use indexeddb to cache dxf data
      */
-    constructor(ignorePaperSpace?: boolean, enableLocalCache?: boolean);
-    setFont(font: Font | ShxFont): this;
+    constructor(manager?: THREE.LoadingManager, ignorePaperSpace?: boolean, enableLocalCache?: boolean);
+    /**
+     * Sets font.
+     */
+    setFont(font: Font | ShxFont): void;
     /**
      * Downloads dxf file content
      */
     private download;
+    /**
+     * Loads a dxf file by given url.
+     * If dxfDataId is specified and local cache is enabled, it firstly tries to load from cache.
+     * @param url url of the dxf file
+     * @param dxfDataId target dxf data id, used to get dxf data from cache if local cache is enabled.
+     * @param onProgress on progress callback
+     * @returns DxfData
+     */
     load(url: string, dxfDataId?: string, onProgress?: (event: ProgressEvent) => void): Promise<DxfData>;
     /**
-     * Loads dxf asynchronously.  It mainly contains 2 steps:
-     * 1. parses file content
-     * 2. generates/load threejs objects
+     * Loads dxf asynchronously. It mainly contains 2 steps:
+     * 1. Parses file content
+     * 2. Generates/load threejs objects
      * @param url url of the dxf file
      * @param onProgress on progress callback
      */
     loadAsync(url: string, onProgress?: (event: ProgressEvent) => void): Promise<DxfData>;
     /**
-     * Parses dxf contents
+     * Parses dxf contents from given url.
      */
     parse(url: string, onProgress?: (event: ProgressEvent) => void): Promise<IDxf>;
     private parseHeader;
     /**
-     * Generates/load threejs objects according to dxf data.
+     * Generates/load threejs objects according to the dxf data.
      * @param data
      * @param onProgress
-     * @returns
-     * @describe load dxf entities
+     * @returns the promise of DxfData
      */
     loadEntities(data: IDxf, onProgress?: (event: ProgressEvent) => void): Promise<DxfData>;
     /**
      * Loads entities from two dxf data for comparing.
-     * It also creates markup for each change.
+     * It also generates DxfChange information for each change.
      */
     loadEntitiesForCompare(data1: IDxf, data2: IDxf, changes: Record<string, DxfChange>, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     private setObjectColorByChange;
+    /**
+     * Manually release some objects to save memory.
+     */
     private releaseCachedData;
     /**
      * Releases memory-costy elements of an entity
@@ -282,55 +324,48 @@ export declare class DxfLoader extends THREE.Loader {
      * We don't know if there is other similar case in future, so pass in blockEntity here.
      */
     drawEntity(entity: DxfEntity, data: IDxf, parentEntity?: IEntity, isParentChanged?: boolean): THREE.Object3D | undefined;
-    drawEllipse(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Line | undefined;
-    drawMText(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Object3D | undefined;
+    private drawEllipse;
+    private drawMText;
     private getMTextGroup;
-    mtextContentAndFormattingToTextAndStyle(textAndControlChars: any, // eslint-disable-line
-    entity: DxfEntity): {
-        text: any[];
-        lineLength: number;
-        style: {
-            horizontalAlignment: string;
-            textHeight: number | undefined;
-        };
-    };
+    private mtextContentAndFormattingToTextAndStyle;
     private getTextLineNum;
-    draw3DFace(entity: DxfEntity): THREE.Line<THREE.BufferGeometry, THREE.LineBasicMaterial> | undefined;
-    drawSpline(entity: DxfEntity, blockEntity?: IEntity): THREE.Line | undefined;
-    drawXLine(entity: DxfEntity): THREE.Line | undefined;
-    drawRay(entity: DxfEntity): THREE.Line | undefined;
-    drawLine(entity: DxfEntity): THREE.LineSegments | THREE.Points | undefined;
-    drawLWPolyline(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Object3D | undefined;
-    drawMLeader(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Object3D | undefined;
-    drawLeader(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Object3D | undefined;
+    private draw3DFace;
+    private drawSpline;
+    private drawXLine;
+    private drawRay;
+    private drawLine;
+    private drawLWPolyline;
+    private drawMLeader;
+    private drawLeader;
     private drawDefaultLeadArrow;
     private getBlockByHandle;
+    static updateMaterialUniforms(material: THREE.Material): void;
     static transformAngleByOcsMatrix(ocsMatrix: THREE.Matrix4, angle: number): number;
     static getArcAnglesByOcsMatrix(ocsMatrix: THREE.Matrix4, startAngle: number, endAngle: number): number[];
-    drawArc(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Line | undefined;
-    addTriangleFacingCamera(verts: THREE.Vector3[], p0: THREE.Vector3, p1: THREE.Vector3, p2: THREE.Vector3): void;
-    drawSolid(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Mesh | undefined;
+    private drawArc;
+    private addTriangleFacingCamera;
+    private drawSolid;
     private getDefaultTextStyle;
     private getDefaultDimensionStyle;
     private getTextEncoding;
     private getTextMesh;
     private transformTextMesh;
-    drawText(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.LineSegments | THREE.Mesh | undefined;
-    drawAttDef(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.LineSegments | THREE.Mesh | undefined;
-    drawAttrib(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.LineSegments | THREE.Mesh | undefined;
-    drawPoint(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Points | undefined;
-    drawDimension(entity: DxfEntity, data: IDxf): THREE.Object3D | undefined;
-    drawInsert(entity: DxfEntity, data: IDxf, isParentChanged?: boolean): THREE.Object3D | undefined;
-    drawSpatialFilter(sfObject: ISpatialFilterObject): THREE.Object3D | undefined;
-    drawLayout(block: IBlock, data: IDxf, layout: ILayoutObject, threejsObject: THREE.Object3D, layersAndThreejsObjects: Record<string, THREE.Object3D[]>, // the key is layer name
-    layoutViewportsMap: Record<string, IViewportEntity[]>): void;
+    private drawText;
+    private drawAttDef;
+    private drawAttrib;
+    private drawPoint;
+    private drawDimension;
+    private drawImage;
+    private drawInsert;
+    private drawSpatialFilter;
+    private drawLayout;
     private convertEdgeToPoints;
-    drawHatch(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Object3D | undefined;
-    drawOle2frame(entity: DxfEntity, data: IDxf): THREE.Object3D | undefined;
-    static getOcsMatrix(extrusion: THREE.Vector3): THREE.Matrix4;
-    static getDcs2WcsMatrix(viewportEntity: IViewportEntity | IViewPort, angDir: number): THREE.Matrix4;
+    private drawHatch;
+    private drawOle2frame;
+    private static getOcsMatrix;
+    static getDcs2WcsMatrix(viewportEntity: IViewportEntity | IViewport, angDir: number): THREE.Matrix4;
     private getViewportMsToPsMatrix;
-    drawViewport(entity: DxfEntity, data: IDxf, blockEntity?: IEntity): THREE.Object3D | undefined;
+    private drawViewport;
     private getColor;
     private getLineType;
     /**
@@ -357,7 +392,7 @@ export declare class DxfLoader extends THREE.Loader {
      * Gets a proper division for curve by entity count, entity size and theta angle, etc.
      * @param size may not be accurate, can be the radius, long size of bbox, etc.
      */
-    getDivision(startAngle: number, endAngle: number, size: number): number;
+    private getDivision;
     /**
      * Gets a proper interpolation for bspline.
      * A bigger interpolation value generates smooth bspline, but with a bad performance, so we need to limit this value.
@@ -369,15 +404,14 @@ export declare class DxfLoader extends THREE.Loader {
      * Gets proper simplify tolerance.
      * If tolerance is bigger, more points are simpified.
      */
-    getSimplifyTolerance(): number;
     /**
      * Catches dxf data into indexedDb
      */
-    setDxfDataToIndexedDb(dxfDataId: string, dxf: IDxf): Promise<void>;
+    private setDxfDataToIndexedDb;
     /**
      * Gets dxf data into indexedDb
      */
-    getDxfDataFromIndexedDb(modelId: string): Promise<IDxf | undefined>;
+    private getDxfDataFromIndexedDb;
     private buildContainHierarchyTree;
     private buildHatchGeometry;
     private findIntersectHole;
@@ -410,7 +444,6 @@ export declare class DxfLoader extends THREE.Loader {
     private getLayout;
     private getLayerVisible;
     private getLayerFrozen;
-    private updateMaterialUniforms;
     private cloneMaterialsForSpatialFilter;
     private getLineTypeScales;
     static getDxfUnits(unitValue: number): Units;

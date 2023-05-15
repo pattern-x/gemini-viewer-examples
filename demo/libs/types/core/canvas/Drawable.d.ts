@@ -21,6 +21,10 @@ export declare abstract class Drawable extends Event {
     protected tolerance: number;
     visible: boolean;
     selected: boolean;
+    /**
+     * render order, the bigger number is on the top
+     */
+    renderOrder: number;
     needsFrustumCulled: boolean;
     protected editPointSize: number;
     protected editPointColor: string;

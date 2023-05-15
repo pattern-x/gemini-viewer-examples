@@ -32,8 +32,6 @@ export declare class VRViewer extends BaseViewer {
     private maxFps;
     private isMousePressing;
     private settings;
-    private spinner?;
-    private jobCount;
     private viewpoints;
     private previousViewpointId;
     private previousPanoramaId;
@@ -65,7 +63,6 @@ export declare class VRViewer extends BaseViewer {
     private onKeyDown;
     private initLights;
     private initEvents;
-    private initSpinner;
     private initOthers;
     private initAxes;
     private initToolbar;
@@ -93,10 +90,6 @@ export declare class VRViewer extends BaseViewer {
      * Sets camera fov. Usually 45 - 90.
      */
     setCameraFov(fov?: number): void;
-    /**
-     * Sets spinner visibility
-     */
-    protected setSpinnerVisibility(visible: boolean): void;
     /**
      * Calls addEventListener of a node.
      * This makes sure to removeEventListener properly

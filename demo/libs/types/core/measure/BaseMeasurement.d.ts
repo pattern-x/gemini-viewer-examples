@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { MeasureMobileHelperDrawable } from "./MeasureMobileHelperDrawable";
 import { Tooltip } from "../../components/tool-tip";
-import { DrawableData, DrawableList } from "../../core/canvas";
-import { OSnapHelper } from "../../core/helpers";
+import { DrawableData } from "../../core/canvas/Constants";
+import { DrawableList } from "../../core/canvas/DrawableList";
+import type { MobileTouchHelperDrawable, OSnapHelper } from "../../core/helpers";
 import { EventInfo, InputManager } from "../../core/input/InputManager";
 import type { BaseMeasureDrawable } from "../../core/measure/BaseMeasureDrawable";
 import { Event } from "../../core/utils";
@@ -37,21 +37,21 @@ export interface MeasurementData extends DrawableData {
 }
 type MeasureHandler = {
     /**
-     * click measure
+     * Triggered when clicked measure
      */
-    clickedonmeasurement: BaseMeasureDrawable;
+    ClickedOnMeasurement: BaseMeasureDrawable;
     /**
-     * draw measure complete
+     * Triggered when draw measure completed
      */
-    complete: BaseMeasureDrawable;
+    Completed: BaseMeasureDrawable;
     /**
-     * deactivate measure
+     * Triggered when deactivate measure
      */
-    deactivate: MeasurementType;
+    Deactivate: MeasurementType;
     /**
-     * draw first point
+     * Triggered when draw first point
      */
-    firstpointpicked: BaseMeasureDrawable;
+    FirstPointPicked: BaseMeasureDrawable;
 };
 /**
  * BaseMeasurement class
@@ -77,7 +77,10 @@ export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
     protected snapPoint?: THREE.Vector3 | undefined;
     protected completed?: boolean;
     protected clickedOnMeasurementDrawable?: BaseMeasureDrawable;
-    protected mobileTouchHelper?: MeasureMobileHelperDrawable;
+    protected mobileTouchHelper?: MobileTouchHelperDrawable;
+    protected exitButton?: HTMLButtonElement;
+    protected firstPickedListerner?: () => void;
+    protected completedListerner?: () => void;
     constructor(type: MeasurementType, viewer: BaseViewer, input: InputManager, drawList: DrawableList, osnapHelper: OSnapHelper);
     get canvas(): HTMLCanvasElement;
     get camera(): THREE.Camera;
@@ -91,7 +94,8 @@ export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
      * If it started to measure, but a measruement action is not completed yet.
      */
     get isMeasuring(): boolean;
-    setTouchHelper(mobileTouchHelper: MeasureMobileHelperDrawable): void;
+    setTouchHelper(mobileTouchHelper: MobileTouchHelperDrawable): void;
+    protected createMobileExitButton(): HTMLButtonElement;
     activate(): void;
     deactivate(): void;
     protected removeDrawable(drawable: BaseMeasureDrawable): void;
@@ -104,6 +108,7 @@ export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
     mouseup: (e: EventInfo) => void;
     dblclick: () => void;
     protected onMouseClick(e: EventInfo): void;
+    protected selectMeasurementByEvent(e: EventInfo): void;
     keydown: (e: EventInfo) => void;
     abstract exitDrawing(): void;
     abstract cancel(): void;
@@ -115,7 +120,7 @@ export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
      * @param e
      */
     getIntersections: (e: EventInfo) => THREE.Intersection[];
-    private getIntersectsOutline;
+    private getIntersectsIncludeOutline;
     lastMouseDownPosition?: THREE.Vector3;
     private handleSnap;
 }

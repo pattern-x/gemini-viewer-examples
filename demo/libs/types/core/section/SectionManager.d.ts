@@ -8,11 +8,12 @@ export declare class SectionManager {
     private activeSectionType?;
     constructor(viewer: BaseViewer, input: InputManager);
     get raycaster(): import("three").Raycaster | undefined;
-    activateSection(type: SectionType): void;
+    activateSection(type: SectionType, clippingObjectIds?: number[]): void;
     deactivateSection(): void;
     resetSection(): void;
     isSectionActive(): boolean;
     getActiveSectionType(): SectionType | undefined;
     getActiveSection(): BaseSection | undefined;
+    setSectionClippingObjectIds(ids?: number[]): void;
     destroy(): void;
 }

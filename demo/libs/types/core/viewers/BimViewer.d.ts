@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { Settings as SettingsType } from "../../components/settings";
 import { Toolbar } from "../../components/toolbar";
-import { BimViewerConfig, CameraConfig, ModelConfig } from "../../core/Configs";
+import { BimViewerConfig, CameraConfig, Hotpoint, ModelConfig } from "../../core/Configs";
 import { SectionType } from "../../core/Constants";
 import { Drawable } from "../../core/canvas";
 import { EventInfo } from "../../core/input/InputManager";
@@ -76,6 +76,7 @@ export declare class BimViewer extends BaseViewer {
     private orthoCamera?;
     private perspectiveCameraControls?;
     private orthoCameraConrols?;
+    private css2dRenderer?;
     private composerRenderEnabled;
     private composerEnabled;
     private composer?;
@@ -111,10 +112,9 @@ export declare class BimViewer extends BaseViewer {
     private lastFrameExecuteTime;
     private maxFps;
     private settings;
-    private spinner?;
-    private jobCount;
     private contextMenu?;
     private navCube?;
+    private viewCube?;
     private axes?;
     private axesInScene?;
     private twoDModelCount;
@@ -129,7 +129,7 @@ export declare class BimViewer extends BaseViewer {
      */
     private bbox;
     private anchor?;
-    private lastOrbPoint?;
+    private hotpointRoot?;
     constructor(viewerCfg: BimViewerConfig, cameraCfg?: CameraConfig);
     /**
      * Initialize everything it needs
@@ -140,6 +140,7 @@ export declare class BimViewer extends BaseViewer {
     private initDom;
     private initScene;
     private initRenderer;
+    private initCSS2DRenderer;
     private initCamera;
     private initControls;
     private initRotateToCursor;
@@ -151,9 +152,9 @@ export declare class BimViewer extends BaseViewer {
      */
     private initEvents;
     private initDatGui;
-    private initSpinner;
     private initOthers;
     private initNavCube;
+    private initViewCube;
     private initAxes;
     private initStats;
     private initContextMenu;
@@ -242,7 +243,7 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     showVertexNormals(show: boolean, size?: number): void;
-    protected resize(width?: number, height?: number): void;
+    protected resize(width: number, height: number): void;
     /**
      * @internal
      */
@@ -363,6 +364,26 @@ export declare class BimViewer extends BaseViewer {
     private disposeRotateToCursor;
     /******* Anchor rotation related interface end *********/
     /**
+     * Adds a hotpoint.
+     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
+     */
+    addHotpoint(hotpoint: Hotpoint): void;
+    /**
+     * Removes a hotpoint by given hotpointId.
+     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
+     */
+    removeHotpoint(hotpointId: string): void;
+    /**
+     * Clears all hotpoints.
+     */
+    clearHotpoints(): void;
+    /**
+     * Checks if hotpoint with specific id already exist
+     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
+     * @internal
+     */
+    hasHotpoint(hotpointId: string): boolean;
+    /**
      * Enables or disable Composer
      * @internal
      */
@@ -411,11 +432,15 @@ export declare class BimViewer extends BaseViewer {
      * Enable section.
      * Currently, it only implemented local(object) box section.
      */
-    activateSection(type?: SectionType): void;
+    activateSection(type?: SectionType, clippingObjectIds?: number[]): void;
     /**
      * Deactivates section
      */
     deactivateSection(): void;
+    /**
+     * @internal
+     */
+    setSectionClippingObjectIds(clippingObjectIds?: number[]): void;
     /**
      * @internal
      */
@@ -475,6 +500,14 @@ export declare class BimViewer extends BaseViewer {
     setEnvironmentFromDataArray(data?: Uint16Array): void;
     takeObjectsScreenshot(uniqueIds: string[]): Promise<unknown>;
     /**
+     * Sets object to a specific color. Note that:
+     * - The change is permanent, and cannot be recovered to the original color or material.
+     * - If a material is shared, it may affect other objects.
+     * @param color A color number in format of "0x000000"
+     * @internal
+     */
+    setObjectColor(object: THREE.Object3D, color: number): void;
+    /**
      * Updates raycaster threshold to a proper value, so user can easily pick points and lines
      */
     private updateRaycasterThreshold;
@@ -491,25 +524,10 @@ export declare class BimViewer extends BaseViewer {
      */
     private merge;
     /**
-     * Sets spinner visibility
-     */
-    protected setSpinnerVisibility(visible: boolean): void;
-    /**
-     * Increases job count, and show spinner accordingly
-     * @internal
-     */
-    increaseJobCount(): void;
-    /**
-     * Decreases job count, and hide spinner accordingly
-     * @internal
-     */
-    decreaseJobCount(): void;
-    /**
      * Updates project settings
      * @internal
      */
     updateProjectSettings(settings: SettingsType): void;
-    private dynamicallyUpdateControllerTarget;
     /**
      * Compute bounding box of loaded models
      * @internal

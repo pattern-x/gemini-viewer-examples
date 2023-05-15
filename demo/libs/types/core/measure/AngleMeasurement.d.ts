@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { DrawableList } from "../../core/canvas";
-import { OSnapHelper } from "../../core/helpers";
+import type { OSnapHelper } from "../../core/helpers";
 import { EventInfo, InputManager } from "../../core/input/InputManager";
 import { BaseMeasurement } from "../../core/measure/BaseMeasurement";
 import type { BaseViewer } from "../../core/viewers";

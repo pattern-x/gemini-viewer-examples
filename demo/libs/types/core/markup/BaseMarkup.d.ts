@@ -1,5 +1,6 @@
 import * as THREE from "three";
-import { Drawable, DrawableData } from "../../core/canvas";
+import { DrawableData } from "../../core/canvas/Constants";
+import { Drawable } from "../../core/canvas/Drawable";
 export declare abstract class BaseMarkup extends Drawable {
     protected editPointSize: number;
     protected editPointColor: string;

@@ -10,6 +10,7 @@ export declare class SnapDrawable extends Drawable {
     static readonly LINE_WIDTH = 2.5;
     static readonly SNAP_ICON_SIZE = 10;
     needsFrustumCulled: boolean;
+    renderOrder: number;
     snapType: OSnapMarkerType;
     private osnapInfo?;
     private drawSnapFunctions;

@@ -1,5 +1,6 @@
 import type { TFunction } from "i18next";
 import * as THREE from "three";
+import { Box2 } from "../Constants";
 import { ViewerEvent } from "./ViewerEvent";
 import type { BaseViewerConfig, CameraConfig } from "../../core/Configs";
 import type { CanvasRender } from "../../core/canvas";
@@ -8,7 +9,38 @@ import { EventInfo, InputManager } from "../../core/input/InputManager";
 import type { MarkupManager } from "../../core/markup";
 import type { MeasurementManager } from "../../core/measure";
 import type { BaseSection } from "../../core/section";
+import { UndoRedoManager } from "../../core/undo-redo/UndoRedoManager";
 import { Event } from "../../core/utils";
+/**
+ * Screenshot result, which contains a result image and,
+ * for DxfViewer, it also contains the view extent when the screenshot is taken,
+ * for BimViewer, it contains the camera's position and target.
+ */
+export interface ScreenshotResult {
+    /**
+     * The view extent when the screenshot is taken.
+     * Note that, it is not the image's extent.
+     * And, this is for DxfViewer only.
+     */
+    viewExtent?: Box2;
+    /**
+     * Used for BimViewer
+     * @internal
+     */
+    /**
+     * Used for BimViewer
+     * @internal
+     */
+    /**
+     * Image type, which is "image/png" by default
+     * @internal
+     */
+    imageType: string;
+    /**
+     * The image, in base 64 format.
+     */
+    base64Image: string;
+}
 /**
  * @internal
  */
@@ -16,7 +48,7 @@ export declare enum ViewerName {
     BaseViewer = "BaseViewer",
     BimViewer = "BimViewer",
     DxfViewer = "DxfViewer",
-    VRViewer = "BaseViewer"
+    VRViewer = "VRViewer"
 }
 type ViewerEventType = {
     [K in ViewerEvent]: any;
@@ -60,6 +92,8 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
      * @internal
      */
     widgetContainer?: HTMLElement;
+    private spinner?;
+    protected jobCount: number;
     protected viewerCfg: BaseViewerConfig;
     /**
      * @internal
@@ -78,6 +112,10 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
      * @internal
      */
     loadedModels?: any;
+    /**
+     * @internal
+     */
+    undoRedoManager?: UndoRedoManager;
     protected enableOverlayRenderer: boolean;
     /**
      * @internal
@@ -93,6 +131,19 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
      */
     private initViewerContainer;
     private initWidgetContainer;
+    protected initSpinner(): void;
+    /**
+     * Sets spinner visibility
+     */
+    protected setSpinnerVisibility(visible: boolean): void;
+    /**
+     * Increases job count, and show spinner accordingly
+     */
+    protected increaseJobCount(): void;
+    /**
+     * Decreases job count, and hide spinner accordingly
+     */
+    protected decreaseJobCount(): void;
     destroy(): void;
     /**
      * @internal
@@ -153,5 +204,9 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
      * @internal
      */
     hideStats(): void;
+    /**
+     * @internal
+     */
+    getPixelSizeInWorldCoord(): number;
 }
 export {};

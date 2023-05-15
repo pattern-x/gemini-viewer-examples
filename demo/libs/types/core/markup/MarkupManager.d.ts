@@ -5,7 +5,11 @@ import { DrawableData } from "../../core/canvas";
 import type { EventInfo, InputManager } from "../../core/input/InputManager";
 import { Event } from "../../core/utils";
 import type { BaseViewer } from "../../core/viewers";
-type MarkupHandler = {};
+type MarkupHandler = {
+    StartDraw: BaseMarkup;
+    EndDraw: BaseMarkup;
+    EndEdit: BaseMarkup;
+};
 export declare class MarkupManager extends Event<MarkupHandler> {
     private viewer;
     private inputManager;
@@ -30,7 +34,7 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     private tempPoints;
     private textInput?;
     private actived;
-    private undoRedoHelper;
+    protected exitButton?: HTMLButtonElement;
     constructor(viewer: BaseViewer, input: InputManager);
     get viewerCanvas(): HTMLCanvasElement;
     get camera(): THREE.OrthographicCamera | THREE.PerspectiveCamera;
@@ -39,6 +43,7 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     setMarkupsVisibility(visible: boolean): void;
     clearAll(): void;
     isMarkupActive(): boolean;
+    protected createMobileExitButton(): HTMLButtonElement;
     activate(): void;
     deactivate(): void;
     getActiveMarkupType(): MarkupType | undefined;
@@ -64,14 +69,14 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     cancelDraw(createdMarkup?: BaseMarkup): void;
     reset(): void;
     render(): void;
-    addMarkup(markup: BaseMarkup, needRecord?: boolean): void;
-    updateMarkup(markup: BaseMarkup, newData: DrawableData, needRecord?: boolean): void;
-    removeMarkup(markup: BaseMarkup, needRecord?: boolean): void;
-    removeMarkupById(id: string, needRecord?: boolean): boolean;
+    addMarkup(markup: BaseMarkup, needFireEvent?: boolean): void;
+    updateMarkup(markup: BaseMarkup, newData: DrawableData, needFireEvent?: boolean): void;
+    removeMarkup(markup: BaseMarkup, needFireEvent?: boolean): void;
+    removeMarkupById(id: string): boolean;
     createMarkup(data: DrawableData): BaseMarkup;
     getMarkupById(id: string): BaseMarkup;
     getMarkupData(): DrawableData[];
-    setMarkupData(markupShapes: DrawableData[]): void;
+    setMarkupData(markupDatas: DrawableData[]): void;
     private isCreateLineMode;
     private isCreateDotMode;
     private isCreateTextMode;
@@ -80,9 +85,6 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     private drawLine;
     private drawText;
     private addInput;
-    undo(): void;
-    redo(): void;
-    clearUndoRedo(): void;
     destroy(): void;
 }
 export {};

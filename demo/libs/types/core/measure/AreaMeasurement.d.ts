@@ -5,11 +5,9 @@ import { EventInfo, InputManager } from "../../core/input/InputManager";
 import { BaseMeasurement } from "../../core/measure/BaseMeasurement";
 import type { BaseViewer } from "../../core/viewers";
 export declare class AreaMeasurement extends BaseMeasurement {
-    private exitButton?;
     constructor(viewer: BaseViewer, input: InputManager, drawList: DrawableList, osnapHelper: OSnapHelper);
     activate(): void;
     deactivate(): void;
-    private createMobileExitButton;
     protected onMouseMove(position: THREE.Vector3): void;
     protected onMouseClick(e: EventInfo): void;
     exitDrawing(): void;

@@ -14,11 +14,8 @@ export declare enum ViewerEvent {
     LayoutChanged = "LayoutChanged",
     /**
      * @internal
-     * Triggered before layout is changed.
-     */
-    BeforeLayoutChange = "BeforeLayoutChange",
-    /**
-     * @internal
+     * TODO:bimviewer need too.
+     * Triggered when a model is loaded.
      */
     ModelLoaded = "ModelLoaded",
     /**
@@ -32,13 +29,18 @@ export declare enum ViewerEvent {
      */
     CameraChanged = "CameraChanged",
     /**
-     * Triggered when a markup is clicked
-     * @internal
+     * Triggered when box select activated
      */
+    BoxSelectActivated = "BoxSelectActivated",
+    /**
+     * Triggered when box select deactivated
+     */
+    BoxSelectDeactivated = "BoxSelectDeactivated",
+    MarkupActivated = "MarkupActivated",
     /**
      * Triggered when markup feature is deactivated
      */
-    MarkupDeactived = "MarkupDeactived",
+    MarkupDeactivated = "MarkupDeactivated",
     /**
      * Triggered when a markup is added
      */
@@ -54,5 +56,15 @@ export declare enum ViewerEvent {
     /**
      * Triggered before a markup is being removed
      */
-    BeforeRemoveMarkup = "BeforeRemoveMarkup"
+    BeforeRemoveMarkup = "BeforeRemoveMarkup",
+    MeasurementActivated = "MeasurementActivated",
+    MeasurementDeactivated = "MeasurementDeactivated",
+    /**
+     * Triggered when a measure is added
+     */
+    MeasurementAdded = "MeasurementAdded",
+    /**
+     * Triggered when a measure is removed
+     */
+    MeasurementRemoved = "MeasurementRemoved"
 }

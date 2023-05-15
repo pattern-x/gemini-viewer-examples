@@ -16,6 +16,7 @@ export declare enum BlockTypeFlags {
     DefinitionExternalReference = 64
 }
 /**
+ * Definition of a block. Which contains entities, name, handle, etc.
  * @internal
  */
 export interface IBlock {
@@ -32,9 +33,10 @@ export interface IBlock {
     description?: string;
 }
 /**
+ * Definition of a viewport.
  * @internal
  */
-export interface IViewPort {
+export interface IViewport {
     name: string;
     lowerLeftCorner: IPoint;
     upperRightCorner: IPoint;
@@ -62,15 +64,17 @@ export interface IViewPort {
     ambientColor: number;
 }
 /**
+ * Viewport table definition.
  * @internal
  */
-export interface IViewPortTableDefinition {
-    tableRecordsProperty: "viewPorts";
-    tableName: "viewPort";
+export interface IViewportTableDefinition {
+    tableRecordsProperty: "viewports";
+    tableName: "viewport";
     dxfSymbolName: "VPORT";
-    parseTableRecords(): IViewPort[];
+    parseTableRecords(): IViewport[];
 }
 /**
+ * Line type.
  * @internal
  */
 export interface ILineType {
@@ -80,6 +84,7 @@ export interface ILineType {
     patternLength: number;
 }
 /**
+ * Line type table definition.
  * @internal
  */
 export interface ILineTypeTableDefinition {
@@ -89,9 +94,12 @@ export interface ILineTypeTableDefinition {
     parseTableRecords(): Record<string, ILineType>;
 }
 /**
- * dwg layer
+ * Definition of a layer.
  */
 export interface ILayer {
+    /**
+     * Unique layer name with the dxf/dwg file.
+     */
     name: string;
     /**
      * @internal
@@ -124,6 +132,7 @@ export interface ILayer {
     lineweight: 0 | 5 | 9 | 13 | 15 | 18 | 20 | 25 | 30 | 35 | 40 | 50 | 53 | 60 | 70 | 80 | 90 | 100 | 106 | 120 | 140 | 158 | 200 | 211 | -3 | -2 | -1;
 }
 /**
+ * Layer table definition.
  * @internal
  */
 export interface ILayerTableDefinition {
@@ -133,6 +142,7 @@ export interface ILayerTableDefinition {
     parseTableRecords(): Record<string, ILayer>;
 }
 /**
+ * BlockRecord
  * @internal
  */
 export interface IBlockRecord {
@@ -155,6 +165,7 @@ export interface IBlockRecordTableDefinition {
     parseTableRecords(): Record<string, IBlockRecord>;
 }
 /**
+ * Definition of a style.
  * @internal
  */
 export interface IStyle {
@@ -171,6 +182,7 @@ export interface IStyle {
     bigFontFile: string;
 }
 /**
+ * Style table definition.
  * @internal
  */
 export interface IStyleTableDefinition {
@@ -180,6 +192,7 @@ export interface IStyleTableDefinition {
     parseTableRecords(): Record<string, IStyle>;
 }
 /**
+ * Dim style.
  * @internal
  */
 export interface IDimStyle {
@@ -200,6 +213,7 @@ export interface IDimStyle {
     DIMLDRBLK: string;
 }
 /**
+ * Dim style table definition
  * @internal
  */
 export interface IDimStyleTableDefinition {
@@ -209,10 +223,11 @@ export interface IDimStyleTableDefinition {
     parseTableRecords(): Record<string, IDimStyle>;
 }
 /**
+ * Table definitions.
  * @internal
  */
 export interface ITableDefinitions {
-    VPORT: IViewPortTableDefinition;
+    VPORT: IViewportTableDefinition;
     LTYPE: ILineTypeTableDefinition;
     LAYER: ILayerTableDefinition;
     BLOCK_RECORD: IBlockRecordTableDefinition;
@@ -220,6 +235,7 @@ export interface ITableDefinitions {
     DIMSTYLE: IDimStyleTableDefinition;
 }
 /**
+ * Base table
  * @internal
  */
 export interface IBaseTable {
@@ -227,10 +243,11 @@ export interface IBaseTable {
     ownerHandle: string;
 }
 /**
+ * Viewport table
  * @internal
  */
-export interface IViewPortTable extends IBaseTable {
-    viewPorts: IViewPort[];
+export interface IViewportTable extends IBaseTable {
+    viewports: IViewport[];
 }
 /**
  * @internal
@@ -266,7 +283,7 @@ export interface IBlockRecordsTable extends IBaseTable {
  * @internal
  */
 export interface ITables {
-    viewPort: IViewPortTable;
+    viewport: IViewportTable;
     lineType: ILayerTypesTable;
     layer: ILayersTable;
     blockRecord: IBlockRecordsTable;
@@ -276,7 +293,7 @@ export interface ITables {
 /**
  * @internal
  */
-export type ITable = IViewPortTable | ILayerTypesTable | ILayersTable | IBlockRecordsTable | IStylesTable | IDimStyleTable;
+export type ITable = IViewportTable | ILayerTypesTable | ILayersTable | IBlockRecordsTable | IStylesTable | IDimStyleTable;
 /**
  * @internal
  */

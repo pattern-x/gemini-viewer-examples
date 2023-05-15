@@ -1,6 +1,5 @@
 /**
  * Markup data
- * @internal
  */
 export interface DrawableData {
     /**

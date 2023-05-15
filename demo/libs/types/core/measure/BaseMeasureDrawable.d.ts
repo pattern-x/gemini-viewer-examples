@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import { Drawable } from "../../core/canvas";
-import { MeasurementData, MeasurementType } from "../../core/measure/BaseMeasurement";
+import { Drawable } from "../../core/canvas/Drawable";
+import { MeasurementType } from "../../core/measure/BaseMeasurement";
+import type { MeasurementData } from "../../core/measure/BaseMeasurement";
 export declare abstract class BaseMeasureDrawable extends Drawable {
     type: MeasurementType;
     static readonly MAJOR_COLOR = "rgba(249, 157, 11, 0.9)";

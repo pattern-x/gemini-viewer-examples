@@ -76,8 +76,8 @@ export declare class MergeUtils {
      * Merges geometries for lines
      */
     private static mergeLineGeometries;
-    private static mergeBufferGeometriesWithLinesToLineSegements;
-    private static mergeBufferAttributesWithLinesToLineSegements;
+    private static mergeBufferGeometriesWithLinesToLineSegments;
+    private static mergeBufferAttributesWithLinesToLineSegments;
     /**
      * Removes a number from array
      */

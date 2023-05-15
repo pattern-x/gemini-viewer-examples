@@ -166,7 +166,7 @@ export declare class ObjectUtils {
     /**
      * Creates outline for given geometry
      */
-    static createOutline(geometry: THREE.BufferGeometry, matrix: THREE.Matrix4, material?: THREE.LineBasicMaterial): THREE.LineSegments;
+    static createOutline(geometry: THREE.BufferGeometry, material?: THREE.LineBasicMaterial): THREE.LineSegments;
     /**
      * Creates outline for given geometry
      */
@@ -202,4 +202,10 @@ export declare class ObjectUtils {
      * Checks if an object is a drawable leaf object
      */
     static isLeafObject(obj: THREE.Object3D): boolean;
+    /**
+     * object layers related setting functions
+     */
+    static enableLayerChannels(obj: THREE.Object3D, channels: number[], recursive?: boolean): void;
+    static disableLayerChannels(obj: THREE.Object3D, channels: number[], recursive?: boolean): void;
+    static setLayerChannels(obj: THREE.Object3D, channels: number[], recursive?: boolean): void;
 }

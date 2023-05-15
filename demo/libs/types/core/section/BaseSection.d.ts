@@ -6,7 +6,7 @@ export declare abstract class BaseSection {
     private inputManager;
     protected scene: THREE.Scene;
     protected renderer: THREE.WebGLRenderer;
-    protected raycaster?: THREE.Raycaster;
+    protected raycaster: THREE.Raycaster;
     protected sectionBox: THREE.Box3;
     protected mouseDown: boolean;
     protected lastWorldPos: THREE.Vector3;
@@ -16,13 +16,21 @@ export declare abstract class BaseSection {
     protected vertices?: THREE.Vector3[];
     protected selectedObject?: THREE.Object3D;
     protected refrencePlane: THREE.Plane;
+    protected active: boolean;
     isShowSectionPlane: boolean;
+    /**
+     * @internal
+     */
+    clippingObjetIds?: number[];
     constructor(viewer: BaseViewer, input: InputManager);
     get canvas(): HTMLCanvasElement;
     get isActive(): boolean;
     get camera(): THREE.Camera;
     get controls(): import("..").CameraControlsEx | import("..").VRControls | undefined;
-    setGlobalClippingEnable(enable: boolean): void;
+    private setGlobalClippingEnable;
+    private setObjectClippingEnable;
+    clearClippingObjectIds(): void;
+    setClippingEnable(enable: boolean): void;
     activate(): void;
     deactivate(): void;
     mousedown: (e: EventInfo) => void;

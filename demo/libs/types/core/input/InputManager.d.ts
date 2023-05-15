@@ -73,7 +73,7 @@ export interface EventInfo {
     movementY: number;
     code?: string;
     pointerId: number;
-    pointers?: PointerEvent[];
+    pointers?: EventInfo[];
     button?: MouseButtonType;
     buttons: MouseButtonType;
     pointerType: string;

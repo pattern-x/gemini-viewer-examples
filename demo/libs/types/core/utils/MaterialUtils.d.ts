@@ -25,7 +25,7 @@ export declare class MaterialUtils {
         depthTest?: boolean;
         highlightColor?: THREE.Color;
         opacity?: number;
-    }): THREE.Material | THREE.MeshLambertMaterial | THREE.MeshStandardMaterial | THREE.MeshPhongMaterial | THREE.MeshBasicMaterial | THREE.LineBasicMaterial | THREE.LineDashedMaterial | THREE.ShaderMaterial | THREE.SpriteMaterial;
+    }): THREE.Material;
     /**
      * Clone given material(s)
      */

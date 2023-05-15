@@ -24,7 +24,6 @@ export declare class CanvasRender extends Event {
     get container(): HTMLElement;
     get camera(): THREE.Camera;
     get raycaster(): THREE.Raycaster;
-    getPixelSize(scale: number, camera: THREE.Camera): number;
     private init;
     private initCanvas;
     private toHighDpr;
@@ -34,15 +33,19 @@ export declare class CanvasRender extends Event {
     setSize(width: number, height: number): void;
     getSortedDrawables(): Drawable[];
     getDrawablesByPosition(p: THREE.Vector3, raycaster?: THREE.Raycaster): Drawable[];
+    getDrawableById(id: string): Drawable | undefined;
     measureTextLength(text: string, font: string): number;
+    /**
+     *
+     * @param option
+     * @returns
+     * @deprecated
+     */
     screenshot(option?: {
         type: string;
         quality: number;
     }): Promise<string | undefined>;
-    getImage(option?: {
-        type: string;
-        quality: number;
-    }): string | undefined;
+    getImage(filter: (drawabkle: Drawable) => boolean): Promise<HTMLImageElement>;
     getCanvas(): HTMLCanvasElement | undefined;
     destroy(): void;
 }

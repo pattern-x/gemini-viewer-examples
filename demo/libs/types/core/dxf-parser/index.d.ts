@@ -1,5 +1,5 @@
 export { default, default as DxfParser } from "./DxfParser";
-export type { IDxf, IBlock, ILayerTypesTable, ILayersTable, ITables, IViewPortTable, IBaseTable, ILayer, ILayerTableDefinition, ILineType, ILineTypeTableDefinition, ITable, ITableDefinitions, IViewPort, IViewPortTableDefinition, } from "./DxfParser";
+export type { IDxf, IBlock, ILayerTypesTable, ILayersTable, ITables, IViewportTable, IBaseTable, ILayer, ILayerTableDefinition, ILineType, ILineTypeTableDefinition, ITable, ITableDefinitions, IViewport, IViewportTableDefinition, } from "./DxfParser";
 export type { IEntity, IPoint } from "./entities/geomtry";
 export type { I3DfaceEntity } from "./entities/3dface";
 export type { IArcEntity } from "./entities/arc";
@@ -21,5 +21,6 @@ export type { ITextEntity } from "./entities/text";
 export type { IVertexEntity } from "./entities/vertex";
 export type { IViewportEntity } from "./entities/viewport";
 export type { IObject } from "./objects/common";
+export type { IImageDefObject } from "./objects/imagedef";
 export type { ILayoutObject } from "./objects/layout";
 export type { ISortEntsObject, ISortEntsTableObject } from "./objects/sortentstable";

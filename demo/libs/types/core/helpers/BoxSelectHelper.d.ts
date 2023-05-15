@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Tooltip } from "../../components/tool-tip";
-import { mouseButtonAction } from "../../core/camera-controls/types";
+import { mouseButtonAction, singleTouchAction } from "../../core/camera-controls/types";
 import type { InputManager } from "../../core/input/InputManager";
 import type { BimViewer, DxfViewer } from "../../core/viewers";
 /**
@@ -15,6 +15,7 @@ export declare class BoxSelectHelper {
     protected mouseDownPositionX: number;
     protected mouseDownPositionY: number;
     protected tempKey?: mouseButtonAction;
+    protected tempTouch?: singleTouchAction;
     protected tempEnableRotate: boolean;
     protected rectDom?: HTMLDivElement;
     protected tooltip?: Tooltip;

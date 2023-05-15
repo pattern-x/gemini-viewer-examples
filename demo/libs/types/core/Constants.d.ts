@@ -13,33 +13,33 @@ export declare const sceneAutoUpdate = false;
  * These concept can be complex: hitable, snapable, selectable, visible
  * Mesh                            Y        Y         Y           Y
  * text in DxfViewer               Y        N         Y           Y
- * ground plan                     Y        N         N           Y
- * outline                         N        N         N           Y
+ * ground plan                     Y        Y         N           Y
+ * outline                         N        Y         N           Y
  * OSnap auxiliary object          N        Y         N           N
  *
  * So, we must handle them properly. We'll try to put them into different layers.
+ *
+ * For each created object with geometry and material, the default layer is set to enableAll.
+ * If the object is only displayed, it is not necessary to call enableAll. For example, some auxiliary display objects.
+ * For objects that cannot be hitable, snapable, selectable, etc., call ObjectUtils.disableLayerChannels to exclude the corresponding channel.
+ * @example
+ * ``` typescript
+ *   this.groundPlane.layers.enableAll();
+ *   ObjectUtils.disableLayerChannels(this.groundPlane, [layerForSelectableObjects]);
+ * ```
  */
 /**
- * In some scenarios, we don't want some objects to be snap-able.
- * E.g. texts in DxfViewer.
- * We'll put them into this layer, so they are visible but not snap-able.
  * @internal
  */
-export declare const layerForNonSnapableObjects = 10;
+export declare const layerForHitableObjects = 10;
 /**
- * In some scenarios, we don't want some objects to be select-able.
- * E.g. outlines in BimViewer
- * We'll put them into this layer, so they are visible but not select-able.
  * @internal
  */
-export declare const layerForUnselectableObjects = 11;
+export declare const layerForSnapableObjects = 11;
 /**
- * In some scenarios, we need to create auxiliary objects. E.g., we need to create
- * point object in order to osnap to circle/arc/ellipse center.
- * We'll put them into this layer, so they are snap-able but not select-able, nor visible.
  * @internal
  */
-export declare const layerForSnapableOnlyObjects = 12;
+export declare const layerForSelectableObjects = 12;
 /**
  * @internal
  */
