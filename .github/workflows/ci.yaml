@@ -1,5 +1,5 @@
 # 当前 workflow 的名称
-name: Gemini Viewer Examples
+name: Gemini Viewer Build
 
 # 指定 workflow 触发的 event
 on:
