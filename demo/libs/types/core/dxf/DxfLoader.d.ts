@@ -345,7 +345,7 @@ export declare class DxfLoader extends THREE.Loader {
     private drawArc;
     private addTriangleFacingCamera;
     private drawSolid;
-    private getDefaultTextStyle;
+    private getTextStyle;
     private getDefaultDimensionStyle;
     private getTextEncoding;
     private getTextMesh;

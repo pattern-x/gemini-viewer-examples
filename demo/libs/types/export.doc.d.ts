@@ -1,6 +1,6 @@
 export { SectionType, Vector2, Vector3, Box2, DrawableData } from "./core";
 export { BaseViewerConfig, BimViewerConfig, CameraConfig, DxfModelConfig, DxfViewerConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint, } from "./core/Configs";
-export { BimViewer, DxfViewer, VRViewer, SimplifiedBimViewer, ViewerEvent, DxfLayers, MarkupData } from "./core/viewers";
+export { BimViewer, DxfViewer, VRViewer, ScreenshotResult, SimplifiedBimViewer, ViewerEvent, DxfLayers, MarkupData, } from "./core/viewers";
 export { DxfChangeType, DxfChange, DxfLayer } from "./core/dxf";
 export { ILayer } from "./core/dxf-parser";
 export { MarkupType } from "./core/markup";
