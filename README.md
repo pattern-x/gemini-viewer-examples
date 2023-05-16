@@ -59,6 +59,9 @@ viewer.goToHomeView();
 ```
 
 ## Features for DxfViewer
+- DxfViewer features includes: load and view one or more dxf files, basic mouse/key operations, layouts, layers, distance/area/angle measurements with osnaps, markups, hotpoints, comparison, undo/redo for measurements/markups, zoom to selected area, screenshots, set background color, etc.
+- Supported entity types includes: POINT, 3DFACE, ARC, ATTDEF, ATTRIB, CIRCLE, DIMENSION, MLEADER, MULTILEADER, ELLIPSE, HATCH, INSERT, LEADER, LINE, LWPOLYLINE, MTEXT, RAY, POLYLINE, SOLID, SPLINE, TEXT, VERTEX, VIEWPORT, XLINE, etc. IMAGE, OLE2FRAME, REGION are partially supported.
+
 - Load and view dxf file
 ![load_and_view.gif](public/demo/images/snapshots/load_and_view.gif)
 - Switch between layouts
@@ -72,6 +75,13 @@ viewer.goToHomeView();
 - Comparison
 ![markups.gif](public/demo/images/snapshots/dxf_compare.png)
 - Undo/redo
+
+## DxfViewer limitations
+- It doesn't support complex linetypes, e.g., linetype with text in it.
+- It uses line geometries to represent texts rather than mesh, for a better performance.
+- It doesn't support polyline with different start and end width.
+- It doesn't support Tangent CAD, need to export to T3 format first.
+- It supports dxf version "AutoCAD 2018", other versions are not well tested.
 
 ## How to integrate DxfViewer into your system
 - Physical structure diagram:
