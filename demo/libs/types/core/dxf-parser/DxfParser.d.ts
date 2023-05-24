@@ -176,8 +176,7 @@ export interface IStyle {
     textHeight: number;
     xScale: number;
     rotation: number;
-    textStyle: string;
-    mirroreType: number;
+    mirrorType: number;
     fontFile: string;
     bigFontFile: string;
 }

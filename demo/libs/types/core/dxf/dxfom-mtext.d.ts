@@ -35,6 +35,11 @@ export type DxfMTextContentElement = DxfMTextContentElement[] | string | {
 };
 /**
  * @internal
+ * [{f:""},
+ *  {W:[,]},
+ *  {C:number},
+ *  ...
+ *  ""] // The last one must be the test string
  */
 export declare const parseDxfMTextContent: (s: string, options?: {
     readonly encoding?: string | TextDecoder | undefined;

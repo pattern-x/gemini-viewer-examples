@@ -3,10 +3,10 @@ import IGeometry, { IEntity, IPoint } from "./geomtry";
 export interface IMtextEntity extends IEntity {
     text: string;
     position: IPoint;
-    directionVector: IPoint;
+    directionVector?: IPoint;
     height: number;
     width: number;
-    rotation: number;
+    rotation?: number;
     attachmentPoint: number;
     drawingDirection: number;
     textStyle?: string;

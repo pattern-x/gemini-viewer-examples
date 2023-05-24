@@ -303,7 +303,7 @@ export declare class DxfLoader extends THREE.Loader {
      * Loads entities from two dxf data for comparing.
      * It also generates DxfChange information for each change.
      */
-    loadEntitiesForCompare(data1: IDxf, data2: IDxf, changes: Record<string, DxfChange>, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    loadEntitiesForCompare(data1: IDxf, data2: IDxf, changes: Record<string, DxfChange>, bIgnoreSameEntity?: boolean, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     private setObjectColorByChange;
     /**
      * Manually release some objects to save memory.

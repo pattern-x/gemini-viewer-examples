@@ -3,7 +3,7 @@ import Stats from "three/examples/jsm/libs/stats.module.js";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { Toolbar } from "../../components/toolbar";
-import { DxfModelConfig, DxfViewerConfig, Hotpoint } from "../../core/Configs";
+import { DxfModelConfig, DxfViewerConfig, Hotpoint, ModelConfig } from "../../core/Configs";
 import { Box2, Vector2 } from "../../core/Constants";
 import { DrawableData, Drawable } from "../../core/canvas";
 import { DxfData, DxfLayer, DxfChange } from "../../core/dxf";
@@ -137,6 +137,7 @@ export declare class DxfViewer extends BaseViewer {
     name: ViewerName;
     private readonly CAMERA_Z_POSITION;
     private readonly CAMERA_MIN_ZOOM;
+    private aspect;
     private timer;
     protected css2dRenderer?: CSS2DRenderer;
     protected font?: Font;
@@ -151,7 +152,10 @@ export declare class DxfViewer extends BaseViewer {
         dxfData?: DxfData;
         msTransformMatrix?: THREE.Matrix4;
     }>;
-    private masterModelId;
+    /**
+     * @internal
+     */
+    masterModelId: string;
     private dxfLayoutBar?;
     private loadingManager?;
     private raycaster?;
@@ -690,15 +694,16 @@ export declare class DxfViewer extends BaseViewer {
      * Add newly added object to scene.
      * Also, usually(but not always) we should regenerate sky and go to home view
      * @param object
+     * @internal
      */
-    private addLoadedModelToScene;
+    addLoadedModelToScene(object: THREE.Object3D, modelCfg: ModelConfig, dxfData: DxfData, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     /**
      *
      * @param width
      * @param height
      * @description resize viewer
      */
-    resize(width?: number, height?: number): void;
+    resize(width: number, height: number): void;
     /**
      * @internal
      */

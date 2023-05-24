@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.1535e7ee.css",
-    "main.js": "./static/js/main.4caf045f.js",
+    "main.js": "./static/js/main.5d9c8768.js",
     "static/js/787.cf5efa72.chunk.js": "./static/js/787.cf5efa72.chunk.js",
     "demo/libs/gemini-viewer.esm.min.js": "./demo/libs/gemini-viewer.esm.min.js",
     "static/media/dwg_background.png": "./static/media/dwg_background.f630e7cda68e19172eec.png",
@@ -38,8 +38,8 @@
     "demo/libs/types/components/dat-gui/BimViewerDatGui.d.ts": "./demo/libs/types/components/dat-gui/BimViewerDatGui.d.ts",
     "demo/libs/types/core/section/BaseSection.d.ts": "./demo/libs/types/core/section/BaseSection.d.ts",
     "demo/libs/types/core/measure/MeasurementManager.d.ts": "./demo/libs/types/core/measure/MeasurementManager.d.ts",
-    "demo/libs/types/core/plugins/view-cube/ViewCube.d.ts": "./demo/libs/types/core/plugins/view-cube/ViewCube.d.ts",
     "demo/libs/types/core/utils/ExportUtils.d.ts": "./demo/libs/types/core/utils/ExportUtils.d.ts",
+    "demo/libs/types/plugins/view-cube/ViewCube.d.ts": "./demo/libs/types/plugins/view-cube/ViewCube.d.ts",
     "demo/libs/types/core/shx-parser/ShxFont.d.ts": "./demo/libs/types/core/shx-parser/ShxFont.d.ts",
     "demo/libs/types/core/viewers/ViewerEvent.d.ts": "./demo/libs/types/core/viewers/ViewerEvent.d.ts",
     "demo/libs/types/core/canvas/CanvasRender.d.ts": "./demo/libs/types/core/canvas/CanvasRender.d.ts",
@@ -61,6 +61,7 @@
     "demo/libs/types/core/dxf-parser/entities/geomtry.d.ts": "./demo/libs/types/core/dxf-parser/entities/geomtry.d.ts",
     "demo/libs/types/core/vr/VRCube24Faces.d.ts": "./demo/libs/types/core/vr/VRCube24Faces.d.ts",
     "demo/libs/types/core/section/SectionGizmo.d.ts": "./demo/libs/types/core/section/SectionGizmo.d.ts",
+    "demo/libs/types/core/compare/DxfCompareHelper.d.ts": "./demo/libs/types/core/compare/DxfCompareHelper.d.ts",
     "demo/libs/types/core/utils/Event.d.ts": "./demo/libs/types/core/utils/Event.d.ts",
     "demo/libs/types/core/section/ObjectsBoxSection.d.ts": "./demo/libs/types/core/section/ObjectsBoxSection.d.ts",
     "demo/libs/types/core/exploder/Exploder.d.ts": "./demo/libs/types/core/exploder/Exploder.d.ts",
@@ -74,14 +75,14 @@
     "demo/libs/types/core/shx-parser/util/BitConverter.d.ts": "./demo/libs/types/core/shx-parser/util/BitConverter.d.ts",
     "demo/libs/types/components/context-menu/ContextMenu.d.ts": "./demo/libs/types/components/context-menu/ContextMenu.d.ts",
     "demo/libs/types/core/controls/CameraControlsEx.d.ts": "./demo/libs/types/core/controls/CameraControlsEx.d.ts",
+    "demo/libs/types/core/dxf/dxfom-mtext.d.ts": "./demo/libs/types/core/dxf/dxfom-mtext.d.ts",
     "demo/libs/types/core/navcube/NavCubeViewport.d.ts": "./demo/libs/types/core/navcube/NavCubeViewport.d.ts",
     "demo/libs/types/core/dxf-parser/DxfTextReader.d.ts": "./demo/libs/types/core/dxf-parser/DxfTextReader.d.ts",
-    "demo/libs/types/core/plugins/view-cube/ViewCubePlugin.d.ts": "./demo/libs/types/core/plugins/view-cube/ViewCubePlugin.d.ts",
+    "demo/libs/types/plugins/view-cube/ViewCubePlugin.d.ts": "./demo/libs/types/plugins/view-cube/ViewCubePlugin.d.ts",
     "demo/libs/types/core/dxf-parser/entities/image.d.ts": "./demo/libs/types/core/dxf-parser/entities/image.d.ts",
     "demo/libs/types/components/progress-bar/ProgressBar.d.ts": "./demo/libs/types/components/progress-bar/ProgressBar.d.ts",
     "demo/libs/types/core/helpers/MobileTouchHelperDrawable.d.ts": "./demo/libs/types/core/helpers/MobileTouchHelperDrawable.d.ts",
     "demo/libs/types/core/indexeddb/BaseTable.d.ts": "./demo/libs/types/core/indexeddb/BaseTable.d.ts",
-    "demo/libs/types/core/dxf/dxfom-mtext.d.ts": "./demo/libs/types/core/dxf/dxfom-mtext.d.ts",
     "demo/libs/types/core/canvas/DrawableList.d.ts": "./demo/libs/types/core/canvas/DrawableList.d.ts",
     "demo/libs/types/core/camera-controls/utils/math-utils.d.ts": "./demo/libs/types/core/camera-controls/utils/math-utils.d.ts",
     "demo/libs/types/components/settings/ProjectSettingsDef.d.ts": "./demo/libs/types/components/settings/ProjectSettingsDef.d.ts",
@@ -141,8 +142,8 @@
     "demo/libs/types/core/helpers/RafHelper.d.ts": "./demo/libs/types/core/helpers/RafHelper.d.ts",
     "demo/libs/types/core/compare/CompareDrawable.d.ts": "./demo/libs/types/core/compare/CompareDrawable.d.ts",
     "demo/libs/types/core/utils/CSS2DObjectUtils.d.ts": "./demo/libs/types/core/utils/CSS2DObjectUtils.d.ts",
-    "demo/libs/types/core/canvas/Constants.d.ts": "./demo/libs/types/core/canvas/Constants.d.ts",
     "demo/libs/types/core/dxf-parser/entities/mtext.d.ts": "./demo/libs/types/core/dxf-parser/entities/mtext.d.ts",
+    "demo/libs/types/core/canvas/Constants.d.ts": "./demo/libs/types/core/canvas/Constants.d.ts",
     "demo/libs/types/core/markup/ArrowMarkup.d.ts": "./demo/libs/types/core/markup/ArrowMarkup.d.ts",
     "demo/libs/types/core/utils/TextureUtils.d.ts": "./demo/libs/types/core/utils/TextureUtils.d.ts",
     "demo/libs/types/core/helpers/MeshBvhHelper.d.ts": "./demo/libs/types/core/helpers/MeshBvhHelper.d.ts",
@@ -229,6 +230,7 @@
     "demo/libs/types/components/toolbar/index.d.ts": "./demo/libs/types/components/toolbar/index.d.ts",
     "demo/libs/types/core/canvas/index.d.ts": "./demo/libs/types/core/canvas/index.d.ts",
     "demo/libs/types/core/vr/index.d.ts": "./demo/libs/types/core/vr/index.d.ts",
+    "demo/libs/types/core/compare/index.d.ts": "./demo/libs/types/core/compare/index.d.ts",
     "demo/libs/types/core/utils/DecimalPrecisionUtils.d.ts": "./demo/libs/types/core/utils/DecimalPrecisionUtils.d.ts",
     "demo/libs/types/components/context-menu/ContextMenu.config.d.ts": "./demo/libs/types/components/context-menu/ContextMenu.config.d.ts",
     "demo/libs/types/core/shp-js/index.d.ts": "./demo/libs/types/core/shp-js/index.d.ts",
@@ -238,7 +240,6 @@
     "demo/libs/types/core/dxf/round10.d.ts": "./demo/libs/types/core/dxf/round10.d.ts",
     "demo/libs/types/core/camera-controls/index.d.ts": "./demo/libs/types/core/camera-controls/index.d.ts",
     "demo/libs/types/core/patches/Constants.d.ts": "./demo/libs/types/core/patches/Constants.d.ts",
-    "demo/libs/types/core/compare/index.d.ts": "./demo/libs/types/core/compare/index.d.ts",
     "demo/libs/types/core/axes/index.d.ts": "./demo/libs/types/core/axes/index.d.ts",
     "demo/libs/types/core/shx-parser/ExtraLettersTemplate.d.ts": "./demo/libs/types/core/shx-parser/ExtraLettersTemplate.d.ts",
     "demo/libs/types/core/workers/index.d.ts": "./demo/libs/types/core/workers/index.d.ts",
@@ -265,11 +266,11 @@
     "demo/libs/types/core/workers/CreateEdgesGeometry.worker.d.ts": "./demo/libs/types/core/workers/CreateEdgesGeometry.worker.d.ts",
     "demo/libs/types/core/workers/CreateMeshBvh.worker.d.ts": "./demo/libs/types/core/workers/CreateMeshBvh.worker.d.ts",
     "main.1535e7ee.css.map": "./static/css/main.1535e7ee.css.map",
-    "main.4caf045f.js.map": "./static/js/main.4caf045f.js.map",
+    "main.5d9c8768.js.map": "./static/js/main.5d9c8768.js.map",
     "787.cf5efa72.chunk.js.map": "./static/js/787.cf5efa72.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1535e7ee.css",
-    "static/js/main.4caf045f.js"
+    "static/js/main.5d9c8768.js"
   ]
 }
