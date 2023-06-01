@@ -22,7 +22,6 @@ export declare class LoadingHelper {
     loadFbx(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     loadObj(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     loadStl(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
-    loadIfc(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     loadShp(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     loadDae(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     loadDxf(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
@@ -34,7 +33,7 @@ export declare class LoadingHelper {
     /**
      * Loads dxf data, including entities, tables(layers, blocks), etc.
      */
-    loadDxfData(url: string, dxfDataId?: string, onProgress?: (event: ProgressEvent) => void, onLoad?: () => void, ignorePaperSpace?: boolean, enableLocalCache?: boolean): Promise<DxfData>;
+    loadDxfData(url: string, dxfDataId?: string, onProgress?: (event: ProgressEvent) => void, onLoad?: () => void, ignorePaperSpace?: boolean, enableLocalCache?: boolean, enableMerge?: boolean): Promise<DxfData>;
     /**
      * Sets font.
      * Font is required for DxfViewer to view Chinese, etc.

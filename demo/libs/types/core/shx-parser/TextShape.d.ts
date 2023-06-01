@@ -19,5 +19,5 @@ export declare class TextShape extends THREE.Shape {
     /**
      * Converts a TextShape to THREE.BufferGeometry
      */
-    toThreeGeometry(): THREE.BufferGeometry;
+    toThreeGeometry(): THREE.BufferGeometry<THREE.NormalBufferAttributes>;
 }

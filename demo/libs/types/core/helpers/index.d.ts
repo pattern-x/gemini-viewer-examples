@@ -6,6 +6,7 @@ export * from "./LoadingHelper";
 export * from "./MeshBvhHelper";
 export * from "./ObjectPixelSizeHelper";
 export * from "./OSnapHelper";
+export * from "./PickMarkupHelper";
 export * from "./BoxSelectHelper";
 export * from "./ZoomToRectHelper";
 export * from "./MobileTouchHelperDrawable";

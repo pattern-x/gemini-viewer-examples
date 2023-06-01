@@ -20,7 +20,7 @@ export declare abstract class BaseMeasureDrawable extends Drawable {
     drawPoints(ctx: CanvasRenderingContext2D, camera: THREE.Camera, points: THREE.Vector3[]): void;
     drawText(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     drawRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number): void;
-    getVertexs(): THREE.Vector3[];
+    getVertexes(): THREE.Vector3[];
     update(points: THREE.Vector3[]): this;
     getBounds(): THREE.Box3;
     getData(): MeasurementData;

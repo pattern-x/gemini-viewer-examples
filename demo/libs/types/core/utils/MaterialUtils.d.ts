@@ -16,7 +16,7 @@ export declare class MaterialUtils {
      * Compares two colors
      */
     static colorEquals(c1: THREE.Color, c2: THREE.Color): boolean;
-    static clonedHighlightMaterials(mesh: THREE.Mesh | THREE.Line, options?: {
+    static clonedHighlightMaterials(mesh: THREE.Mesh | THREE.Line | THREE.Points, options?: {
         depthTest?: boolean;
         highlightColor?: THREE.Color;
         opacity?: number;

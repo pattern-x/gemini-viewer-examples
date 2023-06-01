@@ -22,6 +22,8 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     protected mouseDown: boolean;
     protected mouseDownPositionX?: number;
     protected mouseDownPositionY?: number;
+    protected mousedownPoint?: THREE.Vector2;
+    private isSelectLeaderText;
     private textInitialPosition?;
     private tempKey?;
     private tempTouch?;
@@ -33,7 +35,7 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     private creatingShape?;
     private tempPoints;
     private textInput?;
-    private actived;
+    private activated;
     protected exitButton?: HTMLButtonElement;
     constructor(viewer: BaseViewer, input: InputManager);
     get viewerCanvas(): HTMLCanvasElement;
@@ -58,6 +60,7 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     getFontSize(): number;
     pickPositionByScreenPoint(p: THREE.Vector2): THREE.Vector3;
     pickThreejsPositionByMouse(e: EventInfo): THREE.Vector3;
+    handleInputMousemove: (e: MouseEvent) => void;
     mousedown: (e: EventInfo) => void;
     mousemove: (e: EventInfo) => void;
     mouseup: (e: EventInfo) => void;

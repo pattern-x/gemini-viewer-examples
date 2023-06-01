@@ -87,6 +87,7 @@ export declare const en: {
         areaMeasurement: string;
         section: string;
         boxSelect: string;
+        pickMarkup: string;
     };
     PopPanel: {
         reset: string;
@@ -181,6 +182,7 @@ export declare const cn: {
         areaMeasurement: string;
         section: string;
         boxSelect: string;
+        pickMarkup: string;
     };
     PopPanel: {
         reset: string;

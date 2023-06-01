@@ -22,7 +22,7 @@ export declare class BoxSelectHelper {
     private actived;
     static readonly BORDER_COLOR = "#fff000";
     static readonly BORDER_WIDTH = "2px";
-    protected resolve?: (value: THREE.Box2 | PromiseLike<THREE.Box2>) => void;
+    protected resolve?: (value: THREE.Box2 | PromiseLike<THREE.Box2> | undefined) => void;
     protected reject?: (reason: any) => void;
     protected isResolvedOrRejected: boolean;
     constructor(viewer: DxfViewer | BimViewer);
@@ -38,6 +38,6 @@ export declare class BoxSelectHelper {
     /**
      * Starts to select a box area
      */
-    select(): Promise<THREE.Box2>;
+    select(): Promise<THREE.Box2 | undefined>;
     destroy(): void;
 }

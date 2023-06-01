@@ -24,7 +24,7 @@ export declare class SkyboxUtils {
     /**
      * Create sky according to a bounding box
      */
-    static createSkyOfGradientRampByBoundingBox(bbox: THREE.Box3): THREE.Mesh<THREE.BufferGeometry, THREE.Material | THREE.Material[]>;
+    static createSkyOfGradientRampByBoundingBox(bbox: THREE.Box3): THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.Material | THREE.Material[]>;
     /**
      * Creates skybox by 6 pictures. The texture should be assigned to scene.background.
      */

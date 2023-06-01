@@ -170,6 +170,7 @@ export interface DxfSpatialFilter extends ISpatialFilterObject {
 export declare class DxfLoader extends THREE.Loader {
     static readonly MODEL_LAYOUT_NAME = "Model";
     static readonly SNAP_GROUP_NAME = "InvisibleObjectGroupForOSnap";
+    static readonly SHOW_SNAP_OBJECT = false;
     private timer;
     private ignorePaperSpace;
     font?: Font | ShxFont;
@@ -261,7 +262,7 @@ export declare class DxfLoader extends THREE.Loader {
      * @param ignorePaperSpace if true, only load model space
      * @param enableLocalCache if true, use indexeddb to cache dxf data
      */
-    constructor(manager?: THREE.LoadingManager, ignorePaperSpace?: boolean, enableLocalCache?: boolean);
+    constructor(manager?: THREE.LoadingManager, ignorePaperSpace?: boolean, enableLocalCache?: boolean, enableMerge?: boolean);
     /**
      * Sets font.
      */

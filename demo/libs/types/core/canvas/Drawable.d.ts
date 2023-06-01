@@ -12,12 +12,12 @@ export declare abstract class Drawable extends Event {
     protected lineWidth: number;
     protected lineColor: string;
     protected fillColor: string;
-    protected x: number;
-    protected y: number;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
     protected points: THREE.Vector3[];
     userData: Record<any, any>;
-    protected width: number;
-    protected height: number;
     protected tolerance: number;
     visible: boolean;
     selected: boolean;
@@ -35,7 +35,7 @@ export declare abstract class Drawable extends Event {
     render(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     getData(): DrawableData;
     setData(data: DrawableData): void;
-    getVertexs(): THREE.Vector3[];
+    getVertexes(): THREE.Vector3[];
     setLineWidth(lineWidth?: number): void;
     setLineColor(color?: string): void;
     setFillColor(color?: string): void;
@@ -55,7 +55,7 @@ export declare abstract class Drawable extends Event {
      * @param camera
      * @describe just for debug
      */
-    drawCenter(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
+    private drawCenter;
     /**
      *
      * @param p is world position

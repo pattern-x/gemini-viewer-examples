@@ -36,6 +36,14 @@ export declare enum ViewerEvent {
      * Triggered when box select deactivated
      */
     BoxSelectDeactivated = "BoxSelectDeactivated",
+    /**
+     * Triggered when pick markup activated
+     */
+    PickMarkupActivated = "PickMarkupActivated",
+    /**
+     * Triggered when pick markup deactivated
+     */
+    PickMarkupDeactivated = "PickMarkupDeactivated",
     MarkupActivated = "MarkupActivated",
     /**
      * Triggered when markup feature is deactivated

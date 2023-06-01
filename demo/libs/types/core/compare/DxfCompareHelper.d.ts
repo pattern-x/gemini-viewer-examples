@@ -5,6 +5,7 @@ import { DxfViewer } from "../../core/viewers/DxfViewer";
 export declare class DxfCompareHelper {
     viewer1: DxfViewer;
     viewer2: DxfViewer;
+    enableSyncCamera: boolean;
     protected font?: Font;
     private loader;
     private loadingManager?;
@@ -14,6 +15,8 @@ export declare class DxfCompareHelper {
     protected jobCount: number;
     private loadingProgressBar?;
     constructor(viewerConfig1: DxfViewerConfig, viewerConfig2: DxfViewerConfig);
+    protected initSyncCameraEvent(): void;
+    private syncCamera;
     protected initSpinner(): void;
     setFont(urls: string[]): Promise<void>;
     compare(model1: DxfModelConfig, model2: DxfModelConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;

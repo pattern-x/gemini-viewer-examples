@@ -1,10 +1,9 @@
 import * as THREE from "three";
-import { EventInfo, InputManager } from "../../core/input/InputManager";
+import { InputManager } from "../../core/input/InputManager";
 import { BaseMeasureDrawable } from "../../core/measure/BaseMeasureDrawable";
 import { MeasurementData, MeasurementType } from "../../core/measure/BaseMeasurement";
 import type { BaseViewer } from "../../core/viewers";
 export declare class MeasurementManager {
-    scene: THREE.Scene;
     selectedMeasurementDrawable: BaseMeasureDrawable | undefined;
     private overlayRender?;
     private drawableList;
@@ -38,7 +37,8 @@ export declare class MeasurementManager {
     removeMeasurementById(id: string): void;
     selectMeasurementById(id: string): void;
     selectMeasurement(drawable: BaseMeasureDrawable): void;
-    unselectMeasurement(): void;
+    unselectMeasurement(renderEnabled?: boolean): void;
     destroy(): void;
-    keydown: (e: EventInfo) => void;
+    private keydown;
+    private render;
 }

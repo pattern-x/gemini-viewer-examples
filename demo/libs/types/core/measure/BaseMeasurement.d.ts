@@ -52,6 +52,18 @@ type MeasureHandler = {
      * Triggered when draw first point
      */
     FirstPointPicked: BaseMeasureDrawable;
+    /**
+     * Triggered when draw measure will be added
+     */
+    WillBeAdded: BaseMeasureDrawable;
+    /**
+     * Triggered when draw measure was updated
+     */
+    Updated: BaseMeasureDrawable;
+    /**
+     * Triggered when draw measure will be removed
+     */
+    WillBeRemoved: BaseMeasureDrawable;
 };
 /**
  * BaseMeasurement class
@@ -79,8 +91,8 @@ export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
     protected clickedOnMeasurementDrawable?: BaseMeasureDrawable;
     protected mobileTouchHelper?: MobileTouchHelperDrawable;
     protected exitButton?: HTMLButtonElement;
-    protected firstPickedListerner?: () => void;
-    protected completedListerner?: () => void;
+    protected firstPickedListener?: () => void;
+    protected completedListener?: () => void;
     constructor(type: MeasurementType, viewer: BaseViewer, input: InputManager, drawList: DrawableList, osnapHelper: OSnapHelper);
     get canvas(): HTMLCanvasElement;
     get camera(): THREE.Camera;
@@ -114,7 +126,9 @@ export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
     abstract cancel(): void;
     protected abstract complete(): void;
     protected abstract setTooltipContent(): void;
-    protected abstract onMouseMove(position: THREE.Vector3): void;
+    protected abstract createMeasureDrawable(): BaseMeasureDrawable | undefined;
+    protected onMouseMove(position: THREE.Vector3): void;
+    protected createOrUpdateMeasureDrawable(position?: THREE.Vector3): void;
     /**
      * The closest intersection
      * @param e

@@ -23,7 +23,7 @@ export declare class GeometryUtils {
     private static attributesEqual;
     private static bufferAttributeEqual;
     /**
-     * Converts InterleavedBufferAttribute to BufferAttribute, because mergeBufferGeometries doesn't support InterleavedBufferAttribute.
+     * Converts InterleavedBufferAttribute to BufferAttribute, because mergeGeometries doesn't support InterleavedBufferAttribute.
      * If it is supported by Three.js one day, we should remove this method.
      */
     static tryConvertInterleavedBufferAttributes(geometry: THREE.BufferGeometry): void;
@@ -70,8 +70,8 @@ export declare class GeometryUtils {
     static arePolygonsIntersect(polygon1: THREE.Vector2[], polygon2: THREE.Vector2[]): boolean;
     static getLineLineIntersectionPoint(a: THREE.Vector2, b: THREE.Vector2, c: THREE.Vector2, d: THREE.Vector2, epsilon?: number): THREE.Vector2 | undefined;
     static getOffsetPoint(a: THREE.Vector2, b: THREE.Vector2, offset: number): THREE.Vector2;
-    static convertSimpleWidthLineToMeshGeometry(points: THREE.Vector2[], width: number): THREE.BufferGeometry | undefined;
-    static convertWidthLineToMeshGeometry(points: THREE.Vector2[], width: number): THREE.BufferGeometry | undefined;
+    static convertSimpleWidthLineToMeshGeometry(points: THREE.Vector2[], width: number): THREE.BufferGeometry<THREE.NormalBufferAttributes> | undefined;
+    static convertWidthLineToMeshGeometry(points: THREE.Vector2[], width: number): THREE.BufferGeometry<THREE.NormalBufferAttributes> | undefined;
     static releaseGeometryManually(geometry: THREE.BufferGeometry): void;
     static getAdjacentNonRepeatPoints(points: THREE.Vector3[], epsilon?: number): THREE.Vector3[];
     static mergeBBoxes(bboxes: THREE.Box3[]): THREE.Box3[];

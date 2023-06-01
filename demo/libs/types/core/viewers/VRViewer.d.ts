@@ -1,7 +1,8 @@
+import * as THREE from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 import { Toolbar } from "../../components/toolbar";
-import { CameraConfig, Hotpoint, Panorama, VRViewerConfig, VRViewpoint } from "../../core/Configs";
+import { CameraConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint } from "../../core/Configs";
 import { Vector3 } from "../../core/Constants";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 export declare class VRViewer extends BaseViewer {
@@ -9,6 +10,16 @@ export declare class VRViewer extends BaseViewer {
      * @internal
      */
     name: ViewerName;
+    private timer;
+    /**
+     * @internal
+     */
+    loadedModels: {
+        [src: string]: {
+            id: number;
+            bbox?: THREE.Box3;
+        };
+    };
     /**
      * @internal
      */
@@ -118,6 +129,27 @@ export declare class VRViewer extends BaseViewer {
      */
     setViewpoints(viewpoints: VRViewpoint[]): void;
     /**
+     * Loads a 3d model.
+     * @internal
+     */
+    loadModel(modelCfg: ModelConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    /**
+     * Sets a model's visibility.
+     * @throws Throws exception if modelId doesn't exist.
+     * @internal
+     */
+    setModelVisibility(modelId: string, visible: boolean): void;
+    /**
+     * Applies options and add object to scene.
+     */
+    private applyOptionsAndAddToScene;
+    /**
+     * Add newly added object to scene.
+     * Also, usually(but not always) we should regenerate sky and go to home view
+     * @param object
+     */
+    private addLoadedModelToScene;
+    /**
      * Adds a panorama to a viewpoint
      */
     addPanorama(viewpointId: string, panorama: Panorama): void;
@@ -195,4 +227,16 @@ export declare class VRViewer extends BaseViewer {
      * @param position target position to look to
      */
     lookToPosition(position: [number, number, number]): void;
+    /**
+     * Instatiates leaf nodes of given object.
+     * If objects' geometry and material are the same, they can be instanced.
+     * @param object
+     */
+    private instantiate;
+    /**
+     * Merges leaf nodes of given object.
+     * If objects' materials are the same, they can be merged.
+     * @param object
+     */
+    private merge;
 }

@@ -1,15 +1,16 @@
+/// <reference types="stats.js" />
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { Toolbar } from "../../components/toolbar";
 import { DxfModelConfig, DxfViewerConfig, Hotpoint, ModelConfig } from "../../core/Configs";
-import { Box2, Vector2 } from "../../core/Constants";
-import { DrawableData, Drawable } from "../../core/canvas";
-import { DxfData, DxfLayer, DxfChange } from "../../core/dxf";
+import { Box2, ScreenshotMode, Vector2 } from "../../core/Constants";
+import { Drawable, DrawableData } from "../../core/canvas";
+import { DxfChange, DxfData, DxfLayer } from "../../core/dxf";
 import { ILayoutObject } from "../../core/dxf-parser";
 import { EventInfo } from "../../core/input/InputManager";
-import { MarkupType, MarkupManager } from "../../core/markup";
+import { MarkupManager, MarkupType } from "../../core/markup";
 import { MeasurementData, MeasurementManager, MeasurementType } from "../../core/measure";
 import { BaseViewer, ScreenshotResult, ViewerName } from "../../core/viewers/BaseViewer";
 /**
@@ -137,7 +138,7 @@ export declare class DxfViewer extends BaseViewer {
     name: ViewerName;
     private readonly CAMERA_Z_POSITION;
     private readonly CAMERA_MIN_ZOOM;
-    private aspect;
+    private frustumSize;
     private timer;
     protected css2dRenderer?: CSS2DRenderer;
     protected font?: Font;
@@ -165,6 +166,7 @@ export declare class DxfViewer extends BaseViewer {
     private markupManager?;
     private zoomToRectHelper?;
     private boxSelectHelper?;
+    private pickMarkupHelper?;
     private raf?;
     private clock;
     protected renderEnabled: boolean;
@@ -180,6 +182,7 @@ export declare class DxfViewer extends BaseViewer {
     private enableHideVisuallySmallObjects;
     private sortedHidableObjects;
     private lastCameraZoom;
+    private lastFrame;
     private activeLayoutName;
     private layoutInfos;
     private units;
@@ -209,7 +212,6 @@ export declare class DxfViewer extends BaseViewer {
     protected initControls(): void;
     private onResize;
     protected onControlsChange(viewer: DxfViewer): () => void;
-    protected onControlsEnd(viewer: DxfViewer): () => void;
     /**
      * Initialize mouse/pointer events
      */
@@ -346,6 +348,7 @@ export declare class DxfViewer extends BaseViewer {
      * Calculates the boundingBox of objects with child objects in the children of layoutLevelObject
      */
     private calcBoundingBoxOfLayoutChild;
+    private cancelAllOperations;
     /**
      * Gets active layout
      */
@@ -441,9 +444,31 @@ export declare class DxfViewer extends BaseViewer {
      */
     getCurrentViewExtent(): Box2;
     /**
-     * Box selects an area and get the screenshot in format of base64 string.
+     * @description {en} Gets screenshot of a rectangular area, or by box selecting an area. Returns an image in format of base64 string.
+     * @description {zh} 获取矩形区域或者框选区域的截图。返回base64格式的图片。
+     * @description {en} rect: if this parameter is set, use this rectangle area to take screenshot, otherwise user needs to manually select an area. Default is undefined.
+     * @description {zh} rect: 如果该参数有值，则使用这个矩形区域来截图，否则需要用户手动选定一个截图区域。默认为undefined。
+     * @description {en} includeOverlay: whether to include overlay, which contains markups and measurements. Default is true.
+     * @description {zh} includeOverlay: 是否包含覆盖层，包含标注和测量。默认为true。
+     * @example
+     * ``` typescript
+     * // 点击云线框批注截图且不包含覆盖层
+     * viewer.addEventListener(ViewerEvent.MouseClicked, (data) => {
+     *     if (data.markupData) {
+     *         const markup = data.markupData;
+     *         if (markup.type === "CloudRectMarkup") {
+     *             const points = markup.points;
+     *             const leftTopPoint = viewer.worldCoordinate2NormalizedScreenCoordinate({x: points[0][0], y: points[0][1]});
+     *             const rightBottomPoint = viewer.worldCoordinate2NormalizedScreenCoordinate({x: points[1][0], y: points[1][1]});
+     *             viewer.getScreenshot({min: leftTopPoint, max: rightBottomPoint}, false).then(data => console.log(data));
+     *         }
+     *     }
+     * });
+     * // 根据用户的框选截图且包含覆盖层
+     * viewer.getScreenshot().then(data => console.log(data));
+     * ```
      */
-    getScreenshot(): Promise<undefined | ScreenshotResult>;
+    getScreenshot(mode?: ScreenshotMode): Promise<undefined | ScreenshotResult>;
     /**
      * @internal
      */
@@ -709,6 +734,7 @@ export declare class DxfViewer extends BaseViewer {
      */
     getRaycaster(): THREE.Raycaster | undefined;
     /**
+     * TODO: Remove it later.
      * Gets raycast-able objects.
      * Raycast-able objects should be visible objects and is snap object in scene.
      */
@@ -734,12 +760,14 @@ export declare class DxfViewer extends BaseViewer {
     private selectDrawableByEvent;
     /**
      * Select or unselect an object.
+     * depthTest is turned off by default. The highlighting is more pronounced when objects cover each other.
      */
     protected selectObject(object?: THREE.Object3D, depthTest?: boolean): void;
     /**
      * Clears the current selection
+     * @internal
      */
-    protected clearSelection(): void;
+    clearSelection(): void;
     /**
      * Makes camera fly to objects
      */

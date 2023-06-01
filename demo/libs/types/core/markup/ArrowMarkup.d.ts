@@ -7,7 +7,7 @@ export declare class ArrowMarkup extends BaseMarkup {
     draw(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     private drawArrowLine;
     private drawArrowHead;
-    getVertexs(): THREE.Vector3[];
+    getVertexes(): THREE.Vector3[];
     update(points: THREE.Vector3[]): this;
     isPointInPath(p: THREE.Vector3): boolean;
     getClassType(): string;

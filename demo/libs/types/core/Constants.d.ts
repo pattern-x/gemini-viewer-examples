@@ -108,6 +108,11 @@ export declare enum SectionType {
     PickPlaneSection = "PickPlaneSection",
     AxisPlaneSection = "AxisPlaneSection"
 }
+export declare enum ScreenshotMode {
+    Default = "Default",
+    BoxSelection = "BoxSelection",
+    PickMarkup = "PickMarkup"
+}
 export interface Vector2 {
     x: number;
     y: number;

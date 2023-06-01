@@ -182,7 +182,7 @@ export declare class ObjectUtils {
     /**
      * Creates box mesh
      */
-    static createBox(sizeX: number, sizeY: number, sizeZ: number, faceMaterial?: THREE.Material, withBottom?: boolean): THREE.Mesh<THREE.BufferGeometry, THREE.Material>;
+    static createBox(sizeX: number, sizeY: number, sizeZ: number, faceMaterial?: THREE.Material, withBottom?: boolean): THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.Material>;
     /**
      * TODO: Relative to center
      */

@@ -12,7 +12,7 @@ export declare class SectionGizmo extends THREE.Group {
     initIgnoreClipMaterial(): void;
     setDirection(normal: THREE.Vector3): void;
     initOrUpdateByAxis(normal: THREE.Vector3): void;
-    createTranslateGizmo(actionType: ActionType, direction: THREE.Vector3, size: number, material: THREE.Material): THREE.Mesh<THREE.BufferGeometry, THREE.Material>;
+    createTranslateGizmo(actionType: ActionType, direction: THREE.Vector3, size: number, material: THREE.Material): THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.Material>;
     createRotateGizmo(actionType: ActionType, direction: THREE.Vector3, size: number, material: THREE.Material, degree: number): THREE.Mesh<THREE.TorusGeometry, THREE.Material>;
     createSphere(size: number, material: THREE.Material): void;
     setActiveAxis(axis: THREE.Vector3): void;

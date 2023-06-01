@@ -6,7 +6,5 @@ export declare class CloudLineMarkup extends BaseMarkup {
     constructor(id: string, points: THREE.Vector3[]);
     draw(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     static getControlPointByTwoPoints(p1: THREE.Vector2, p2: THREE.Vector2): THREE.Vector2;
-    private calculateWidthAndHeight;
-    update(points: THREE.Vector3[]): this;
     getClassType(): string;
 }

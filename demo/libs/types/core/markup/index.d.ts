@@ -4,6 +4,7 @@ export * from "./CloudLineMarkup";
 export * from "./CloudRectMarkup";
 export * from "./DotMarkup";
 export * from "./EllipseMarkup";
+export * from "./LeaderLineMarkup";
 export * from "./PolylineMarkup";
 export * from "./RectMarkup";
 export * from "./TextMarkup";
