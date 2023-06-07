@@ -31,11 +31,20 @@
     "title": "Drawing comparison",
     "url": "./demo/dxf_3.html"
   }, {
+    "title": "Drawing comparison with 2 viewports",
+    "url": "./demo/dxf_8.html"
+  }, {
     "title": "Drawing comparison with 3 viewports",
     "url": "./demo/dxf_4.html"
   }, {
+    "title": "Upload files and comparison with  viewports",
+    "url": "./demo/dxf_10.html"
+  }, {
     "title": "Markups",
     "url": "./demo/dxf_5.html"
+  }, {
+    "title": "Take screenshot via markup",
+    "url": "./demo/dxf_9.html"
   }, {
     "title": "Hotpoints",
     "url": "./demo/dxf_6.html"
