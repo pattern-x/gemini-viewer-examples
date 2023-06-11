@@ -1,0 +1,289 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="
+		width=device-width,
+		initial-scale=1.0,
+		minimum-scale=1.0,
+		maximum-scale=1.0,
+		user-scalable=no">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/global.css">
+    <link rel="stylesheet" type="text/css" href="/iconfont/iconfont.css">
+    <link rel="stylesheet" href="layerManager/layerManager.css">
+    <link rel="stylesheet" href="settings/SettingsPanel.css">
+    <style>
+        #app {
+            width: 100%;
+            height: 100%;
+            background-color: silver;
+        }
+
+        #myCanvas {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            left: 7.5%;
+            top: 7.5%;
+        }
+        .settings {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .settings-line {
+            margin: 2px;
+        }
+        .toolbar-btn {
+            min-width: 50px;
+            height: 30px;
+            cursor: pointer;
+            padding: 2px;
+        }
+        .toolbar-btn:hover {
+            background-color: lightblue;
+        }
+        .btn-active {
+            background-color: cornflowerblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+        <div class="settings">
+            <div class="settings-line">
+                <label for="og">Choose operation granularity:</label>
+                <select name="og" id="og">
+                    <option value="RootLevelEntity">Root level entity</option>
+                    <option value="LeafLevelEntity">Leaf level entity</option>
+                </select>
+            </div>
+            <div class="settings-line">
+                <button id="groupObjects" class="settings-line toolbar-btn" title="Create a new group and pick objects, enter to finish.">Group objects</button>
+                <button id="associateEdges" class="settings-line toolbar-btn" title="Associate edges of different objects of the same group.">Associate edges</button>
+                <button id="moveObjects" class="settings-line toolbar-btn" title="Move objects associations together">Move objects by associations</button>
+                <button id="removeEdges" class="settings-line toolbar-btn" title="Remove associative edges">Remove associative edges</button>
+            </div>
+            <div class="settings-line">
+                <button id="automaticProcess" class="settings-line toolbar-btn" title="Automatically group, associate, move, delete and merge fabric pieces.">Start automatic process</button>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { DxfViewer, ViewerEvent, OperationGranularity } from "./demo/libs/gemini-viewer2.esm.min.js";
+        // import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
+        // import LayerManager from './demo/layerManager/LayerManager.js';
+
+        const models = [{
+            modelId: "example1",
+            name: "example1",
+            src: "./demo/models/dxf/example1.dxf",
+            merge: false,
+            visible: true,
+        }];
+        const config = {
+            containerId: "myCanvas",
+            enableAxisGizmo: true,
+            enableStats: true,
+            enableToolbar: true,
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableBottomBar: true,
+            enableLayoutBar: true,
+            enableSelection: true,
+        };
+        const viewer = new DxfViewer(config);
+        // const fontFiles = ["three/fonts/Microsoft_YaHei_Regular.typeface.json"];
+        const fontFiles = ["three/fonts/hztxt.shx", "three/fonts/simplex.shx"];
+        await viewer.setFont(fontFiles);
+
+        window.viewer = viewer;
+        let globalGroupId = 0;
+        let globalAssociationId = 0;
+        const groups = {}; // key is groupId, value is {modelId, handle}
+        const associations = {}; // key is associationId, value is {modelId, handle}
+
+        let counter = 0; // to indicate how many models are loading
+        models.forEach((modelCfg) => {
+            if (modelCfg.visible === false) {
+                // visible is true by default
+                return; // only load visible ones
+            }
+            counter++;
+            const onProgress = (event) => {
+                const progress = ((event.loaded * 100) / event.total).toFixed(1);
+                console.log(`[Demo] Loading '${modelCfg.modelId}' progress: ${progress}%`);
+            };
+            try {
+                viewer.loadModelAsync(modelCfg, onProgress).then(() => {
+                    console.log(`[Demo] Loaded model ${modelCfg.src}`);
+                }).finally(() => {
+                    counter--;
+                });
+            } catch (ex) {
+                console.log(ex);
+            }
+        });
+
+        viewer.addEventListener(ViewerEvent.MouseClicked, (data) => {
+            const isGroupingObjects = isBtnActive("groupObjects");
+            const isAssociatingEdges = isBtnActive("associateEdges");
+            if (data.entityData) {
+                const modelId = data.entityData.modelId;
+                const handle = data.entityData.handle;
+                const parentHandle = data.entityData.parentHandle;
+                const indexOfParent = data.entityData.indexOfParent;
+                if (isGroupingObjects) {
+                    if (!groups[globalGroupId]) {
+                        groups[globalGroupId] = [];
+                    }
+                    // check if this object is already in a group, it cannot in more than one group
+                    let exists = false;
+                    for (const groupId in groups) {
+                        exists = groups[groupId].find(item => item.modelId === modelId && item.handle === handle);
+                        if (exists) {
+                            break;
+                        }
+                    }
+                    if (!exists) {
+                        groups[globalGroupId].push({ modelId, handle });
+                    }
+                    console.log("Current groups", groups);
+                } else if (isAssociatingEdges) {
+                    // check if an edge is already associated
+                    let exists = false;
+                    for (const associationId in associations) {
+                        exists = associations[associationId].find(item => {
+                            return item.modelId === modelId &&
+                                item.handle === handle &&
+                                item.parentHandle === parentHandle &&
+                                item.indexOfParent === indexOfParent;
+                        });
+                        if (exists) {
+                            break;
+                        }
+                    }
+                    if (!exists) {
+                        if (!associations[globalAssociationId]) {
+                            associations[globalAssociationId] = [];
+                            associations[globalAssociationId].push(data.entityData);
+                            console.log("Picked the first edge, continue to pick the second...");
+                        } else {
+                            associations[globalAssociationId].push(data.entityData);
+                            console.log("Current associations", associations);
+                            console.log("Continue to create a new association with id", ++globalAssociationId);
+                        }
+                    }
+                }
+            }
+        });
+
+        document.onkeydown = (event) => {
+            const isGroupingObjects = isBtnActive("groupObjects");
+            const isAssociatingEdges = isBtnActive("associateEdges");
+            if (event.key === "Escape") {
+                if (isGroupingObjects) {
+                    deactivateBtn("groupObjects");
+                    console.log("Canceled grouping objects, current groups", groups);
+                }
+                if (isAssociatingEdges) {
+                    deactivateBtn("associateEdges");
+                    console.log("Canceled associating edges, current associations", associations);
+                }
+                viewer.selectObject();
+            }
+        };
+
+        const isBtnActive = (btnId) => {
+            const btn = document.getElementById(btnId);
+            return btn.classList.contains("btn-active");
+        };
+        const activateBtn = (btnId) => {
+            const btn = document.getElementById(btnId);
+            btn.classList.add("btn-active");
+        };
+        const deactivateBtn = (btnId) => {
+            const btn = document.getElementById(btnId);
+            btn.classList.remove("btn-active");
+        };
+        const toggleBtnActivity = (btnId) => {
+            isBtnActive(btnId) ? deactivateBtn(btnId) : activateBtn(btnId);
+        };
+
+        const og = document.getElementById("og");
+        og.onchange = (event) => {
+            if (event.target.value === "RootLevelEntity") {
+                viewer.setOperationGranularity(OperationGranularity.RootLevelEntity);
+            } else {
+                viewer.setOperationGranularity(OperationGranularity.LeafLevelEntity);
+            }
+        };
+
+        const groupObjectsBtn = document.getElementById("groupObjects");
+        groupObjectsBtn.onclick = () => {
+            deactivateBtn("associateEdges");
+            deactivateBtn("moveObjects");
+            toggleBtnActivity("groupObjects");
+            const isGroupingObjects = isBtnActive("groupObjects");
+            if (isGroupingObjects) {
+                og.value = "RootLevelEntity"; // must set to RootLevelEntity
+                viewer.setOperationGranularity(OperationGranularity.RootLevelEntity);
+                ++globalGroupId;
+                console.log("Created new groupId:", globalGroupId, ". Pick objects for the group...");
+            } else {
+                console.log("Completed grouping objects, current groups", groups);
+            }
+        };
+
+        const associateEdgesBtn = document.getElementById("associateEdges");
+        associateEdgesBtn.onclick = () => {
+            deactivateBtn("groupObjects");
+            toggleBtnActivity("associateEdges");
+            const isAssociatingEdges = isBtnActive("associateEdges");
+            if (isAssociatingEdges) {
+                og.value = "LeafLevelEntity"; // must set to LeafLevelEntity
+                viewer.setOperationGranularity(OperationGranularity.LeafLevelEntity);
+                console.log("Started associating edges...");
+            } else {
+                // TODO: if just one edge is picked, need to delete this association
+                console.log("Completed associating edges, current associations", associations);
+            }
+        };
+
+        const moveObjectsBtn = document.getElementById("moveObjects");
+        moveObjectsBtn.onclick = () => {
+            console.log(viewer.getFabricPieces());
+            deactivateBtn("groupObjects");
+            deactivateBtn("associateEdges");
+            const entityDataPairs = [];
+            for (const associationId in associations) {
+                entityDataPairs.push(associations[associationId]);
+            }
+            viewer.moveFabricPiecesByAssociations(entityDataPairs);
+        };
+
+        const removeEdgesBtn = document.getElementById("removeEdges");
+        removeEdgesBtn.onclick = () => {
+            deactivateBtn("groupObjects");
+            deactivateBtn("associateEdges");
+            const entityDataPairs = [];
+            for (const associationId in associations) {
+                entityDataPairs.push(associations[associationId]);
+            }
+            viewer.removeAssociaedEdges(entityDataPairs);
+            entityDataPairs.length = 0; // clear the array
+        };
+
+        const automaticProcessBtn = document.getElementById("automaticProcess");
+        automaticProcessBtn.onclick = () => {
+            deactivateBtn("groupObjects");
+            deactivateBtn("associateEdges");
+            viewer.startAutomaticProcess();
+        };
+    </script>
+</body>
+
+</html>
