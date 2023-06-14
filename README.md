@@ -104,3 +104,11 @@ viewer.goToHomeView();
 ![bim_section_plane.png](public/demo/images/snapshots/bim_section_plane.png)
 - Overlay 3d model with dxf
 ![overlay_3d_model_with_dxf.gif](public/demo/images/snapshots/overlay_3d_model_with_dxf.gif)
+
+## Features for VRViewer
+- Load and view a panorama
+![load_and_view.gif](public/demo/images/snapshots/pano_load_and_view.gif)
+- Switch to another panorama
+![bim_ortho_camera.png](public/demo/images/snapshots/pano_switch_panos.gif)
+- Switch between decorations
+![bim_ortho_camera.png](public/demo/images/snapshots/pano_switch_decorations.gif)
