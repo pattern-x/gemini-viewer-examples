@@ -73,7 +73,8 @@ viewer.goToHomeView();
 - Markups
 ![markups.gif](public/demo/images/snapshots/markups.gif)
 - Comparison
-![markups.gif](public/demo/images/snapshots/dxf_compare.png)
+![dxf_compare_2_viewports.gif](public/demo/images/snapshots/dxf_compare_2_viewports.gif)
+![dxf_compare.gif](public/demo/images/snapshots/dxf_compare.png)
 - Undo/redo
 
 ## DxfViewer limitations
@@ -91,7 +92,7 @@ viewer.goToHomeView();
 
 ## Features for BimViewer
 - Load and view BIM model
-![load_and_view.gif](public/demo/images/snapshots/bim_view_model.png)
+![bim_view_model.png](public/demo/images/snapshots/bim_view_model.png)
 - Orthographic view
 ![bim_ortho_camera.png](public/demo/images/snapshots/bim_ortho_camera.png)
 - Selection
@@ -107,8 +108,8 @@ viewer.goToHomeView();
 
 ## Features for VRViewer
 - Load and view a panorama
-![load_and_view.gif](public/demo/images/snapshots/pano_load_and_view.gif)
+![pano_load_and_view.gif](public/demo/images/snapshots/pano_load_and_view.gif)
 - Switch to another panorama
-![bim_ortho_camera.png](public/demo/images/snapshots/pano_switch_panos.gif)
+![pano_switch_panos.gif](public/demo/images/snapshots/pano_switch_panos.gif)
 - Switch between decorations
-![bim_ortho_camera.png](public/demo/images/snapshots/pano_switch_decorations.gif)
+![pano_switch_decorations.gif](public/demo/images/snapshots/pano_switch_decorations.gif)
