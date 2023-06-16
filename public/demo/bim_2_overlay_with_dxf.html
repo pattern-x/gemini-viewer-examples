@@ -3,19 +3,12 @@
 <head>
     <link rel="icon" href="./demo/favicon.ico">
     <link rel="stylesheet" type="text/css" href="./demo/global.css">
-    <!-- <style>
+    <style>
         #myCanvas {
-            position: absolute;
-            width: calc(100% - 100px);
-            width: -moz-calc(100% - 100px);
-            width: -webkit-calc(100% - 100px);
-            height: calc(100% - 80px);
-            height: -moz-calc(100% - 80px);
-            height: -webkit-calc(100vh - 80px);
-            left: 50px;
-            top: 40px;
+            width: 100%;
+            height: 100%;
         }
-    </style> -->
+    </style>
 </head>
 
 <body>
@@ -60,7 +53,7 @@
 
         // draco decoder path is needed to load draco encoded models.
         // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.
-        const decoderPath = "demo/three/js/libs/draco/gltf/";
+        const decoderPath = "./demo/three/js/libs/draco/gltf/";
         viewer.setDracoDecoderPath(decoderPath);
 
         // loadProjectModel
