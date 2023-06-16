@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import type { DxfEntity } from "./DxfLoader";
+import type { DxfCompareConfig } from "../../core/Configs";
 import { IDxf } from "../../core/dxf-parser";
 /**
  * Dxf change type, which can be "Added", "Removed" or "Modified".
@@ -15,6 +16,12 @@ export declare enum DxfChangeType {
     Modified = "Modified",
     NoChange = "NoChange"
 }
+export type DetailChanges = {
+    [Property in keyof DxfEntity]: {
+        old: unknown;
+        new: unknown;
+    };
+};
 /**
  * Describes a dxf change
  */
@@ -39,6 +46,7 @@ export interface DxfChange {
      * @internal
      */
     box?: THREE.Box3;
+    detailChanges?: DetailChanges;
 }
 /**
  * Used to compare two drawings/dxfs.
@@ -49,6 +57,9 @@ export interface DxfChange {
  * - Ignore spatial filter (xclip) of block reference.
  * - We compare entities with the same handle and type. e.g.
  *   - if line A from dxf1 has the same handle with arc A from dxf2, then line A is "Removed", arc A is "Added".
+ * - For color, it compares color setting rather than the actual color. E.g.
+ *   - If a color setting is "ByLayer", but the layer's color is changed. We take this case as unchanged.
+ *   - If a color setting is "ByLayer", the setting is changed to "ByBlock", while the layer and block actually have the same color. We take this case as changed.
  * @internal
  */
 export declare class DxfCompare {
@@ -62,14 +73,16 @@ export declare class DxfCompare {
     private comparedBlocks;
     private isComparingBlock;
     private isComparingDimension;
+    private enableDetailComparision;
     static readonly ignoreEntityTypes: string[];
-    constructor(dxf1: IDxf, dxf2: IDxf);
+    constructor(dxf1: IDxf, dxf2: IDxf, compareCfg?: DxfCompareConfig);
     private getLayerFrozen;
     /**
      * Compares model spaces of two dxf files.
-     * Returns DxfChange map, the key is entity handle.
+     * Returns DxfChange map, the key is incremental integer starts from 1.
+     * It is unique in the lifecycle of a DxfViewer.
      */
-    compare(onProgress?: (event: ProgressEvent) => void): Promise<Record<string, DxfChange>>;
+    compare(onProgress?: (event: ProgressEvent) => void): Promise<Record<number, DxfChange>>;
     private isDimensionBlock;
     compareInsertOrDemensionEntities(a: DxfEntity, b: DxfEntity, parentHandle1?: string, parentHandle2?: string): {
         type: DxfChangeType;
@@ -80,6 +93,9 @@ export declare class DxfCompare {
     private compareEntities;
     private bIgnoreChildEntitiesOriginalType;
     private entitiesEqual;
+    private getColor;
+    private getLineType;
+    private addModificationItem;
     private baseEntitiesEqual;
     private arcsEqual;
     private linesEqual;

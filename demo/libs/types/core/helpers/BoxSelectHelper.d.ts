@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { Tooltip } from "../../components/tool-tip";
 import { mouseButtonAction, singleTouchAction } from "../../core/camera-controls/types";
-import type { InputManager } from "../../core/input/InputManager";
+import type { EventInfo, InputManager } from "../../core/input/InputManager";
 import type { BimViewer, DxfViewer } from "../../core/viewers";
 /**
  * Box select an area in screen coordinate.
@@ -33,6 +33,7 @@ export declare class BoxSelectHelper {
     private mousedown;
     private mousemove;
     private mouseup;
+    keydown: (e: EventInfo) => void;
     private drawRect;
     private setRectDomVisible;
     /**

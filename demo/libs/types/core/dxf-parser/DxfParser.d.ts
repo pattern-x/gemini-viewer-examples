@@ -304,6 +304,7 @@ export interface IDxf {
     objects: Record<string, IObject[]>;
 }
 export default class DxfParser {
+    private encoding?;
     private _entityHandlers;
     private _objectHandlers;
     private _layoutBlocks;
@@ -311,7 +312,7 @@ export default class DxfParser {
     private unhandledObjects;
     private unhandledEntities;
     private unsupportedLineTypes;
-    constructor();
+    constructor(encoding?: string);
     parse(source: string | ArrayBuffer): IDxf;
     registerEntityHandler(handlerType: new () => IGeometry): void;
     registerObjectHandler(handlerType: new () => IObjectParser): void;

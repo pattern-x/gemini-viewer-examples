@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
-import { DxfChange, DxfChangeType } from "./DxfCompare";
+import { DxfChange } from "./DxfCompare";
+import { DxfObject } from "./DxfObject";
 import { Units } from "../../core/Units";
 import { IBlock, IDxf, IEntity, ILayer, ILayoutObject, IPoint, IViewport, IViewportEntity } from "../../core/dxf-parser";
 import { ImageFlags } from "../../core/dxf-parser/entities/image";
@@ -11,7 +12,7 @@ import { ShxFont } from "../../core/shx-parser";
  * @internal
  */
 export interface DxfData extends IDxf {
-    threejsObject: THREE.Group;
+    threejsObject: THREE.Object3D;
     layersAndThreejsObjects: Record<string, THREE.Object3D[]>;
     loadedEntityCount: number;
     layoutViewportsMap: Record<string, IViewportEntity[]>;
@@ -111,7 +112,7 @@ export interface DxfEntity extends IEntity {
     image: string;
     psBBox?: THREE.Box3;
     msToPsMatrix?: THREE.Matrix4;
-    viewportThreejsObject?: THREE.Object3D;
+    viewportThreejsObject?: DxfObject;
     associatedLeafObjectSet?: Set<THREE.Object3D>;
     associatedSpatialFilter?: DxfSpatialFilter;
     imageSize?: IPoint;
@@ -119,7 +120,6 @@ export interface DxfEntity extends IEntity {
     uPixel?: IPoint;
     vPixel?: IPoint;
     flags?: ImageFlags;
-    compareChangeType?: DxfChangeType;
 }
 /**
  * Dxf block.
@@ -129,7 +129,7 @@ export interface DxfBlock extends IBlock {
     /**
      * References to corresponding threejs object
      */
-    threejsObject?: THREE.Object3D;
+    threejsObject?: DxfObject;
 }
 /**
  * Dxf layout.
@@ -159,9 +159,31 @@ export interface DxfSpatialFilter extends ISpatialFilterObject {
     /**
      * References to corresponding threejs object
      */
-    threejsObject?: THREE.Object3D;
+    threejsObject?: DxfObject;
     localMatrix?: THREE.Matrix4;
     clipPolylines: DxfSpatialFilterClipPolyline[];
+}
+/**
+ * Dxf loader config.
+ * @internal
+ */
+export interface DxfLoaderConfig {
+    /**
+     * Ignores everything from paper space, aka, only load model space.
+     */
+    ignorePaperSpace?: boolean;
+    /**
+     * Enables caching dxf data into indexeddb.
+     */
+    enableLocalCache?: boolean;
+    /**
+     * Enables to merge objects.
+     */
+    enableMerge?: boolean;
+    /**
+     * File encoding, can be used by dxf. Common encoding include "UTF-8", "gb2312", etc.
+     */
+    encoding?: string;
 }
 /**
  * Dxf file loader.
@@ -174,6 +196,7 @@ export declare class DxfLoader extends THREE.Loader {
     private timer;
     private ignorePaperSpace;
     font?: Font | ShxFont;
+    private encoding;
     angBase: number | IPoint;
     angDir: number | IPoint;
     private header;
@@ -259,10 +282,9 @@ export declare class DxfLoader extends THREE.Loader {
      */
     static abortJobs: boolean;
     /**
-     * @param ignorePaperSpace if true, only load model space
-     * @param enableLocalCache if true, use indexeddb to cache dxf data
+     * DxfLoader constructor
      */
-    constructor(manager?: THREE.LoadingManager, ignorePaperSpace?: boolean, enableLocalCache?: boolean, enableMerge?: boolean);
+    constructor(manager?: THREE.LoadingManager, cfg?: DxfLoaderConfig);
     /**
      * Sets font.
      */
@@ -294,6 +316,11 @@ export declare class DxfLoader extends THREE.Loader {
     parse(url: string, onProgress?: (event: ProgressEvent) => void): Promise<IDxf>;
     private parseHeader;
     /**
+     * For some versions, the dxf file may be wired, missing header, objects, tables, etc.
+     * We'll try to fill in missing content for it.
+     */
+    private tryFixDxfData;
+    /**
      * Generates/load threejs objects according to the dxf data.
      * @param data
      * @param onProgress
@@ -324,7 +351,7 @@ export declare class DxfLoader extends THREE.Loader {
      * rather than the layer of the entity itself!
      * We don't know if there is other similar case in future, so pass in blockEntity here.
      */
-    drawEntity(entity: DxfEntity, data: IDxf, parentEntity?: IEntity, isParentChanged?: boolean): THREE.Object3D | undefined;
+    drawEntity(entity: DxfEntity, data: IDxf, parentEntity?: IEntity, isParentChanged?: boolean): DxfObject | undefined;
     private drawEllipse;
     private drawMText;
     private getMTextGroup;
@@ -450,10 +477,15 @@ export declare class DxfLoader extends THREE.Loader {
     static getDxfUnits(unitValue: number): Units;
     static computeLineDistance(line: THREE.Line): void;
     static computeLineDistances(object: THREE.Object3D): void;
+    private static mergeDxfObjects;
     /**
      * Merges objects by layer and layout.
      */
     static merge(dxfData: DxfData, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    /**
+     * Prints stats info for debugging
+     */
+    private printStatsInfo;
     private static statLayoutAndLayerObjects;
     /**
      * First marks the objects to be removed from bottom to top,
@@ -461,4 +493,10 @@ export declare class DxfLoader extends THREE.Loader {
      */
     private static removeEmptyObjectsFromRemovingMarkedObjects;
     private static removeEmptyObjectsFromMark;
+    /**
+     * First marks the objects to be removed from bottom to top,
+     * and then removes empty objects from top to bottom
+     */
+    private static removeEmptyObjectsFromRemovingMarkedObjects2;
+    private static removeEmptyObjectsFromMark2;
 }

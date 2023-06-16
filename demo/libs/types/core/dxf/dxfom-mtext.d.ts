@@ -19,7 +19,7 @@ export type DxfMTextContentElement = DxfMTextContentElement[] | string | {
     /** character width (with unit) */
     W?: [number, string];
     /** stacking */
-    S?: [string, '^' | '/' | '#', string];
+    S?: [string, "^" | "/" | "#", string];
     /** alignment (0: bottom, 1: center, 2: top) */
     A?: 0 | 1 | 2;
     /** color index */

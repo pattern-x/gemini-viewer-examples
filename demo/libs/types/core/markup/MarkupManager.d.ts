@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { BaseMarkup } from "./BaseMarkup";
 import { MarkupType } from "./Constants";
-import { DrawableData } from "../../core/canvas";
+import { CanvasRender, DrawableData } from "../../core/canvas";
 import type { EventInfo, InputManager } from "../../core/input/InputManager";
 import { Event } from "../../core/utils";
 import type { BaseViewer } from "../../core/viewers";
@@ -13,7 +13,7 @@ type MarkupHandler = {
 export declare class MarkupManager extends Event<MarkupHandler> {
     private viewer;
     private inputManager;
-    private overlayRender?;
+    overlayRender?: CanvasRender;
     private drawableList;
     private lineWidth;
     private lineColor;
@@ -24,7 +24,6 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     protected mouseDownPositionY?: number;
     protected mousedownPoint?: THREE.Vector2;
     private isSelectLeaderText;
-    private textInitialPosition?;
     private tempKey?;
     private tempTouch?;
     private tempArrowKeys?;
@@ -34,7 +33,6 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     private initialDataForEditing?;
     private creatingShape?;
     private tempPoints;
-    private textInput?;
     private activated;
     protected exitButton?: HTMLButtonElement;
     constructor(viewer: BaseViewer, input: InputManager);
@@ -60,6 +58,7 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     getFontSize(): number;
     pickPositionByScreenPoint(p: THREE.Vector2): THREE.Vector3;
     pickThreejsPositionByMouse(e: EventInfo): THREE.Vector3;
+    handleDbClick: () => void;
     handleInputMousemove: (e: MouseEvent) => void;
     mousedown: (e: EventInfo) => void;
     mousemove: (e: EventInfo) => void;
@@ -87,7 +86,6 @@ export declare class MarkupManager extends Event<MarkupHandler> {
     private drawShape;
     private drawLine;
     private drawText;
-    private addInput;
     destroy(): void;
 }
 export {};

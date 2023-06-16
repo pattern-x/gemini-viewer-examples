@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { DxfObject } from "../dxf/DxfObject";
 /**
  * @internal
  */
@@ -187,8 +188,8 @@ export declare class ObjectUtils {
      * TODO: Relative to center
      */
     static rebaseObjectOnRTC(object: THREE.Object3D): THREE.Object3D;
-    static isEmptyObject(object: THREE.Object3D): boolean;
-    static removeEmptyObjects(object: THREE.Object3D): boolean;
+    static isEmptyObject(object: THREE.Object3D | DxfObject): boolean;
+    static removeEmptyObjects(object: THREE.Object3D | DxfObject): boolean;
     /**
      * From bottom to top, removes child objects first,
      * and then removes empty parent objects

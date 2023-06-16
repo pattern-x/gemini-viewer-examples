@@ -53,7 +53,6 @@ export declare class MergeUtils {
      * TODO: Filters XC etc.
      * there are cases where entities with xc and without xc are merged together
      */
-    private static isFilteredByOtherFactors;
     /**
      * Merges all objects of given object, just leaf children.
      * If objects' material are the same, they can be merged.
@@ -75,7 +74,7 @@ export declare class MergeUtils {
     /**
      * Merges geometries for lines
      */
-    private static mergeLineGeometries;
+    static mergeLineGeometries(geometries: THREE.BufferGeometry[], saveBatchInfo: boolean, isDashedMaterial: boolean, batches?: Batch[]): THREE.BufferGeometry | undefined;
     private static mergeBufferGeometriesWithLinesToLineSegments;
     private static mergeBufferAttributesWithLinesToLineSegments;
     /**

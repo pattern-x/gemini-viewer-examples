@@ -1,0 +1,235 @@
+<html>
+  <head>
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="./demo/compare/dxfComparePanel.css" />
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css" />
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css" />
+    <style>
+      body {
+        font-size: 0;
+      }
+      #myCanvas1,
+      #myCanvas2 {
+        width: calc(50% - 1px);
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+      }
+      .split {
+        display: inline-block;
+        width: 1px;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #eee;
+      }
+
+      .upload-containter {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        top: 80px;
+      }
+      #uploadModelFile::file-selector-button {
+        height: 40px;
+        font-size: 16px;
+        line-height: 40px;
+        color: #fff;
+        border-radius: 5px;
+        border: 1px solid #409eff;
+        background-color: #409eff;
+        font-family: inherit;
+        cursor: pointer;
+      }
+      .button {
+        height: 40px;
+        font-size: 16px;
+        line-height: 40px;
+        color: #fff;
+        border-radius: 5px;
+        border: 1px solid #409eff;
+        background-color: #409eff;
+        font-family: inherit;
+        cursor: pointer;
+        padding: 0 3px;
+        margin: 5px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="app">
+      <div id="myCanvas1" class="container"></div>
+      <div class="split"></div>
+      <div id="myCanvas2" class="container"></div>
+    </div>
+    <div class="upload-containter">
+      <input id="uploadModelFile" accept=".dxf" multiple type="file" />
+      <button id="syncCamera" class="button" title="Click to sync or unsync cameras">unsynced</button>
+      <button id="getDetailChange" class="button" class="button">get detail change</button>
+    </div>
+    <script type="module">
+      import {
+        DxfCompareHelper,
+        ToolbarMenuId,
+      } from "./demo/libs/gemini-viewer.esm.min.js";
+      import DxfComparePanel from "./demo/compare/dxfComparePanel.js";
+      import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
+      import LayerManager from "./demo/layerManager/LayerManager.js";
+
+      const compareHelper = new DxfCompareHelper(
+        {
+          containerId: "myCanvas1",
+          enableAxisGizmo: true,
+          enableStats: true,
+          enableToolbar: true,
+          enableBottomBar: true,
+          enableSelection: true,
+        },
+        {
+          containerId: "myCanvas2",
+          enableAxisGizmo: true,
+          enableStats: true,
+          enableToolbar: true,
+          enableBottomBar: true,
+          enableSelection: true,
+        }
+      );
+      window.compareHelper = compareHelper;
+      const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+      await compareHelper.setFont(fontFiles);
+
+      compareHelper.viewer1.toolbar.updateMenus(
+        overrideToolbarConfig(compareHelper.viewer1)
+      );
+      compareHelper.viewer2.toolbar.updateMenus(
+        overrideToolbarConfig(compareHelper.viewer2)
+      );
+
+      const syncCameraBtn = document.getElementById("syncCamera");
+      let enableSyncCamera = false;
+      syncCameraBtn.onclick = function () {
+        if (!enableSyncCamera) {
+          compareHelper.enableSyncCamera(true);
+          syncCameraBtn.innerText = "synced";
+        } else {
+          compareHelper.enableSyncCamera(false);
+          syncCameraBtn.innerText = "unsynced";
+        }
+        enableSyncCamera = !enableSyncCamera;
+      };
+
+      const onProgress = (event) => {
+        const progress = ((event.loaded * 100) / event.total).toFixed(2);
+        console.log(`[Demo] Compare progress: ${progress}%`);
+      };
+
+      const uploadBtn = document.getElementById("uploadModelFile");
+      uploadBtn.onchange = function (e) {
+        const files = event.target.files;
+        if (files.length === 2) {
+          const file1 = files[0];
+          const file2 = files[1];
+          const url1 = URL.createObjectURL(file1);
+          const url2 = URL.createObjectURL(file2);
+
+          compareHelper
+            .compare(
+              { src: url1, modelId: file1.name },
+              { src: url2, modelId: file2.name },
+              onProgress
+            )
+            .then(() => {
+              console.log(`[Demo] Compared models: ${url1}, ${url2}`);
+              new DxfComparePanel(compareHelper, compareHelper.container);
+            })
+            .catch((reason) => {
+              console.error(
+                `[Demo] Failed to compare models: ${url1}, ${url2}. reason: ${reason}`
+              );
+            });
+        }
+      };
+
+      const detailButton = document.getElementById("getDetailChange");
+      detailButton.onclick = function () {
+        alert(JSON.stringify(compareHelper.getCompareChanges()));
+      }
+
+      function overrideToolbarConfig(viewer) {
+        return [
+          {
+            menuId: ToolbarMenuId.Settings,
+            config: {
+              onActive: () => {
+                console.log("[Toolbar]", "Activate Settings");
+                if (!viewer.dxfSettingsPanel) {
+                  viewer.dxfSettingsPanel = new DxfSettingsPanel(viewer);
+                }
+                viewer.dxfSettingsPanel.show();
+              },
+              onDeactive: () => {
+                console.log("[Toolbar]", "Deactivate Settings");
+                if (!viewer.dxfSettingsPanel) {
+                  viewer.dxfSettingsPanel = new DxfSettingsPanel(viewer);
+                }
+                viewer.dxfSettingsPanel.hide();
+              },
+            },
+          },
+          {
+            menuId: ToolbarMenuId.Layers,
+            config: {
+              onActive: () => {
+                console.log("[Toolbar]", "Activate Layers");
+                if (!viewer.layerManager) {
+                  viewer.layerManager = new LayerManager(viewer);
+                }
+                viewer.layerManager.show();
+              },
+              onDeactive: () => {
+                console.log("[Toolbar]", "Deactivate Layers");
+                if (!viewer.layerManager) {
+                  viewer.layerManager = new LayerManager(viewer);
+                }
+                viewer.layerManager.hide();
+              },
+            },
+          },
+          {
+            menuId: ToolbarMenuId.MarkupVisibility,
+            config: {
+              visible: false,
+            },
+          },
+          {
+            menuId: ToolbarMenuId.Fullscreen,
+            config: {
+              onClick: (bimViewer, toolbar) => {
+                const isFullScreen = !!document.fullscreenElement;
+                const onResize = () => {
+                  const toolbarMenu = toolbar?.menuList.get(
+                    ToolbarMenuId.Fullscreen
+                  );
+                  toolbarMenu && toolbarMenu.setActive(isFullScreen);
+                };
+
+                if (isFullScreen) {
+                  document.exitFullscreen();
+                  window.removeEventListener("resize", onResize);
+                } else {
+                  compareHelper.container.requestFullscreen();
+                }
+                window.addEventListener("resize", onResize);
+              },
+            },
+          },
+        ];
+      }
+    </script>
+  </body>
+</html>
+

@@ -19,7 +19,7 @@ export declare class CanvasRender extends Event {
     private frustum;
     private projScreenMatrix;
     static _registerDrawableClass(drawable: constructorReturnType<Drawable>): void;
-    static createDrawable(data: DrawableData): Drawable;
+    static createDrawable(data: DrawableData): Drawable<Record<string, unknown>>;
     constructor(viewer: BimViewer | DxfViewer);
     get container(): HTMLElement;
     get camera(): THREE.Camera;
@@ -31,9 +31,9 @@ export declare class CanvasRender extends Event {
     addDrawableList(drawableList: DrawableList): void;
     render(): void;
     setSize(width: number, height: number): void;
-    getSortedDrawables(): Drawable[];
+    getSortedDrawables(): Drawable<Record<string, unknown>>[];
     getDrawablesByPosition(p: THREE.Vector3, raycaster?: THREE.Raycaster): Drawable[];
-    getDrawableById(id: string): Drawable | undefined;
+    getDrawableById(id: string): Drawable<Record<string, unknown>> | undefined;
     measureTextLength(text: string, font: string): number;
     /**
      *

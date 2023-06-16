@@ -47,6 +47,11 @@ export interface ModelConfig {
      */
     fileFormat?: string;
     /**
+     * File encoding, can be used by dxf. Common encoding include "UTF-8", "gb2312", etc.
+     * @internal
+     */
+    encoding?: string;
+    /**
      * A float array of length 16, definds model's position, rotation and scale
      */
     matrix?: number[];
@@ -278,6 +283,12 @@ export interface DxfViewerConfig extends BaseViewerConfig {
     toolbarMenuConfig?: {
         [key in ToolbarMenuId]?: ToolbarMenuConfig<DxfViewer>;
     };
+}
+/**
+ * @internal
+ */
+export interface DxfCompareConfig {
+    enableDetailComparision: boolean;
 }
 /**
  * This wrappers most config for VRViewer

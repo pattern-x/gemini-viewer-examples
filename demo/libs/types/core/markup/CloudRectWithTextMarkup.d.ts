@@ -1,13 +1,14 @@
 import * as THREE from "three";
+import type { MarkupManager } from "./MarkupManager";
 import { DrawableData } from "../../core/canvas";
-import { BaseMarkup } from "../../core/markup/BaseMarkup";
 import { MarkupType } from "../../core/markup/Constants";
+import { TextMarkup } from "../../core/markup/TextMarkup";
 export interface CloudRectWithTextShape extends DrawableData {
     text: string;
     fontSize: number;
     textPosition: number[];
 }
-export declare class CloudRectWithTextMarkup extends BaseMarkup {
+export declare class CloudRectWithTextMarkup extends TextMarkup {
     type: MarkupType;
     private textPosition;
     private controlPoints?;
@@ -16,25 +17,30 @@ export declare class CloudRectWithTextMarkup extends BaseMarkup {
     private showLeaderLine;
     text: string;
     fontSize: number;
-    private padding;
-    constructor(id: string, points: THREE.Vector3[]);
+    static LEADER_LINE_WIDTH: number;
+    constructor(id: string, points: THREE.Vector3[], text?: string);
     enableLeaderLine(enable: boolean): void;
     draw(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     private drawCloudRect;
     private drawLeaderLine;
-    private drawText;
+    protected drawText(ctx: CanvasRenderingContext2D, camera: THREE.Camera, text: string): void;
     translate(tx: number, ty: number): this;
     update(points: THREE.Vector3[]): this;
     getCloudPoints(): THREE.Vector3[];
     getBounds(): THREE.Box3;
     getVertexes(): THREE.Vector3[];
-    updateTextPosition(p: THREE.Vector3): void;
     isLeaderTextSelected(p: THREE.Vector3): boolean;
     translateLeaderText(tx: number, ty: number): this;
     isPointInPath(p: THREE.Vector3): boolean;
-    setFontSize(fontSize: number): void;
     setData(data: CloudRectWithTextShape): void;
     updateText(text: string): void;
     getData(): CloudRectWithTextShape;
     getClassType(): string;
+    addInput(manager: MarkupManager, x: number, y: number): void;
+    updateInputPosition(p1: THREE.Vector2, p2: THREE.Vector2): void;
+    exitEditing(): void;
+    handleClick: () => void;
+    handleInput: () => void;
+    handleCompositionEnd: () => void;
+    private calcInputPositionByText;
 }

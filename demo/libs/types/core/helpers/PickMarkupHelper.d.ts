@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { Tooltip } from "../../components/tool-tip";
+import { EventInfo } from "../../core/input/InputManager";
 import type { DxfViewer } from "../../core/viewers";
 /**
  * Box select an area in screen coordinate.
@@ -19,6 +20,7 @@ export declare class PickMarkupHelper {
     private mouseClicked;
     activate(): void;
     deactivate(): void;
+    keydown: (e: EventInfo) => void;
     /**
      * Starts to pick a markup area.
      */

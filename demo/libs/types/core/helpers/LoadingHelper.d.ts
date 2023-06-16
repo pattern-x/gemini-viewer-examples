@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
-import type { DxfData } from "../../core/dxf";
+import type { DxfData, DxfLoaderConfig } from "../../core/dxf";
 import type { ShxFont } from "../../core/shx-parser";
 export declare class LoadingHelper {
     private static decoderPath;
@@ -33,7 +33,7 @@ export declare class LoadingHelper {
     /**
      * Loads dxf data, including entities, tables(layers, blocks), etc.
      */
-    loadDxfData(url: string, dxfDataId?: string, onProgress?: (event: ProgressEvent) => void, onLoad?: () => void, ignorePaperSpace?: boolean, enableLocalCache?: boolean, enableMerge?: boolean): Promise<DxfData>;
+    loadDxfData(url: string, dxfDataId?: string, onProgress?: (event: ProgressEvent) => void, onLoad?: () => void, cfg?: DxfLoaderConfig): Promise<DxfData>;
     /**
      * Sets font.
      * Font is required for DxfViewer to view Chinese, etc.

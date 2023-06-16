@@ -1,0 +1,196 @@
+<html>
+  <head>
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="./demo/compare/dxfComparePanel.css" />
+    <link rel="stylesheet" href="./demo/layerManager/layerManager.css" />
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css" />
+    <style>
+      body {
+        font-size: 0;
+      }
+      #viewer1,
+      #viewer2 {
+        width: calc(50% - 1px);
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+      }
+      .split {
+        display: inline-block;
+        width: 1px;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #eee;
+      }
+
+      #syncCamera {
+        height: 40px;
+        font-size: 16px;
+        line-height: 40px;
+        color: #fff;
+        border-radius: 5px;
+        border: 1px solid #409eff;
+        background-color: #409eff;
+        font-family: inherit;
+        cursor: pointer;
+        margin: 5px auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="app" class="app">
+      <div id="viewer1" class="container"></div>
+      <div class="split"></div>
+      <div id="viewer2" class="container"></div>
+    </div>
+    <div class="upload-containter">
+      <button id="syncCamera" title="Click to sync or unsync cameras">unsynced</button>
+    </div>
+    <script type="module">
+      import {
+        DxfCompareHelper,
+        ToolbarMenuId,
+      } from "./demo/libs/gemini-viewer.esm.min.js";
+      import DxfComparePanel from "./demo/compare/dxfComparePanel.js";
+      import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
+      import LayerManager from "./demo/layerManager/LayerManager.js";
+
+      const compareViewer = new DxfCompareHelper(
+        {
+          containerId: "viewer1",
+          enableAxisGizmo: true,
+          enableStats: true,
+          enableToolbar: true,
+          enableBottomBar: true,
+          enableSelection: true,
+        },
+        {
+          containerId: "viewer2",
+          enableAxisGizmo: true,
+          enableStats: true,
+          enableToolbar: true,
+          enableBottomBar: true,
+          enableSelection: true,
+        }
+      );
+      window.compareViewer = compareViewer;
+      const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+      await compareViewer.setFont(fontFiles);
+
+      compareViewer.viewer1.toolbar?.updateMenus(
+        overrideToolbarConfig(compareViewer.viewer1)
+      );
+      compareViewer.viewer2.toolbar?.updateMenus(
+        overrideToolbarConfig(compareViewer.viewer2)
+      );
+
+      const syncCameraBtn = document.getElementById("syncCamera");
+      let enableSyncCamera = false;
+      syncCameraBtn.onclick = function () {
+        if (!enableSyncCamera) {
+          compareViewer.enableSyncCamera(true);
+          syncCameraBtn.innerText = "synced";
+        } else {
+          compareViewer.enableSyncCamera(false);
+          syncCameraBtn.innerText = "unsynced";
+        }
+        enableSyncCamera = !enableSyncCamera;
+      };
+
+      const onProgress = (event) => {
+        const progress = ((event.loaded * 100) / event.total).toFixed(2);
+        console.log(`[Demo] Compare progress: ${progress}%`);
+      };
+
+      const url1 = "./demo/models/dxf/doors_and_windows.dxf";
+      const url2 = "./demo/models/dxf/doors_and_windows_mopdified.dxf";
+      const modelConfig1 = { modelId: "doors_and_windows", name: "dxf 1", src: url1 };
+      const modelConfig2 = { modelId: "doors_and_windows_mopdified", name: "dxf 2", src: url2 };
+      compareViewer.compare(modelConfig1, modelConfig2, onProgress).then(() => {
+        console.log(`[Demo] Compared models: ${url1}, ${url2}`);
+        new DxfComparePanel(compareViewer, compareViewer.container);
+      }).catch((reason) => {
+        console.error(
+          `[Demo] Failed to compare models: ${url1}, ${url2}. reason: ${reason}`
+        );
+      });
+
+      function overrideToolbarConfig(viewer) {
+        return [
+          {
+            menuId: ToolbarMenuId.Settings,
+            config: {
+              onActive: () => {
+                console.log("[Toolbar]", "Activate Settings");
+                if (!viewer.dxfSettingsPanel) {
+                  viewer.dxfSettingsPanel = new DxfSettingsPanel(viewer);
+                }
+                viewer.dxfSettingsPanel.show();
+              },
+              onDeactive: () => {
+                console.log("[Toolbar]", "Deactivate Settings");
+                if (!viewer.dxfSettingsPanel) {
+                  viewer.dxfSettingsPanel = new DxfSettingsPanel(viewer);
+                }
+                viewer.dxfSettingsPanel.hide();
+              },
+            },
+          },
+          {
+            menuId: ToolbarMenuId.Layers,
+            config: {
+              onActive: () => {
+                console.log("[Toolbar]", "Activate Layers");
+                if (!viewer.layerManager) {
+                  viewer.layerManager = new LayerManager(viewer);
+                }
+                viewer.layerManager.show();
+              },
+              onDeactive: () => {
+                console.log("[Toolbar]", "Deactivate Layers");
+                if (!viewer.layerManager) {
+                  viewer.layerManager = new LayerManager(viewer);
+                }
+                viewer.layerManager.hide();
+              },
+            },
+          },
+          {
+            menuId: ToolbarMenuId.MarkupVisibility,
+            config: {
+              visible: false,
+            },
+          },
+          {
+            menuId: ToolbarMenuId.Fullscreen,
+            config: {
+              onClick: (bimViewer, toolbar) => {
+                const isFullScreen = !!document.fullscreenElement;
+                const onResize = () => {
+                  const toolbarMenu = toolbar?.menuList.get(
+                    ToolbarMenuId.Fullscreen
+                  );
+                  toolbarMenu && toolbarMenu.setActive(isFullScreen);
+                };
+
+                if (isFullScreen) {
+                  document.exitFullscreen();
+                  window.removeEventListener("resize", onResize);
+                } else {
+                  compareViewer.container.requestFullscreen();
+                }
+                window.addEventListener("resize", onResize);
+              },
+            },
+          },
+        ];
+      }
+    </script>
+  </body>
+</html>
+

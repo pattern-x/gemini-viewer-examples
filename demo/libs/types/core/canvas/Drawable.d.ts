@@ -4,7 +4,7 @@ import { Event } from "../../core/utils";
 /**
  * @internal
  */
-export declare abstract class Drawable extends Event {
+export declare abstract class Drawable<Handle extends Record<string, unknown> = Record<string, unknown>> extends Event<Handle> {
     protected readonly DEFAULT_LINE_WIDTH = 1;
     protected readonly DEFAULT_STROKE_STYLE = "#000000";
     protected readonly DEFAULT_FILL_STYLE = "#000000";

@@ -17,11 +17,11 @@ export declare class DrawableList extends Event<DrawableListHandler> {
     addDrawable(drawable: Drawable): void;
     updateDrawable(drawable: Drawable, newData: DrawableData): void;
     removeDrawable(drawable: Drawable): void;
-    getDrawableById(id: string): Drawable | undefined;
+    getDrawableById(id: string): Drawable<Record<string, unknown>> | undefined;
     clear(): void;
-    getDrawables(): Map<string, Drawable>;
+    getDrawables(): Map<string, Drawable<Record<string, unknown>>>;
     getDrawableDatas(): DrawableData[];
     setDrawableDatas(drawableDatas: DrawableData[]): void;
-    getDrawableByPosition(p: THREE.Vector3, raycaster?: THREE.Raycaster): Drawable | undefined;
+    getDrawableByPosition(p: THREE.Vector3, raycaster?: THREE.Raycaster): Drawable<Record<string, unknown>> | undefined;
 }
 export {};

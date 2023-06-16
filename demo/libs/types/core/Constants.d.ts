@@ -108,9 +108,21 @@ export declare enum SectionType {
     PickPlaneSection = "PickPlaneSection",
     AxisPlaneSection = "AxisPlaneSection"
 }
+/**
+ * Screenshot mode.
+ */
 export declare enum ScreenshotMode {
+    /**
+     * Take screenshot of the whole canvas.
+     */
     Default = "Default",
+    /**
+     * Take screenshot by box selecting an area.
+     */
     BoxSelection = "BoxSelection",
+    /**
+     * Take screenshot by picking a markup.
+     */
     PickMarkup = "PickMarkup"
 }
 export interface Vector2 {

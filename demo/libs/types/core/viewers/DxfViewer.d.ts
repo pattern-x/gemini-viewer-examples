@@ -4,7 +4,7 @@ import Stats from "three/examples/jsm/libs/stats.module.js";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { Toolbar } from "../../components/toolbar";
-import { DxfModelConfig, DxfViewerConfig, Hotpoint, ModelConfig } from "../../core/Configs";
+import { DxfCompareConfig, DxfModelConfig, DxfViewerConfig, Hotpoint, ModelConfig } from "../../core/Configs";
 import { Box2, ScreenshotMode, Vector2 } from "../../core/Constants";
 import { Drawable, DrawableData } from "../../core/canvas";
 import { DxfChange, DxfData, DxfLayer } from "../../core/dxf";
@@ -22,7 +22,7 @@ import { BaseViewer, ScreenshotResult, ViewerName } from "../../core/viewers/Bas
 export type MarkupData = DrawableData;
 export interface EntityData {
     modelId: string;
-    layoutName: string;
+    layerName: string;
 }
 /**
  * A group of dxf/dwg layers for a drawing.
@@ -263,7 +263,12 @@ export declare class DxfViewer extends BaseViewer {
      */
     is3d(): boolean;
     /**
-     * Destroies DxfViewer
+     * @description {en} Destroys DxfViewer.
+     * @description {zh} 销毁 DxfViewer。
+     * @example
+     * ```typescript
+     * viewer.destroy();
+     * ```
      */
     destroy(): void;
     /**
@@ -271,12 +276,23 @@ export declare class DxfViewer extends BaseViewer {
      */
     private loadingDxfCount;
     /**
-     * Loads a dxf file.
+     * @description {en} Loads a dxf file.
      * The first loaded file will be taken as a "master" model.
      * Any other files are non-master, we call "overlay" model.
      * We'll load everything of a master model, including model and paper space.
      * For an overlay model, we'll only load its model space. And its model space can only
      * overly to master model's model space.
+     * @description {zh} 加载 dxf 文件。
+     * 第一个加载的文件将被视为“主”模型。
+     * 任何其他文件都是非主文件，我们称之为“叠加”模型。
+     * 我们将加载主模型的所有内容，包括模型和图纸空间。
+     * 对于叠加模型，我们只会加载其模型空间。并且它的模型空间只能叠加到主模型的模型空间上。
+     * @param modelCfg
+     * - {en} The configuration of the model to be loaded.
+     * - {zh} 要加载的模型的配置。
+     * @param onProgress
+     * - {en} A callback function to indicate the loading progress.
+     * - {zh} 用于指示加载进度的回调函数。
      * @example
      * ``` typescript
      * const viewerCfg = {
@@ -316,10 +332,11 @@ export declare class DxfViewer extends BaseViewer {
      * - It shouldn't load anything else before and after compare.
      * @param model1 The first dxf to be compared
      * @param model2 The second dxf to be compared
+     * @param {DxfCompareConfig} compareConfig The compare config
      * @param onProgress loading progress
      * @internal
      */
-    compare(model1: DxfModelConfig, model2: DxfModelConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    compare(model1: DxfModelConfig, model2: DxfModelConfig, compareConfig?: DxfCompareConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     /**
      * Gets loaded entity count
      * @internal
@@ -331,7 +348,16 @@ export declare class DxfViewer extends BaseViewer {
      */
     protected getLoadedDxfModelIds(): string[];
     /**
-     * Gets layout names of the master model.
+     * @description {en} Gets layout names of the master model.
+     * @description {zh} 获取主模型的布局名称。
+     * @returns
+     * - {en} Layout names of the master model.
+     * - {zh} 主模型的布局名称。
+     * @example
+     * ```typescript
+     * const layoutNames = dxfViewer.getLayoutNames();
+     * console.log(layoutNames); // ['Model', 'Layout1', 'Layout2']
+     * ```
      */
     getLayoutNames(): string[];
     /**
@@ -341,20 +367,37 @@ export declare class DxfViewer extends BaseViewer {
     protected getLayouts(): ILayoutObject[];
     private handleOverlayDxf;
     /**
-     * Activates a layout
+     * @description {en} Activates a layout.
+     * @description {zh} 激活布局。
+     * @param layoutName
+     * - {en} The name of the layout to be activated.
+     * - {zh} 要激活的布局名称。
+     * @example
+     * ```typescript
+     * viewer.activateLayout('Layout1');
+     * ```
      */
     activateLayout(layoutName: string): void;
-    /**
-     * Calculates the boundingBox of objects with child objects in the children of layoutLevelObject
-     */
-    private calcBoundingBoxOfLayoutChild;
     private cancelAllOperations;
     /**
-     * Gets active layout
+     * @description {en} Gets active layout.
+     * @description {zh} 获取当前布局。
+     * @returns
+     * - {en} Active layout name or undefined.
+     * - {zh} 当前激活的布局名称或undefined。
+     * @example
+     * ``` typescript
+     * const activeLayout = viewer.getActiveLayoutName();
+     * console.log(activeLayout);
+     * ```
      */
     getActiveLayoutName(): string | undefined;
     /**
-     * Gets dxf layers.
+     * @description {en} Gets dxf layers.
+     * @description {zh} 获取dxf图层。
+     * @returns
+     * - {en} Dxf layers.
+     * - {zh} dxf图层。
      * @example
      * ``` typescript
      * const dxfLayers = viewer.getLayers();
@@ -373,11 +416,20 @@ export declare class DxfViewer extends BaseViewer {
      */
     setModelVisibility(modelId: string, visible: boolean): void;
     /**
-     * Sets layer's visibility.
-     * @param layerName Layer's name to show or hide
-     * @param visible Layer's target visibility
-     * @param modelId Useful when more than one model is loaded, if not specified, will use the master model.
-     * @throws Throws exception if given modelId doesn't exist.
+     * @description {en} Sets layer's visibility.
+     * @description {zh} 设置图层的可见性。
+     * @param layerName
+     * - {en} Layer's name to show or hide.
+     * - {zh} 要显示或隐藏的图层名称。
+     * @param visible
+     * - {en} Layer's target visibility.
+     * - {zh} 图层的目标可见性。
+     * @param modelId
+     * - {en} Useful when more than one model is loaded, if not specified, will use the master model.
+     * - {zh} 当加载了多个模型时有用，如果未指定，将使用主模型。
+     * @throws Error
+     * - {en}: Throws exception if given modelId doesn't exist.
+     * - {zh} 如果给定的modelId不存在，则抛出异常。
      * @example
      * ``` typescript
      * // Hides layer "0"
@@ -402,10 +454,19 @@ export declare class DxfViewer extends BaseViewer {
      */
     resetLayerColor(layerName: string, modelId?: string): void;
     /**
-     * Sets font.
+     * @description {en} Sets font.
      * This needs to be called before loading a dxf, it won't affect any loaded text.
      * It accepts shx or typeface formats. For typeface, it only support passing in 1 font file in the array for now.
-     * @param urls font file urls
+     * @description {zh} 设置字体。
+     * 需要在加载dxf之前调用，不会影响已加载的文字。
+     * 支持shx或typeface格式。对于typeface，目前只支持传入1个字体文件。
+     * @param urls
+     * - {en} font file urls.
+     * - {zh} 字体文件链接。
+     * @example
+     * ```typescript
+     * viewer.setFont(["https://example.com/xxx.shx"]);
+     * ```
      */
     setFont(urls: string[]): Promise<void>;
     /**
@@ -434,8 +495,10 @@ export declare class DxfViewer extends BaseViewer {
      */
     setDisplayPrecision(): void;
     /**
-     * Gets current view extent.
+     * @description {en} Gets current view extent.
      * This is useful for user to save this value as a viewpoint, and jump to this viewpoint next time.
+     * @description {zh} 获取当前视图范围。
+     * 用户可使用该接口获取当前视口范围，并在适当的场景下跳转到该视口范围。
      * @example
      * ``` typescript
      * const box = viewer.getCurrentViewExtent();
@@ -446,26 +509,23 @@ export declare class DxfViewer extends BaseViewer {
     /**
      * @description {en} Gets screenshot of a rectangular area, or by box selecting an area. Returns an image in format of base64 string.
      * @description {zh} 获取矩形区域或者框选区域的截图。返回base64格式的图片。
-     * @description {en} rect: if this parameter is set, use this rectangle area to take screenshot, otherwise user needs to manually select an area. Default is undefined.
-     * @description {zh} rect: 如果该参数有值，则使用这个矩形区域来截图，否则需要用户手动选定一个截图区域。默认为undefined。
-     * @description {en} includeOverlay: whether to include overlay, which contains markups and measurements. Default is true.
-     * @description {zh} includeOverlay: 是否包含覆盖层，包含标注和测量。默认为true。
+     * @param mode
+     * - {en} screenshot mode("Default", "BoxSelection" and "PickMarkup").
+     * - {zh} 截图模式("全屏"， "框选" 和 "选中批注")。
      * @example
      * ``` typescript
-     * // 点击云线框批注截图且不包含覆盖层
-     * viewer.addEventListener(ViewerEvent.MouseClicked, (data) => {
-     *     if (data.markupData) {
-     *         const markup = data.markupData;
-     *         if (markup.type === "CloudRectMarkup") {
-     *             const points = markup.points;
-     *             const leftTopPoint = viewer.worldCoordinate2NormalizedScreenCoordinate({x: points[0][0], y: points[0][1]});
-     *             const rightBottomPoint = viewer.worldCoordinate2NormalizedScreenCoordinate({x: points[1][0], y: points[1][1]});
-     *             viewer.getScreenshot({min: leftTopPoint, max: rightBottomPoint}, false).then(data => console.log(data));
-     *         }
-     *     }
-     * });
-     * // 根据用户的框选截图且包含覆盖层
-     * viewer.getScreenshot().then(data => console.log(data));
+     * // {en} Click on markup to take screenshot.
+     * // {zh} 点击批注截屏。
+     * const mode = ScreenshotMode.PickMarkup;
+     * viewer.getScreenshot(mode).then(data => console.log(data));
+     * // {en} Take screenshot by box selecting an area.
+     * // {zh} 根据用户的框选截屏。
+     * const mode = ScreenshotMode.BoxSelection;
+     * viewer.getScreenshot(mode).then(data => console.log(data));
+     * // {en} Take screenshot of the whole view.
+     * // {zh} 全屏截屏。
+     * const mode = ScreenshotMode.Default;
+     * viewer.getScreenshot(mode).then(data => console.log(data));
      * ```
      */
     getScreenshot(mode?: ScreenshotMode): Promise<undefined | ScreenshotResult>;
@@ -474,8 +534,10 @@ export declare class DxfViewer extends BaseViewer {
      */
     getMeasurementManager(): MeasurementManager | undefined;
     /**
-     * Activates one of "Distance", "Area" or "Angle" measurement
-     * @param type "Distance", "Area" or "Angle"
+     * @description {en} Activates one of "Distance", "Area" or "Angle" measurement
+     * @description {zh} 激活"距离", "面积" 或者 "角度"测量
+     * @param type
+     * - "Distance", "Area" or "Angle"
      * @example
      * ``` typescript
      * viewer.activateMeasurement(MeasurementType.Distance);
@@ -483,15 +545,32 @@ export declare class DxfViewer extends BaseViewer {
      */
     activateMeasurement(type: MeasurementType): void;
     /**
-     * Deactivates measurement
+     * @description {en} Deactivates measurement.
+     * @description {zh} 退出测量。
+     * @example
+     * ``` typescript
+     * viewer.deactivateMeasurement();
+     * ```
      */
     deactivateMeasurement(): void;
     /**
-     * Gets active measurement type
+     * @description {en} Gets active measurement type.
+     * @description {zh} 获取当前激活的测量类型。
+     * @returns
+     * - "Distance", "Area" or "Angle" or undefined
+     * @example
+     * ``` typescript
+     * const measurementType = viewer.getActiveMeasurementType();
+     * console.log(measurementType);
+     * ```
      */
     getActiveMeasurementType(): MeasurementType | undefined;
     /**
-     * Gets all measurements
+     * @description {en} Gets all measurements.
+     * @description {zh} 获取所有测量数据。
+     * @returns
+     * - {en} measurement data array.
+     * - {zh} 测量数据数组。
      * @example
      * ``` typescript
      * const measurementData = viewer.getMeasurements();
@@ -500,11 +579,16 @@ export declare class DxfViewer extends BaseViewer {
      */
     getMeasurements(): MeasurementData[];
     /**
-     * Cancels drawing measurement
+     * @description {en} Cancels drawing measurement.
+     * @description {zh} 取消测量绘制。
      */
     cancelMeasurement(): void;
     /**
-     * Sets measurement data.
+     * @description {en} Sets measurement data.
+     * @description {zh} 设置测量数据。
+     * @param measurementData
+     * - {en} measurement data array.
+     * - {zh} 测量数据数组。
      * @example
      * ``` typescript
      * const measurementData = [{
@@ -527,7 +611,16 @@ export declare class DxfViewer extends BaseViewer {
      */
     unselectMeasurement(): void;
     /**
-     * Removes a measurement by id.
+     * @description {en} Removes a measurement by id.
+     * @description {zh} 根据id删除测量数据。
+     * @param id
+     * - {en} Measurement data id.
+     * - {zh} 测量数据id。
+     * @example
+     * ``` typescript
+     * const id = "c6ea70a3-ddb0-4dd0-87c8-bd2491936428";
+     * viewer.removeMeasurement(id);
+     * ```
      */
     removeMeasurement(id: string): void;
     /**
@@ -537,7 +630,12 @@ export declare class DxfViewer extends BaseViewer {
      */
     setMeasurementVisibility(id: string, visible: boolean): boolean;
     /**
-     * Clears measurement results.
+     * @description {en} Clears measurement results.
+     * @description {zh} 清除测量结果。
+     * @example
+     * ``` typescript
+     * viewer.clearMeasurements();
+     * ```
      */
     clearMeasurements(): void;
     /** markup start **/
@@ -546,20 +644,38 @@ export declare class DxfViewer extends BaseViewer {
      */
     getMarkupManager(): MarkupManager | undefined;
     /**
-     * Activates markup feature
-     * @param type MarkupType
+     * @description {en} Activates markup feature.
+     * @description {zh} 激活标注功能。
+     * @param type
+     * - {en} markup type.
+     * - {zh} 标注类型。
      * @example
      * ``` typescript
-     * viewer.activateMarkup(MarkupType.Arrow);
+     * const markupType = MarkupType.Arrow;
+     * viewer.activateMarkup(markupType);
      * ```
      */
     activateMarkup(type: MarkupType): void;
     /**
-     * Deactivates markup
+     * @description {en} Deactivates markup feature.
+     * @description {zh} 退出标注功能。
+     * @example
+     * ``` typescript
+     * viewer.deactivateMarkup();
+     * ```
      */
     deactivateMarkup(): void;
     /**
-     * Gets active markup type
+     * @description {en} Gets active markup type.
+     * @description {zh} 获取激活的标注类型。
+     * @returns
+     * - {en} markup type.
+     * - {zh} 标注类型。
+     * @example
+     * ``` typescript
+     * const markupType = viewer.getActiveMarkupType();
+     * console.log(markupType);
+     * ```
      */
     getActiveMarkupType(): MarkupType | undefined;
     /**
@@ -599,12 +715,24 @@ export declare class DxfViewer extends BaseViewer {
      */
     getMarkupFontSize(): number | undefined;
     /**
-     * Gets all markups
-     * @returns MarkupData array
+     * @description {en} Gets all markups.
+     * @description {zh} 获取所有标注数据。
+     * @returns
+     * - {en} markup data array.
+     * - {zh} 标注数据数组。
+     * @example
+     * ``` typescript
+     * const markupData = viewer.getMarkups();
+     * console.log(markupData);
+     * ```
      */
     getMarkups(): MarkupData[];
     /**
-     * Sets markup data to active layout.
+     * @description {en} Adds markups to active layout.
+     * @description {zh} 添加标注到当前布局。
+     * @param markupDataArray
+     * - {en} markup data array.
+     * - {zh} 标注数据数组。
      * @example
      * ``` typescript
      * const markupData = [{
@@ -626,30 +754,93 @@ export declare class DxfViewer extends BaseViewer {
      */
     setMarkupVisibility(id: string, visible: boolean): boolean;
     /**
-     * Updates a markup.
+     * @description {en} Updates a markup.
+     * @description {zh} 更新标注。
+     * @param {MarkupData} markup
+     * - {en} markup data.
+     * - {zh} 标注数据。
+     * @returns
+     * - {en} Whether update successfully, true means success, false means failure.
+     * - {zh} 是否更新成功，true表示成功，false表示失败。
+     * @example
+     * ``` typescript
+     * const markupData = {
+     *    type: "ArrowMarkup",
+     *    id: "c6ea70a3-ddb0-4dd0-87c8-bd2491936428",
+     *    lineWidth: 3,
+     *    strokeStyle: "#ff0000",
+     *    fillStyle: "#ff000030",
+     *    points: [[0, 0], [1000, 1000]],
+     * };
+     * viewer.updateMarkup(markupData);
      */
     updateMarkup(markup: MarkupData): boolean;
     /**
-     * Removes a markup by markup id.
+     * @description {en} Removes a markup by markup id.
+     * @description {zh} 根据标注id删除标注。
+     * @param {string} id
+     * - {en} markup id.
+     * - {zh} 标注id。
+     * @returns
+     * - {en} Whether remove successfully, true means success, false means failure.
+     * - {zh} 是否删除成功，true表示成功，false表示失败。
+     * @example
+     * ``` typescript
+     * const markupId = "c6ea70a3-ddb0-4dd0-87c8-bd2491936428";
+     * viewer.removeMarkup(markupId);
+     * ```
      */
     removeMarkup(id: string): boolean;
     /**
-     * Clears markups.
+     * @description {en} Clears markups.
+     * @description {zh} 清除所有标注。
+     * @example
+     * ``` typescript
+     * viewer.clearMarkups();
+     * ```
      */
     clearMarkups(): void;
     /** markup end **/
     /**
-     * Adds a hotpoint.
+     * @description {en} Adds a hotpoint.
      * Caller should set a hotpointId that is unique in the session of current DxfViewer.
+     * @description {zh} 添加热点。
+     * 调用者应该设置一个在当前DxfViewer会话中唯一的热点id。
+     * @param hotpoint
+     * - {en} hotpoint data.
+     * - {zh} 热点数据。
+     * @example
+     * ``` typescript
+     * const hotpoint = {
+     *    hotpointId: "c6ea70a3-ddb0-4dd0-87c8-bd2491936428",
+     *    anchorPosition: [0, 0, 0],
+     *    html: "<div>hotpoint</div>",
+     *    visible: true,
+     * };
+     * viewer.addHotpoint(hotpoint);
+     * ```
      */
     addHotpoint(hotpoint: Hotpoint): void;
     /**
-     * Removes a hotpoint by given hotpointId.
-     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
+     * @description {en} Removes a hotpoint by given hotpointId.
+     * @description {zh} 根据热点id删除热点。
+     * @param {string} hotpointId
+     * - {en} hotpoint id.
+     * - {zh} 热点id。
+     * @example
+     * ``` typescript
+     * const hotpointId = "c6ea70a3-ddb0-4dd0-87c8-bd2491936428";
+     * viewer.removeHotpoint(hotpointId);
+     * ```
      */
     removeHotpoint(hotpointId: string): void;
     /**
-     * Clears all hotpoints.
+     * @description {en} Clears all hotpoints.
+     * @description {zh} 清除所有热点。
+     * @example
+     * ``` typescript
+     * viewer.clearHotpoints();
+     * ```
      */
     clearHotpoints(): void;
     /**
@@ -680,7 +871,12 @@ export declare class DxfViewer extends BaseViewer {
      */
     protected getHitResultByNdcCoordinate(coord: Vector2): Vector2 | undefined;
     /**
-     * Asks user to select a box area, and zooms to it.
+     * @description {en} Asks user to select a box area, and zooms to it.
+     * @description {zh} 询问用户选择一个框选区域，然后缩放到该区域。
+     * @example
+     * ``` typescript
+     * viewer.zoomToRect();
+     * ```
      */
     zoomToRect(): void;
     /**
@@ -721,12 +917,22 @@ export declare class DxfViewer extends BaseViewer {
      * @param object
      * @internal
      */
-    addLoadedModelToScene(object: THREE.Object3D, modelCfg: ModelConfig, dxfData: DxfData, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    addLoadedModelToScene(object: THREE.Object3D, modelCfg: ModelConfig, dxfData: DxfData): Promise<void>;
     /**
-     *
-     * @param width
-     * @param height
-     * @description resize viewer
+     * @description {en} resize viewer
+     * @description {zh} 重置视图大小
+     * @param {number} width
+     * - {en} width of viewer
+     * - {zh} 视图宽度。
+     * @param {number} height
+     * - {en} height of viewer
+     * - {zh} 视图高度。
+     * @example
+     * ```typescript
+     * const width = 800;
+     * const height = 600;
+     * viewer.resize(width, height);
+     * ```
      */
     resize(width: number, height: number): void;
     /**
@@ -801,11 +1007,20 @@ export declare class DxfViewer extends BaseViewer {
      */
     goTo(position: Vector2, targetCameraZoom?: number, animate?: boolean): void;
     /**
-     * Moves camera to home view
+     * @description {en} Moves camera to home view.
+     * @description {zh} 移动相机到主视图.
+     * @example
+     * ``` typescript
+     * viewer.goToHomeView();
+     * ```
      */
     goToHomeView(): void;
     /**
-     * Zooms to specific bounding box
+     * @description {en} Zooms to specific bounding box.
+     * @description {zh} 缩放到指定的包围盒.
+     * @param bbox
+     * - {en} 2d bounding box
+     * - {zh} 2d 包围盒。
      * @example
      * ``` typescript
      * const box = { min: { x: 0, y: 0 }, max: { x: 10000, y: 10000} };
@@ -814,26 +1029,58 @@ export declare class DxfViewer extends BaseViewer {
      */
     zoomToBBox(bbox: Box2): void;
     /**
-     * Zooms to view extent
+     * @description {en} Zooms to view extent.
+     * @description {zh} 缩放到视图范围.
+     * @example
+     * ``` typescript
+     * viewer.zoomToExtent();
+     * ```
      */
     zoomToExtent(): void;
     /**
-     * Zooms to a compare change
-     * @param changeId Change data id
+     * @description {en} Zooms to a compare change.
+     * @description {zh} 聚焦到图纸的一处变动。
+     * @param changeId
+     * - {en} Change id, which is an incremental integer starts from 1.
+     * - {zh} 变动id，该id是从数字1开始自增的整数。
+     * @example
+     * ``` typescript
+     * const changeId = 1;
+     * viewer.zoomToCompareChange(changeId);
+     * ```
+     * @internal
      */
     zoomToCompareChange(changeId: number): void;
     /**
-     * Gets compare changes
-     */
-    getCompareChanges(): Record<string, DxfChange> | undefined;
-    /**
-     * Sets background color
-     * @param r value between 0-1
-     * @param g value between 0-1
-     * @param b value between 0-1
+     * @description {en} Gets compare changes.
+     * @description {zh} 获取对比变动.
+     * @returns
+     * - {en} Compare changes.
+     * - {zh} 对比变动列表。
      * @example
      * ``` typescript
-     * // Sets background to gray
+     * const changes = viewer.getCompareChanges();
+     * console.log(changes);
+     * ```
+     * @internal
+     */
+    getCompareChanges(): Record<number, DxfChange> | undefined;
+    /**
+     * @description {en} Sets background color.
+     * @description {zh} 设置背景颜色.
+     * @param r
+     * - {en} value between 0-1.
+     * - {zh} 0-1之间的值。
+     * @param g
+     * - {en} value between 0-1.
+     * - {zh} 0-1之间的值。
+     * @param b
+     * - {en} value between 0-1.
+     * -{zh} 0-1之间的值。
+     * @example
+     * ``` typescript
+     * // {en} Sets background to gray
+     * // {zh} 设置背景为灰色
      * viewer.setBackgroundColor(0.5, 0.5, 0.5);
      * ```
      */
@@ -855,11 +1102,6 @@ export declare class DxfViewer extends BaseViewer {
      * Checks if an expected zoom value is valid, and adjust its value if necessary.
      */
     private checkAndGetLimitedCameraZoom;
-    /**
-     * Set the visibility of dxf objects based on the camera frustum.
-     * TODO: the visibility of the children of modelspace or paperspace objects
-     */
-    private setVisibilityByCameraFrustum;
     private getVisiblePixelSize;
     private setLayoutHidableObjectArray;
     private statObjects;

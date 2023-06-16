@@ -1,22 +1,25 @@
 import * as THREE from "three";
-import { BaseMarkup } from "./BaseMarkup";
 import { MarkupType } from "./Constants";
-import { TextShape } from "./TextMarkup";
-export declare class LeaderLineMarkup extends BaseMarkup {
+import type { MarkupManager } from "./MarkupManager";
+import { TextShape, TextMarkup } from "./TextMarkup";
+export declare class LeaderLineMarkup extends TextMarkup {
     type: MarkupType;
     text: string;
     fontSize: number;
     private textBounds;
-    constructor(id: string, points: THREE.Vector3[]);
+    constructor(id: string, points: THREE.Vector3[], text: string);
     draw(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     private drawArrowHead;
     private drawArrowLine;
-    private drawText;
-    setFontSize(fontSize: number): void;
+    protected drawText(ctx: CanvasRenderingContext2D, camera: THREE.Camera, text: string): void;
     getVertexes(): THREE.Vector3[];
-    setData(data: TextShape): void;
+    update(points: THREE.Vector3[]): this;
     getData(): TextShape;
     isPointInPath(p: THREE.Vector3): boolean;
     updateText(text: string): void;
     getClassType(): string;
+    addInput(manager: MarkupManager, x: number, y: number): void;
+    handleInput: () => void;
+    handleCompositionEnd: () => void;
+    private calcuTextInputPositionByText;
 }
