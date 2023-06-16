@@ -93,10 +93,10 @@
       let enableSyncCamera = false;
       syncCameraBtn.onclick = function () {
         if (!enableSyncCamera) {
-          compareViewer.enableSyncCamera = true;
+          compareViewer.enableSyncCamera(true);
           syncCameraBtn.innerText = "synced";
         } else {
-          compareViewer.enableSyncCamera = false;
+          compareViewer.enableSyncCamera(false);
           syncCameraBtn.innerText = "unsynced";
         }
         enableSyncCamera = !enableSyncCamera;
