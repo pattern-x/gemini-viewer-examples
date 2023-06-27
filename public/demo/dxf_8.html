@@ -86,7 +86,7 @@
       const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
       await compareHelper.setFont(fontFiles);
 
-      compareHelper.viewer1.toolbar?.updateMenus(
+      compareHelper.viewer.toolbar?.updateMenus(
         overrideToolbarConfig(compareHelper.viewer1)
       );
       compareHelper.viewer2.toolbar?.updateMenus(
