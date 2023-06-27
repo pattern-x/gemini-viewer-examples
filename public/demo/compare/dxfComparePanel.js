@@ -29,7 +29,7 @@ export default class DxfComparePanel {
         panelContainer.appendChild(compareDetail);
         this.compareDetail = compareDetail;
 
-        const changes = this.viewer.getCompareChanges();
+        const changes = this.viewer.getChanges();
         if (!changes) {
             return;
         }
@@ -98,7 +98,7 @@ export default class DxfComparePanel {
         lists.forEach((list) => {
             list.addEventListener("click", (e) => {
                 if (e.target.tagName.toUpperCase() === "LI" && e.target.dataset.id) {
-                    this.viewer.zoomToCompareChange(e.target.dataset.id);
+                    this.viewer.zoomToChange(e.target.dataset.id);
                 }
             });
         });
