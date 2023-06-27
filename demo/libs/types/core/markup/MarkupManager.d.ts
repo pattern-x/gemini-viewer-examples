@@ -5,7 +5,7 @@ import { CanvasRender, DrawableData } from "../../core/canvas";
 import type { EventInfo, InputManager } from "../../core/input/InputManager";
 import { Event } from "../../core/utils";
 import type { BaseViewer } from "../../core/viewers";
-type MarkupHandler = {
+declare type MarkupHandler = {
     StartDraw: BaseMarkup;
     EndDraw: BaseMarkup;
     EndEdit: BaseMarkup;

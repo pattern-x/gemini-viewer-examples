@@ -292,7 +292,7 @@ export interface ITables {
 /**
  * @internal
  */
-export type ITable = IViewportTable | ILayerTypesTable | ILayersTable | IBlockRecordsTable | IStylesTable | IDimStyleTable;
+export declare type ITable = IViewportTable | ILayerTypesTable | ILayersTable | IBlockRecordsTable | IStylesTable | IDimStyleTable;
 /**
  * @internal
  */

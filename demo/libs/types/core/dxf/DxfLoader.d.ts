@@ -24,7 +24,7 @@ export interface DxfData extends IDxf {
  *
  * We can change a layer's visibility, color, etc.
  */
-export type DxfLayer = ILayer;
+export declare type DxfLayer = ILayer;
 /**
  * Dxf entity, which can be an arc, circle, attach, line, insert, text, etc.
  * @internal

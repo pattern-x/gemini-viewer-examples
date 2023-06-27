@@ -6,7 +6,7 @@ export declare enum ObjectType {
     LineSegment = 3,
     Mesh = 4
 }
-export type CallBack = (object: DxfObject) => void;
+export declare type CallBack = (object: DxfObject) => void;
 export declare class DxfObject {
     name: string;
     type: ObjectType;

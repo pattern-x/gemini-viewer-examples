@@ -20,7 +20,7 @@
         <div id="myCanvas" class="container"></div>
     </div>
     <script type="module">
-        import { DxfViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import { BaseDxfCompareHelper, DxfViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
         import DxfComparePanel from "./demo/compare/dxfComparePanel.js"
         import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
         import LayerManager from "./demo/layerManager/LayerManager.js";
@@ -39,14 +39,14 @@
                     onActive: () => {
                         console.log("[Toolbar]", "Activate Settings");
                         if (!window.dxfSettingsPanel) {
-                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.compareHelper.viewer);
                         }
                         window.dxfSettingsPanel.show();
                     },
                     onDeactive: () => {
                         console.log("[Toolbar]", "Deactivate Settings");
                         if (!window.dxfSettingsPanel) {
-                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                            window.dxfSettingsPanel = new DxfSettingsPanel(window.compareHelper.viewer);
                         }
                         window.dxfSettingsPanel.hide();
                     },
@@ -55,31 +55,31 @@
                     onActive: () => {
                         console.log("[Toolbar]", "Activate Layers");
                         if (!window.layerManager) {
-                            window.layerManager = new LayerManager(window.viewer);
+                            window.layerManager = new LayerManager(window.compareHelper.viewer);
                         }
                         window.layerManager.show();
                     },
                     onDeactive: () => {
                         console.log("[Toolbar]", "Deactivate Layers");
                         if (!window.layerManager) {
-                            window.layerManager = new LayerManager(window.viewer);
+                            window.layerManager = new LayerManager(window.compareHelper.viewer);
                         }
                         window.layerManager.hide();
                     },
                 },
             },
         };
-        const viewer = new DxfViewer(config);
+        const compareHelper = new BaseDxfCompareHelper(config);
         // const fontFiles = ["./demo/three/fonts/Microsoft_YaHei_Regular.typeface.json"];
         const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
-        await viewer.setFont(fontFiles);
-        window.viewer = viewer;
+        await compareHelper.setFont(fontFiles);
+        window.compareHelper = compareHelper;
 
         const onProgress = (event) => {
             const progress = ((event.loaded * 100) / event.total).toFixed(1);
             console.log(`[Demo] Loading progress: ${progress}%`);
         };
-        await viewer.compare({src: url1, modelId: "doors_and_windows.dxf"}, {src: url2, modelId: "doors_and_windows_mopdified.dxf"}, onProgress).then(() => {
+        await compareHelper.compare({src: url1, modelId: "doors_and_windows.dxf"}, {src: url2, modelId: "doors_and_windows_mopdified.dxf"}, onProgress).then(() => {
             console.log(`[Demo] Compared models: ${url1}, ${url2}`);
         });
 

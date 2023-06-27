@@ -1,4 +1,4 @@
-export type Handler<T = any> = (val: T) => void;
+export declare type Handler<T = any> = (val: T) => void;
 /**
  * @internal
  */

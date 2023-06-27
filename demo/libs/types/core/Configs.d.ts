@@ -285,9 +285,12 @@ export interface DxfViewerConfig extends BaseViewerConfig {
     };
 }
 /**
- * @internal
+ * Dxf compare config.
  */
 export interface DxfCompareConfig {
+    /**
+     * Enables to compare properties (color, linetype, line width, etc.)
+     */
     enableDetailComparision: boolean;
 }
 /**

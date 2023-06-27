@@ -1,7 +1,7 @@
 /**
  * @internal
  */
-export type DxfMTextContentElement = DxfMTextContentElement[] | string | {
+export declare type DxfMTextContentElement = DxfMTextContentElement[] | string | {
     /** font family */
     f?: string;
     /** bold */

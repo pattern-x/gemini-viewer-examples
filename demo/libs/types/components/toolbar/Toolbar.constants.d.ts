@@ -88,7 +88,7 @@ export interface ToolbarMenuConfig<T extends BaseViewer> {
 /**
  * @internal
  */
-export type ToolbarConfig<T extends BaseViewer> = {
+export declare type ToolbarConfig<T extends BaseViewer> = {
     [key in ToolbarMenuId]?: ToolbarMenuConfig<T>;
 };
 /**

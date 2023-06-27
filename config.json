@@ -28,14 +28,11 @@
     "title": "Doors & windows",
     "url": "./demo/dxf_2.html"
   }, {
-    "title": "Drawing comparison",
+    "title": "Drawing comparison with 1 viewport",
     "url": "./demo/dxf_3.html"
   }, {
     "title": "Drawing comparison with 2 viewports",
     "url": "./demo/dxf_8.html"
-  }, {
-    "title": "Drawing comparison with 3 viewports",
-    "url": "./demo/dxf_4.html"
   }, {
     "title": "Upload files and compare with 2 viewports",
     "url": "./demo/dxf_10.html"

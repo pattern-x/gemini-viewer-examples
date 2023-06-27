@@ -16,9 +16,22 @@ export declare enum DxfChangeType {
     Modified = "Modified",
     NoChange = "NoChange"
 }
-export type DetailChanges = {
-    [Property in keyof DxfEntity]: {
+/**
+ * Dxf compare detail changes.
+ * It supports:
+ * - color
+ * - lineType
+ * - constantWidth (polyline width)
+ */
+export declare type DxfDetailChanges = {
+    [propName: string]: {
+        /**
+         * The old value.
+         */
         old: unknown;
+        /**
+         * The new value.
+         */
         new: unknown;
     };
 };
@@ -46,7 +59,7 @@ export interface DxfChange {
      * @internal
      */
     box?: THREE.Box3;
-    detailChanges?: DetailChanges;
+    detailChanges?: DxfDetailChanges;
 }
 /**
  * Used to compare two drawings/dxfs.

@@ -1,7 +1,7 @@
 import { DrawableData } from "./Constants";
 import { Drawable } from "./Drawable";
 import { Event } from "../../core/utils";
-type DrawableListHandler = {
+declare type DrawableListHandler = {
     addDrawable: DrawableData;
     updateDrawable: DrawableData;
     removeDrawable: DrawableData;

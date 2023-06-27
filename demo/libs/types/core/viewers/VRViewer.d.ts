@@ -85,7 +85,7 @@ export declare class VRViewer extends BaseViewer {
     private onMouseWheel;
     private updateFov;
     setMinAndMaxFov(minFov: number, maxFov: number): void;
-    private resize;
+    protected resize(width: number, height: number): void;
     /**
      * Enables/Disables orbit controls to automatically rotate.
      */

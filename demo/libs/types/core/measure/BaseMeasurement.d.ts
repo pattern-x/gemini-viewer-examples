@@ -35,7 +35,7 @@ export interface MeasurementData extends DrawableData {
      */
     points: number[][];
 }
-type MeasureHandler = {
+declare type MeasureHandler = {
     /**
      * Triggered when clicked measure
      */

@@ -19,7 +19,7 @@ import { BaseViewer, ScreenshotResult, ViewerName } from "../../core/viewers/Bas
  * DxfViewer doesn't maintain the relationship between model and markup data,
  * business logic should knows which model a set of markup data belong to.
  */
-export type MarkupData = DrawableData;
+export declare type MarkupData = DrawableData;
 export interface EntityData {
     modelId: string;
     layerName: string;
@@ -138,7 +138,6 @@ export declare class DxfViewer extends BaseViewer {
     name: ViewerName;
     private readonly CAMERA_Z_POSITION;
     private readonly CAMERA_MIN_ZOOM;
-    private frustumSize;
     private timer;
     protected css2dRenderer?: CSS2DRenderer;
     protected font?: Font;
@@ -187,6 +186,9 @@ export declare class DxfViewer extends BaseViewer {
     private layoutInfos;
     private units;
     private raycastableObjects;
+    /**
+     * @deprecated
+     */
     private changes;
     private fpsUtils;
     protected hotpointRoot?: THREE.Group;
@@ -319,24 +321,27 @@ export declare class DxfViewer extends BaseViewer {
     unloadDxf(): void;
     /**
      * If it is under compare mode
+     * @deprecated use DxfCompareHelper2 instead
      */
     private compareMode;
     /**
      * If it is under compare mode
      * @internal
+     * @deprecated use DxfCompareHelper2 instead
      */
     isCompareMode(): boolean;
     /**
      * Compares two dxf files. Note that:
      * - It only compares model spaces.
      * - It shouldn't load anything else before and after compare.
-     * @param model1 The first dxf to be compared
-     * @param model2 The second dxf to be compared
-     * @param {DxfCompareConfig} compareConfig The compare config
+     * @param modelCfg1 The first dxf to be compared
+     * @param modelCfg2 The second dxf to be compared
+     * @param {DxfCompareConfig} compareCfg The compare config
      * @param onProgress loading progress
      * @internal
+     * @deprecated use DxfCompareHelper2 instead
      */
-    compare(model1: DxfModelConfig, model2: DxfModelConfig, compareConfig?: DxfCompareConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    compare(modelCfg1: DxfModelConfig, modelCfg2: DxfModelConfig, compareCfg?: DxfCompareConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     /**
      * Gets loaded entity count
      * @internal
@@ -579,8 +584,8 @@ export declare class DxfViewer extends BaseViewer {
      */
     getMeasurements(): MeasurementData[];
     /**
-     * @description {en} Cancels drawing measurement.
-     * @description {zh} 取消测量绘制。
+     * @description {en} Cancels current measurement. This won't deactivate measurement, rather, you can start a new measurement.
+     * @description {zh} 取消当前的测量绘制。这并不会退出测量，用户可以开始一个新的测量。
      */
     cancelMeasurement(): void;
     /**
@@ -934,7 +939,7 @@ export declare class DxfViewer extends BaseViewer {
      * viewer.resize(width, height);
      * ```
      */
-    resize(width: number, height: number): void;
+    protected resize(width: number, height: number): void;
     /**
      * @internal
      */
@@ -1049,6 +1054,7 @@ export declare class DxfViewer extends BaseViewer {
      * viewer.zoomToCompareChange(changeId);
      * ```
      * @internal
+     * @deprecated use DxfCompareHelper2 instead
      */
     zoomToCompareChange(changeId: number): void;
     /**
@@ -1063,6 +1069,7 @@ export declare class DxfViewer extends BaseViewer {
      * console.log(changes);
      * ```
      * @internal
+     * @deprecated use DxfCompareHelper2 instead
      */
     getCompareChanges(): Record<number, DxfChange> | undefined;
     /**

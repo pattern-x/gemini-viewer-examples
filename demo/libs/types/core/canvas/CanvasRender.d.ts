@@ -7,7 +7,7 @@ import type { BimViewer, DxfViewer } from "../../core/viewers";
 /**
  * @internal
  */
-export type constructorReturnType<T> = new (...arg: any) => T;
+export declare type constructorReturnType<T> = new (...arg: any) => T;
 /**
  * @internal
  */

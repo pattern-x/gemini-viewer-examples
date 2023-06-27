@@ -50,7 +50,7 @@ export declare enum ViewerName {
     DxfViewer = "DxfViewer",
     VRViewer = "VRViewer"
 }
-type ViewerEventType = {
+declare type ViewerEventType = {
     [K in ViewerEvent]: any;
 };
 /**
@@ -121,6 +121,10 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
      * @internal
      */
     protected requestAnimationFrameHandle?: number;
+    /**
+     * @internal
+     */
+    protected frustumSize: number;
     constructor(viewerCfg: BaseViewerConfig);
     private initLogLevel;
     private initLocalization;
@@ -144,6 +148,7 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
      * Decreases job count, and hide spinner accordingly
      */
     protected decreaseJobCount(): void;
+    protected resize(width: number, height: number): void;
     destroy(): void;
     /**
      * @internal

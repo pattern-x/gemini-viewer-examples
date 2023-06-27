@@ -1,5 +1,5 @@
 import { Command } from "./Command";
-type CommandData = Command | Command[];
+declare type CommandData = Command | Command[];
 export declare class UndoRedoManager {
     private history;
     private step;

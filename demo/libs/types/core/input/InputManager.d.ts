@@ -55,7 +55,7 @@ export declare enum MouseButtons {
     /** Middle Click */
     Middle = 4
 }
-type MouseButtonType = MouseButton | MouseButtons;
+declare type MouseButtonType = MouseButton | MouseButtons;
 /**
  *
  */
@@ -83,7 +83,7 @@ export interface EventInfo {
     metaKey: boolean;
     timestamp: number;
 }
-type InputEvent = {
+declare type InputEvent = {
     pointerdown: EventInfo;
     pointermove: EventInfo;
     pointerup: EventInfo;

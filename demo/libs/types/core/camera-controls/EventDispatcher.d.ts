@@ -1,4 +1,4 @@
-export type Listener = (event?: DispatcherEvent) => void;
+export declare type Listener = (event?: DispatcherEvent) => void;
 export interface DispatcherEvent {
     type: string;
     [key: string]: any;

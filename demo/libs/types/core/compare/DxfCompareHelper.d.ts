@@ -1,6 +1,5 @@
-import { Font } from "three/examples/jsm/loaders/FontLoader.js";
+import { BaseDxfCompareHelper } from "./BaseDxfCompareHelper";
 import { DxfCompareConfig, DxfModelConfig, DxfViewerConfig } from "../../core/Configs";
-import { DxfChange } from "../../core/dxf";
 import { DxfViewer } from "../../core/viewers/DxfViewer";
 /**
  * Dxf compare helper with two viewports.
@@ -24,11 +23,7 @@ import { DxfViewer } from "../../core/viewers/DxfViewer";
  * compareHelper.enableSyncCamera(true);
  * ```
  */
-export declare class DxfCompareHelper {
-    /**
-     * The first DxfViewer of DxfCompareHelper.
-     */
-    viewer1: DxfViewer;
+export declare class DxfCompareHelper extends BaseDxfCompareHelper {
     /**
      * The second DxfViewer of DxfCompareHelper.
      */
@@ -37,14 +32,6 @@ export declare class DxfCompareHelper {
      * Enables to synchronize camera position when another camera is moved.
      */
     protected syncCamera: boolean;
-    protected font?: Font;
-    private loader;
-    private loadingManager?;
-    protected changes?: Record<string, DxfChange>;
-    private container;
-    private spinner?;
-    protected jobCount: number;
-    private loadingProgressBar?;
     constructor(viewerCfg1: DxfViewerConfig, viewerCfg2: DxfViewerConfig);
     protected initSyncCameraEvent(): void;
     /**
@@ -57,23 +44,6 @@ export declare class DxfCompareHelper {
      */
     enableSyncCamera(enable: boolean): void;
     private syncCameraControls;
-    protected initSpinner(): void;
-    /**
-     * @description {en} Sets font.
-     * This needs to be called before loading a dxf, it won't affect any loaded text.
-     * It accepts shx or typeface formats. For typeface, it only support passing in 1 font file in the array for now.
-     * @description {zh} 设置字体。
-     * 需要在加载dxf之前调用，不会影响已加载的文字。
-     * 支持shx或typeface格式。对于typeface，目前只支持传入1个字体文件。
-     * @param urls
-     * - {en} font file urls.
-     * - {zh} 字体文件链接。
-     * @example
-     * ```typescript
-     * compareHelper.setFont(["https://example.com/xxx.shx"]);
-     * ```
-     */
-    setFont(urls: string[]): Promise<void>;
     /**
      * Compares two dxf files. Note that:
      * - It only compares model spaces.
@@ -84,19 +54,6 @@ export declare class DxfCompareHelper {
      */
     compare(modelCfg1: DxfModelConfig, modelCfg2: DxfModelConfig, compareCfg?: DxfCompareConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     /**
-     * @description {en} Gets compare changes.
-     * @description {zh} 获取对比变动.
-     * @returns
-     * - {en} Compare changes.
-     * - {zh} 对比变动列表。
-     * @example
-     * ``` typescript
-     * const changes = compareHelper.getCompareChanges();
-     * console.log(changes);
-     * ```
-     */
-    getCompareChanges(): Record<number, DxfChange> | undefined;
-    /**
      * @description {en} Zooms to a compare change.
      * @description {zh} 聚焦到图纸的一处变动。
      * @param changeId
@@ -105,20 +62,8 @@ export declare class DxfCompareHelper {
      * @example
      * ``` typescript
      * const changeId = 1;
-     * compareHelper.zoomToCompareChange(changeId);
+     * compareHelper.zoomToChange(changeId);
      * ```
      */
-    zoomToCompareChange(changeId: number): void;
-    /**
-     * Sets spinner visibility
-     */
-    protected setSpinnerVisibility(visible: boolean): void;
-    /**
-     * Increases job count, and show spinner accordingly
-     */
-    protected increaseJobCount(): void;
-    /**
-     * Decreases job count, and hide spinner accordingly
-     */
-    protected decreaseJobCount(): void;
+    zoomToChange(changeId: number): void;
 }
