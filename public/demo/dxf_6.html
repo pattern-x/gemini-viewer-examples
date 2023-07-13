@@ -161,6 +161,7 @@
         let addingHotpoint = false;
         let hotpointCount = 0; // used to generate unique id
         const hotpointsPerLayout = {}; // a map, the key is layoutName
+        let draggingHotpointId = "";
 
         const addHotpointBtn = document.getElementById("AddHotpoint");
         const clearHotpointsBtn = document.getElementById("ClearHotpoints");
@@ -182,7 +183,9 @@
             });
         };
 
-        document.addEventListener("click", (event) => {
+        const n2s = (n) => n.toFixed(1);
+
+        const createOrToggleHotpoint = (event) => {
             // if clicked on "close" button, close the hotpoint panel
             // if clicked on hotpoint, open the hotpoint panel
             const target = event.target;
@@ -213,7 +216,7 @@
                                 <div class="hotpoint-dot" id="hotpoint-dot_${hotpointId}"></div>
                                 <div class="hotpoint-panel" id="hotpoint-panel_${hotpointId}">
                                     <div class="hotpoint-close">X</div>
-                                    <div class="hotpoint-body">This is a hotpoint with id 'hotpoint_${hotpointCount}'</div>
+                                    <div class="hotpoint-body">This is a hotpoint with id 'hotpoint_${hotpointCount}'</br></br>You can drag the dot to change its location.</div>
                                 </div>
                             </div>`,
                 }
@@ -225,7 +228,7 @@
                 viewer.addHotpoint(hotpoint);
                 hotpointCount++;
             }
-        });
+        };
 
         // manages hotpoints for different layouts
         viewer.addEventListener(ViewerEvent.LayoutChanged, () => {
@@ -236,6 +239,55 @@
                 hotpoints.forEach((h) => viewer.addHotpoint(h));
             }
         });
+
+        // enable to drag the hotpoint
+        const onPointerDown = (e) => {
+            if (event.isPrimary === false) {
+                return;
+            }
+            const t = e.target;
+            if (t.classList.contains(`hotpoint-dot`)) {
+                // get the hotpoint id
+                draggingHotpointId = t.id.replace("hotpoint-dot_", "");
+                viewer.controls.enabled = false; // disable controls
+                window.addEventListener("pointermove", onPointerMove);
+                window.addEventListener("pointerup", onPointerUp);
+                console.log("Going to drag hotpoint with id: ", draggingHotpointId);
+            } else if (e.button === 0) { // left button
+                createOrToggleHotpoint(e);
+            }
+        };
+        const onPointerUp = (e) => {
+            viewer.controls.enabled = true; // recover controls
+            window.removeEventListener("pointermove", onPointerMove);
+            window.removeEventListener("pointerup", onPointerUp);
+            draggingHotpointId = "";
+        };
+        const onPointerMove = (e) => {
+            if (event.isPrimary === false) {
+                return;
+            }
+            const location = viewer.getHitResult(event);
+            if (!location) {
+                return;
+            }
+            const layoutName = viewer.getActiveLayoutName();
+            const hotpoint = hotpointsPerLayout[layoutName].find((h) => h.hotpointId === draggingHotpointId);
+            // console.log(hotpoint);
+            console.log(`Moving hotpoint '${hotpoint.hotpointId}' from (${n2s(hotpoint.anchorPosition[0])}, ${n2s(hotpoint.anchorPosition[1])}) to (${n2s(location.x)}, ${n2s(location.y)})`);
+            hotpoint.anchorPosition[0] = location.x;
+            hotpoint.anchorPosition[1] = location.y;
+            // update object position in three.js
+            // DxfViewer desn't have api to update hotpoint position yet, so, we'll hack it
+            const objects = viewer.hotpointRoot?.children || [];
+            let object = objects.find((o) => o.userData.hotpoint?.hotpointId === hotpoint.hotpointId);
+            if (object) {
+                object.position.set(location.x, location.y, 0);
+                object.updateWorldMatrix(false, false);
+                viewer.enableRender();
+            }
+        };
+        window.addEventListener("pointerdown", onPointerDown);
     </script>
 </body>
 
