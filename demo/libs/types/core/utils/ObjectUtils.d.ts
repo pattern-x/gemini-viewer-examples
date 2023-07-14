@@ -146,8 +146,7 @@ export declare class ObjectUtils {
      * @param options 'replaceOriginalObject' must be used carefully, it removes original objects and cannot get back for now.
      *   It can be used in case for really large models that has a bad performace.
      */
-    private static createOutlines;
-    static addOutlines(object: THREE.Object3D, options?: {
+    static createOutlines(object: THREE.Object3D, options?: {
         visibleOnly: boolean;
         meshOnly: boolean;
         replaceOriginalObject: boolean;
@@ -209,4 +208,7 @@ export declare class ObjectUtils {
     static enableLayerChannels(obj: THREE.Object3D, channels: number[], recursive?: boolean): void;
     static disableLayerChannels(obj: THREE.Object3D, channels: number[], recursive?: boolean): void;
     static setLayerChannels(obj: THREE.Object3D, channels: number[], recursive?: boolean): void;
+    static isObjectHittable(obj: THREE.Object3D): boolean;
+    static isObjectSnapable(obj: THREE.Object3D): boolean;
+    static isObjectSelectable(obj: THREE.Object3D): boolean;
 }

@@ -1,39 +1,54 @@
-import * as THREE from "three";
-export interface ViewCubePluginConfig {
+import { Plugin, type BaseViewer, PluginConfig } from "../../core/viewers";
+export interface ViewCubePluginConfig extends PluginConfig {
     containerId: string;
     context?: WebGLRenderingContext | WebGL2RenderingContext;
+    showAxes?: boolean;
+    lineColor?: number;
 }
-export declare class ViewCubePlugin {
+export declare class ViewCubePlugin extends Plugin {
+    /**
+     * @internal
+     */
+    name: string;
+    private container?;
+    private scene?;
+    private camera?;
     private cfg;
-    /**
-     * @internal
-     */
-    container?: HTMLElement;
-    /**
-     * @internal
-     */
-    scene?: THREE.Scene;
     private renderer?;
-    /**
-     * @internal
-     */
-    camera?: THREE.OrthographicCamera;
     private directionalLight?;
     private width;
     private height;
     private requestAnimationFrameHandle?;
     private raycaster;
-    update?: () => void;
-    constructor(cfg: ViewCubePluginConfig);
+    private renderEnabled;
+    private inputManager;
+    private viewCube?;
+    private lastCoords?;
+    constructor(viewer: BaseViewer, cfg?: ViewCubePluginConfig);
     private init;
     private initDom;
     private initScene;
     private initCamera;
     private initRenderer;
     private initLights;
-    getNdcPointByPointerEvent(event: PointerEvent): THREE.Vector2 | undefined;
-    getIntersects(coords: THREE.Vector2): THREE.Intersection<THREE.Object3D<THREE.Event>>[] | undefined;
-    zoomToBbox(bbox: THREE.Box3): void;
+    private initViewCube;
+    private initEvents;
+    private onPointerDown;
+    private onPointerMove;
+    private onPointerleave;
+    private onClick;
+    private updateViewerCamera;
+    private updateActivateMeshName;
+    private getNdcPointByEvent;
+    private getIntersects;
+    private updateCameraAndMeshName;
+    /**
+     * Update viewCube according to camera direction.
+     * Camera's direction is the only input factor for this class. It always look at the origin.
+     * @param direction
+     */
+    private updateCameraDirection;
     private animate;
+    private zoomToBbox;
     destroy(): void;
 }

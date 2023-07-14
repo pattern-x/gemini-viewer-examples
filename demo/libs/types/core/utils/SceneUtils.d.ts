@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { Exploder } from "../../core/exploder";
 /**
  * Util methods about Scene
  * @internal
@@ -23,14 +22,5 @@ export declare class SceneUtils {
      * InstancedMesh is different, we need to get its child meshes in order to get the bounding box
      */
     static getInstancedMeshBoundingBox(mesh: THREE.InstancedMesh): THREE.Box3;
-    private static explodeObject;
-    static explodeObjects(scene: THREE.Scene, exploderDict: {
-        [objId: number]: Exploder;
-    }, objectIds: number[], onlyExplodeUp?: boolean): {
-        [objId: number]: Exploder;
-    };
-    static unexplodeObjects(scene: THREE.Scene, exploderDict: {
-        [objId: number]: Exploder;
-    }): void;
     static getObjectCenter(object: THREE.Object3D, center: THREE.Vector3): void;
 }

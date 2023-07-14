@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Vector3, Box, Mat4 } from "../../core/Constants";
 /**
  * @internal
  */
@@ -16,4 +17,43 @@ export declare class MathUtils {
     static getRelativeEps(num: number, epsilon?: number): number;
     static getVector2RelativeEps(vec: THREE.Vector2, epsilon?: number): number;
     static getControlPointByTwoPoints(p1: THREE.Vector2, p2: THREE.Vector2): THREE.Vector2;
+    static convertPointFromUEToGltf(point: Vector3): {
+        x: number;
+        y: number;
+        z: number;
+    };
+    static convertPointFromGltfToUE(point: Vector3): {
+        x: number;
+        y: number;
+        z: number;
+    };
+    static convertPointFromUEToRevit(point: Vector3): {
+        x: number;
+        y: number;
+        z: number;
+    };
+    static convertPointFromRevitToUE(point: Vector3): {
+        x: number;
+        y: number;
+        z: number;
+    };
+    static getBox(point1: Vector3, point2: Vector3): number[];
+    static getCenter(box: Box): {
+        x: number;
+        y: number;
+        z: number;
+    };
+    static convertBoxFromGltfToUE(box: Box): number[];
+    static convertBoxFromUEToGltf(box: Box): number[];
+    static convertBoxFromRevitToUE(box: Box): number[];
+    static convertBoxFromUEToRevit(box: Box): number[];
+    static clamp(value: number, min: number, max: number): number;
+    static getLookAtMatrix(eye: Vector3, target: Vector3, up: Vector3): number[];
+    static getLocationFromMatrix(matrix: Mat4): {
+        x: number;
+        y: number;
+        z: number;
+    };
+    static toDegrees(radians: number): number;
+    static toRadians(degrees: number): number;
 }

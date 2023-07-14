@@ -1,4 +1,5 @@
 import { Event } from "../../core/utils";
+declare type NativeEvent = UIEvent | MouseEvent | PointerEvent | WheelEvent | KeyboardEvent;
 export interface IUIEvent {
     readonly type: string;
     readonly target: any;
@@ -82,8 +83,9 @@ export interface EventInfo {
     shiftKey: boolean;
     metaKey: boolean;
     timestamp: number;
+    originalEvent?: NativeEvent;
 }
-declare type InputEvent = {
+export declare type InputEvent = {
     pointerdown: EventInfo;
     pointermove: EventInfo;
     pointerup: EventInfo;
@@ -109,8 +111,7 @@ export declare class InputManager extends Event<InputEvent> {
     private enable;
     protected mouseDownPositionX: number;
     protected mouseDownPositionY: number;
-    protected downClickTime: number;
-    protected upClickTime: number;
+    protected lastLeftPointerUpTime: number;
     private pointers;
     constructor(element: HTMLElement);
     setEnable(enable: boolean): void;
@@ -135,5 +136,13 @@ export declare class InputManager extends Event<InputEvent> {
     private removePointers;
     style: {};
     getBoundingClientRect(): DOMRect;
+    /**
+     * Checks if user clicked on last position, this is used to detect a dblclick event.
+     */
+    private isCloseToLastPosition;
+    /**
+     * Checks if a dblclick event happen.
+     */
+    private isDoubleClick;
 }
 export {};

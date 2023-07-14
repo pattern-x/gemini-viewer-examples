@@ -12,6 +12,7 @@ export declare abstract class BaseFontFile {
     fileHeader: string;
     fileVersion: string;
     url: string;
+    fileName: string;
     codes: Record<number, Uint8Array>;
     private graphicData;
     constructor(url: string);
@@ -27,6 +28,7 @@ export declare abstract class BaseFontFile {
     private getFontFile;
     setFontFile(data: FontDataTableRecord): void;
     releaseFontData(): void;
+    private getFileNameByPath;
     /**
      * Catches dxf data into indexedDb
      */

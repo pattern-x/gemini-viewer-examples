@@ -30,16 +30,4 @@ export declare class Event<Events extends Record<string, any> = {}> {
      * @internal
      */
     removeEventListener<EventName extends keyof Events>(name: EventName, handler: Handler<Events[EventName]>): void;
-    /**
-     *
-     * @param name
-     * @deprecated Replaced by removeEventListener(name);
-     * @internal
-     */
-    clearEventListeners<EventName extends keyof Events>(name: EventName): void;
-    /**
-     * @deprecated Replaced by removeEventListener();
-     * @internal
-     */
-    clearAllEventListener(): void;
 }

@@ -134,6 +134,25 @@ export interface Vector3 {
     y: number;
     z: number;
 }
+export declare type Box = [number, number, number, number, number, number];
+export declare type Mat4 = [
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number,
+    number
+] | Float32Array;
 export interface Box2 {
     min: Vector2;
     max: Vector2;

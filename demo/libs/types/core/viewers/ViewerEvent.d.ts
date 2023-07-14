@@ -19,6 +19,10 @@ export declare enum ViewerEvent {
      */
     ModelLoaded = "ModelLoaded",
     /**
+     * Triggered before rendered.
+     */
+    BeforeRender = "BeforeRender",
+    /**
      * Triggered when rendered
      * @internal
      */

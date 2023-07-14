@@ -1,21 +1,38 @@
 import * as THREE from "three";
-import type { BaseViewer } from "../../core/viewers";
 export interface ViewCubeConfig {
-    containerId: string;
-    context?: WebGLRenderingContext | WebGL2RenderingContext;
     showAxes?: boolean;
     lineColor?: number;
 }
-export declare class ViewCube {
-    /**
-     * @internal
-     */
-    name: string;
-    private cfg;
-    private plugin;
-    private showAxes;
-    private group?;
-    private viewCubeFaces;
+export declare enum ViewCubeName {
+    TopFace = "TopFace",
+    FrontFace = "FrontFace",
+    RightFace = "RightFace",
+    BackFace = "BackFace",
+    LeftFace = "LeftFace",
+    BottomFace = "BottomFace",
+    TopFrontEdge = "TopFrontEdge",
+    TopRightEdge = "TopRightEdge",
+    TopBackEdge = "TopBackEdge",
+    TopLeftEdge = "TopLeftEdge",
+    FrontRightEdge = "FrontRightEdge",
+    BackRightEdge = "BackRightEdge",
+    BackLeftEdge = "BackLeftEdge",
+    FrontLeftEdge = "FrontLeftEdge",
+    BottomFrontEdge = "BottomFrontEdge",
+    BottomRightEdge = "BottomRightEdge",
+    BottomBackEdge = "BottomBackEdge",
+    BottomLeftEdge = "BottomLeftEdge",
+    TopFrontRightCorner = "TopFrontRightCorner",
+    TopBackRightCorner = "TopBackRightCorner",
+    TopBackLeftCorner = "TopBackLeftCorner",
+    TopFrontLeftCorner = "TopFrontLeftCorner",
+    BottomFrontRightCorner = "BottomFrontRightCorner",
+    BottomBackRightCorner = "BottomBackRightCorner",
+    BottomBackLeftCorner = "BottomBackLeftCorner",
+    BottomFrontLeftCorner = "BottomFrontLeftCorner"
+}
+export declare class ViewCube extends THREE.Object3D {
+    readonly name = "ViewCube";
     private readonly AXIS_LENGTH;
     private readonly AXIS_COLOR_X;
     private readonly AXIS_COLOR_Y;
@@ -30,12 +47,12 @@ export declare class ViewCube {
     private readonly CORNER_OPACITY;
     private faces;
     private innerViewCubeMesh?;
-    private hostViewer?;
+    private showAxes;
     private lineColor;
-    private activateMeshName?;
-    private lastCoords?;
-    constructor(config: ViewCubeConfig);
-    init(): void;
+    dirty: boolean;
+    activateMeshName?: string;
+    constructor(cfg?: ViewCubeConfig);
+    private init;
     private createAxes;
     private createViewCubeFaces;
     private createViewCubeFace;
@@ -43,21 +60,9 @@ export declare class ViewCube {
     private createEdge;
     private createViewCubeCorners;
     private createCorner;
-    private onPointerDown;
-    private onPointerMove;
-    private updateActivateMaterial;
-    private onPointerleave;
-    private initEvent;
-    private update;
+    getBbox(): THREE.Box3;
+    getDirectionByViewCubeName(viewCubeName: ViewCubeName): THREE.Vector3 | undefined;
+    update(): void;
     private updateViewCube;
     private updateMeshTick;
-    private updateHostViewerCamera;
-    /**
-     * Update viewCube according to camera direction.
-     * Camera's direction is the only input factor for this class. It always look at the origin.
-     * @param direction
-     */
-    updateCameraDirection(direction: THREE.Vector3, up: THREE.Vector3): void;
-    setHostViewer(hostViewer: BaseViewer): void;
-    destroy(): void;
 }

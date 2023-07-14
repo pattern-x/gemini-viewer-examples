@@ -17,7 +17,7 @@ export declare class ShxFont extends Font {
     /**
      * Gets TextShape by a char
      */
-    private getGraphicDataByChar;
+    getGraphicDataByChar(char: string, size: number): TextShape | undefined;
     /**
      * Gets TextShape by a char code
      */

@@ -6,6 +6,7 @@ export declare class TextShape extends THREE.Shape {
     width: number;
     lastPoint: THREE.Vector2;
     polylines: Array<Array<THREE.Vector2>>;
+    private bounds;
     constructor(lastPoint: THREE.Vector2, polylines: Array<Array<THREE.Vector2>>);
     /**
      * Gets an offsetted new TextShape

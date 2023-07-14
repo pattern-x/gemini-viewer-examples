@@ -1,5 +1,6 @@
 export * from "./CancelablePromise";
 export * from "./CommonUtils";
+export * from "./ColorUtils";
 export * from "./CoordinateConversionUtils";
 export * from "./CSS2DObjectUtils";
 export * from "./DecimalPrecisionUtils";
@@ -19,7 +20,6 @@ export * from "./PolygonUtils";
 export * from "./SceneUtils";
 export * from "./SectionUtils";
 export * from "./SimplifyUtils";
-export * from "./SkyboxUtils";
 export * from "./SVGObjectUtils";
 export * from "./TextureUtils";
 export * from "./UnitConversionUtils";

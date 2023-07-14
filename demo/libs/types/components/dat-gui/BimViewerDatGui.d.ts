@@ -1,5 +1,4 @@
 import * as dat from "dat.gui";
-import { Exploder } from "../../core/exploder/Exploder";
 import type { BimViewer } from "../../core/viewers";
 /**
  * @internal
@@ -7,9 +6,6 @@ import type { BimViewer } from "../../core/viewers";
 export declare class BimViewerDatGui {
     viewer: BimViewer | undefined;
     gui?: dat.GUI;
-    exploderDict?: {
-        [objId: number]: Exploder;
-    };
     /**
      *
      * @param viewer pass in the Viewer3D, so we can reference its data members
@@ -66,7 +62,6 @@ export declare class BimViewerDatGui {
      * Init dat.GUI
      */
     init(): void;
-    private setExplodeMode;
     open(): void;
     close(): void;
     beforeDestroy(): void;

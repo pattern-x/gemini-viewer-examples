@@ -1,10 +1,11 @@
 export { SectionType, Vector2, Vector3, Box2, DrawableData, ScreenshotMode } from "./core";
 export { BaseDxfCompareHelper, DxfCompareHelper } from "./core/compare";
 export { BaseViewerConfig, BimViewerConfig, CameraConfig, DxfCompareConfig, DxfModelConfig, DxfViewerConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint, } from "./core/Configs";
-export { BimViewer, DxfViewer, VRViewer, ScreenshotResult, SimplifiedBimViewer, ViewerEvent, DxfLayers, MarkupData, } from "./core/viewers";
+export { BimViewer, DxfViewer, VRViewer, ScreenshotResult, SimplifiedBimViewer, ViewerEvent, DxfLayers, MarkupData, Plugin, PluginConfig, } from "./core/viewers";
 export { DxfDetailChanges, DxfChangeType, DxfChange, DxfLayer } from "./core/dxf";
 export { ILayer } from "./core/dxf-parser";
 export { MarkupType } from "./core/markup";
-export { MeasurementType, MeasurementData } from "./core/measure";
+export { MeasurementType, MeasurementData } from "./plugins";
 export { ToolbarMenuId } from "./components/toolbar";
 export { LocalDxfUploader, LocalModelUploader, LocalImageUploader } from "./core/local-model-uploader";
+export { BottomBarPlugin, NavCubePlugin, StatsPlugin } from "./plugins";

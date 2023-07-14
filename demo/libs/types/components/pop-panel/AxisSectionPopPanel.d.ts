@@ -1,6 +1,6 @@
 import { PopPanel } from "./PopPanel";
-import { AxisPlaneSection } from "../../core/section/AxisPlaneSection";
 import type { BaseViewer } from "../../core/viewers/BaseViewer";
+import { AxisPlaneSection } from "../../plugins/sections/AxisPlaneSection";
 export declare class AxisSectionPopPanel extends PopPanel {
     protected axis: string;
     protected activeItem?: string;

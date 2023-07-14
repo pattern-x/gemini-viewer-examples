@@ -1,0 +1,30 @@
+import * as THREE from "three";
+import { MeasurementType } from "./BaseMeasurement";
+import type { MeasurementData } from "./BaseMeasurement";
+import { Drawable } from "../../core/canvas/Drawable";
+export declare abstract class BaseMeasureDrawable extends Drawable {
+    type: MeasurementType;
+    static readonly MAJOR_COLOR: number[];
+    static readonly MINOR_COLOR: number[];
+    static readonly AREA_FILL_COLOR: number[];
+    static readonly LINE_WIDTH = 2;
+    static readonly POINT_RADIUS = 5;
+    static readonly LABEL_FONT_SIZE = 14;
+    label?: string;
+    labelPositon?: THREE.Vector2;
+    labelBounds: THREE.Box2;
+    drawing: boolean;
+    constructor(id: string, points: THREE.Vector3[]);
+    setDrawingState(isDrawing: boolean): void;
+    drawSelect(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
+    drawPoints(ctx: CanvasRenderingContext2D, camera: THREE.Camera, points: THREE.Vector3[]): void;
+    drawText(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
+    drawRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, radius: number): void;
+    getVertexes(): THREE.Vector3[];
+    update(points: THREE.Vector3[]): this;
+    getBounds(): THREE.Box3;
+    getData(): MeasurementData;
+    setData(data: MeasurementData): void;
+    isPointInPath(p: THREE.Vector3, raycaster?: THREE.Raycaster): boolean;
+    getUnitString(): string;
+}

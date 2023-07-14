@@ -30,6 +30,7 @@ export declare class BaseTable {
      * @param cursorHandler callback to handle records one by one
      */
     query(cursorHandler?: any, errorCallback?: any): void;
+    queryByIndex(indexName: any, indexValue: any, successCallback?: any, errorCallback?: any): void;
     queryAll(successCallback?: any, errorCallback?: any): void;
     clearAll(successCallback?: any, errorCallback?: any): void;
 }

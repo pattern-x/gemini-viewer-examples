@@ -178,21 +178,19 @@ export interface BimViewerConfig extends BaseViewerConfig {
     /**
      * Shows the NavCube.
      * @internal
+     * @deprecated use NavCubePlugin instead
      */
     enableNavCube?: boolean;
     /**
-     * Shows the ViewCube.
-     * @internal
-     */
-    enableViewCube?: boolean;
-    /**
      * Shows the AxisGizmo.
      * @internal
+     * @deprecated use AxisGizmoPlugin instead
      */
     enableAxisGizmo?: boolean;
     /**
      * Shows the stats output.
      * @internal
+     * @deprecated use StatsPlugin instead
      */
     enableStats?: boolean;
     /**
@@ -209,6 +207,7 @@ export interface BimViewerConfig extends BaseViewerConfig {
     /**
      * shows the bottom-bar.
      * @internal
+     * @deprecated use BottomBarPlugin instead
      */
     enableBottomBar?: boolean;
     /**
@@ -238,6 +237,7 @@ export interface BimViewerConfig extends BaseViewerConfig {
 export interface DxfViewerConfig extends BaseViewerConfig {
     /**
      * @internal
+     * @deprecated use AxisGizmoPlugin instead
      */
     enableAxisGizmo?: boolean;
     /**
@@ -248,6 +248,7 @@ export interface DxfViewerConfig extends BaseViewerConfig {
     enableLayoutBar?: boolean;
     /**
      * @internal
+     * @deprecated use NavCubePlugin instead
      */
     enableStats?: boolean;
     /**
@@ -262,6 +263,7 @@ export interface DxfViewerConfig extends BaseViewerConfig {
     enableProgressBar?: boolean;
     /**
      * @internal
+     * @deprecated use BottomBarPlugin instead
      */
     enableBottomBar?: boolean;
     /**
@@ -299,19 +301,11 @@ export interface DxfCompareConfig {
 export interface VRViewerConfig extends BaseViewerConfig {
     autoRotateSpeed?: number;
     /**
-     * @internal
-     */
-    enableAxisGizmo?: boolean;
-    /**
      * Enables toolbar.
      * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
      * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
      */
     enableToolbar?: boolean;
-    /**
-     * @internal
-     */
-    enableBottomBar?: boolean;
     /**
      * @internal
      */

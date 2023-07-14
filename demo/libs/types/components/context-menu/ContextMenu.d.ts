@@ -1,7 +1,7 @@
 import { Toolbar } from "../../components/toolbar";
 import { Context as ContextFromConfigs, ContextMenuConfig as ContextMenuConfigFromConfigs, ContextMenuItem } from "../../core/Configs";
-import type { AxisPlaneSection, ObjectsBoxSection, PickPlaneSection } from "../../core/section";
 import type { BimViewer } from "../../core/viewers";
+import type { AxisPlaneSection, ObjectsBoxSection, PickPlaneSection } from "../../plugins/sections";
 export interface Context extends ContextFromConfigs {
     section?: ObjectsBoxSection | PickPlaneSection | AxisPlaneSection;
     toolbar?: Toolbar<BimViewer>;

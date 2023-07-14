@@ -1,18 +1,17 @@
-/// <reference types="stats.js" />
 import * as THREE from "three";
-import Stats from "three/examples/jsm/libs/stats.module.js";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { Toolbar } from "../../components/toolbar";
-import { DxfCompareConfig, DxfModelConfig, DxfViewerConfig, Hotpoint, ModelConfig } from "../../core/Configs";
+import { DxfCompareConfig, DxfModelConfig, DxfViewerConfig, ModelConfig } from "../../core/Configs";
 import { Box2, ScreenshotMode, Vector2 } from "../../core/Constants";
 import { Drawable, DrawableData } from "../../core/canvas";
 import { DxfChange, DxfData, DxfLayer } from "../../core/dxf";
 import { ILayoutObject } from "../../core/dxf-parser";
 import { EventInfo } from "../../core/input/InputManager";
 import { MarkupManager, MarkupType } from "../../core/markup";
-import { MeasurementData, MeasurementManager, MeasurementType } from "../../core/measure";
 import { BaseViewer, ScreenshotResult, ViewerName } from "../../core/viewers/BaseViewer";
+import { MeasurementData, MeasurementType } from "../../plugins/measure";
+import type { MeasurementPlugin } from "../../plugins/measure";
 /**
  * Markup for DxfViewer contains additional information, e.g. layoutName.
  *
@@ -143,7 +142,6 @@ export declare class DxfViewer extends BaseViewer {
     protected font?: Font;
     protected enableSelection?: boolean;
     protected selectedObject?: THREE.Object3D | Drawable;
-    protected stats?: Stats;
     /**
      * The record "key" is modelId or src.
      * @internal
@@ -161,7 +159,6 @@ export declare class DxfViewer extends BaseViewer {
     private raycaster?;
     private cameraUpdateInterval?;
     protected selected: boolean;
-    private measurementManager?;
     private markupManager?;
     private zoomToRectHelper?;
     private boxSelectHelper?;
@@ -172,12 +169,10 @@ export declare class DxfViewer extends BaseViewer {
     private timeoutSymbol?;
     private loadingProgressBar?;
     private contextMenu?;
-    private axes?;
     /**
      * @internal
      */
     toolbar?: Toolbar<DxfViewer>;
-    private bottomBar?;
     private enableHideVisuallySmallObjects;
     private sortedHidableObjects;
     private lastCameraZoom;
@@ -191,7 +186,6 @@ export declare class DxfViewer extends BaseViewer {
      */
     private changes;
     private fpsUtils;
-    protected hotpointRoot?: THREE.Group;
     constructor(viewerCfg: DxfViewerConfig);
     /**
      * Initialize everything it needs
@@ -219,20 +213,7 @@ export declare class DxfViewer extends BaseViewer {
      */
     private initEvents;
     protected initOthers(): void;
-    private initAxes;
-    private initStats;
-    /**
-     * Shows the stats panel, which indicates current FPS, MS, MB, etc.
-     * @internal
-     */
-    showStats(): void;
-    /**
-     * Shows the stats panel, which indicates current FPS, MS, MB, etc.
-     * @internal
-     */
-    hideStats(): void;
     private initToolbar;
-    private initBottomBar;
     private initLoadingProgressBar;
     /**
      * Shows the layout bar
@@ -339,7 +320,7 @@ export declare class DxfViewer extends BaseViewer {
      * @param {DxfCompareConfig} compareCfg The compare config
      * @param onProgress loading progress
      * @internal
-     * @deprecated use DxfCompareHelper2 instead
+     * @deprecated use DxfCompareHelper instead
      */
     compare(modelCfg1: DxfModelConfig, modelCfg2: DxfModelConfig, compareCfg?: DxfCompareConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     /**
@@ -535,9 +516,10 @@ export declare class DxfViewer extends BaseViewer {
      */
     getScreenshot(mode?: ScreenshotMode): Promise<undefined | ScreenshotResult>;
     /**
+     * @description Compatible with older versions, use MeasurePlugin instead
      * @internal
      */
-    getMeasurementManager(): MeasurementManager | undefined;
+    get measurePlugin(): MeasurementPlugin | undefined;
     /**
      * @description {en} Activates one of "Distance", "Area" or "Angle" measurement
      * @description {zh} 激活"距离", "面积" 或者 "角度"测量
@@ -547,6 +529,7 @@ export declare class DxfViewer extends BaseViewer {
      * ``` typescript
      * viewer.activateMeasurement(MeasurementType.Distance);
      * ```
+     * @deprecated use MeasurePlugin instead
      */
     activateMeasurement(type: MeasurementType): void;
     /**
@@ -556,6 +539,7 @@ export declare class DxfViewer extends BaseViewer {
      * ``` typescript
      * viewer.deactivateMeasurement();
      * ```
+     * @deprecated use MeasurePlugin instead
      */
     deactivateMeasurement(): void;
     /**
@@ -568,6 +552,7 @@ export declare class DxfViewer extends BaseViewer {
      * const measurementType = viewer.getActiveMeasurementType();
      * console.log(measurementType);
      * ```
+     * @deprecated use MeasurePlugin instead
      */
     getActiveMeasurementType(): MeasurementType | undefined;
     /**
@@ -581,11 +566,13 @@ export declare class DxfViewer extends BaseViewer {
      * const measurementData = viewer.getMeasurements();
      * console.log(measurementData);
      * ```
+     * @deprecated use MeasurePlugin instead
      */
     getMeasurements(): MeasurementData[];
     /**
      * @description {en} Cancels current measurement. This won't deactivate measurement, rather, you can start a new measurement.
      * @description {zh} 取消当前的测量绘制。这并不会退出测量，用户可以开始一个新的测量。
+     * @deprecated use MeasurePlugin instead
      */
     cancelMeasurement(): void;
     /**
@@ -603,16 +590,19 @@ export declare class DxfViewer extends BaseViewer {
      * }];
      * viewer.setMeasurements(measurementData);
      * ```
+     * @deprecated use MeasurePlugin instead
      */
     setMeasurements(measurementData: MeasurementData[]): void;
     /**
      * Selects a measurement by id
      * @internal
+     * @deprecated use MeasurePlugin instead
      */
     selectMeasurement(id: string): void;
     /**
      * Unselects a measurement.
      * @internal
+     * @deprecated use MeasurePlugin instead
      */
     unselectMeasurement(): void;
     /**
@@ -626,12 +616,14 @@ export declare class DxfViewer extends BaseViewer {
      * const id = "c6ea70a3-ddb0-4dd0-87c8-bd2491936428";
      * viewer.removeMeasurement(id);
      * ```
+     * @deprecated use MeasurePlugin instead
      */
     removeMeasurement(id: string): void;
     /**
      * Sets a measurement's visibility.
      * Note that, the markup should belong to active layout. You shouldn't update a markup of an inactive layout.
      * @internal
+     * @deprecated use MeasurePlugin instead
      */
     setMeasurementVisibility(id: string, visible: boolean): boolean;
     /**
@@ -641,6 +633,7 @@ export declare class DxfViewer extends BaseViewer {
      * ``` typescript
      * viewer.clearMeasurements();
      * ```
+     * @deprecated use MeasurePlugin instead
      */
     clearMeasurements(): void;
     /** markup start **/
@@ -687,20 +680,20 @@ export declare class DxfViewer extends BaseViewer {
      * Set markup stroke color
      * @internal
      */
-    setMarkupLineColor(color: string): void;
+    setMarkupLineColor(r: number, g: number, b: number, a: number): void;
     /**
      * @internal
      */
-    getMarkupLineColor(): string | undefined;
+    getMarkupLineColor(): number[] | undefined;
     /**
      * Set markup fill color
      * @internal
      */
-    setMarkupFillColor(color: string): void;
+    setMarkupFillColor(r: number, g: number, b: number, a: number): void;
     /**
      * @internal
      */
-    getMarkupFillColor(): string | undefined;
+    getMarkupFillColor(): number[] | undefined;
     /**
      * Set markup stroke line width
      * @internal
@@ -806,54 +799,6 @@ export declare class DxfViewer extends BaseViewer {
      */
     clearMarkups(): void;
     /** markup end **/
-    /**
-     * @description {en} Adds a hotpoint.
-     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
-     * @description {zh} 添加热点。
-     * 调用者应该设置一个在当前DxfViewer会话中唯一的热点id。
-     * @param hotpoint
-     * - {en} hotpoint data.
-     * - {zh} 热点数据。
-     * @example
-     * ``` typescript
-     * const hotpoint = {
-     *    hotpointId: "c6ea70a3-ddb0-4dd0-87c8-bd2491936428",
-     *    anchorPosition: [0, 0, 0],
-     *    html: "<div>hotpoint</div>",
-     *    visible: true,
-     * };
-     * viewer.addHotpoint(hotpoint);
-     * ```
-     */
-    addHotpoint(hotpoint: Hotpoint): void;
-    /**
-     * @description {en} Removes a hotpoint by given hotpointId.
-     * @description {zh} 根据热点id删除热点。
-     * @param {string} hotpointId
-     * - {en} hotpoint id.
-     * - {zh} 热点id。
-     * @example
-     * ``` typescript
-     * const hotpointId = "c6ea70a3-ddb0-4dd0-87c8-bd2491936428";
-     * viewer.removeHotpoint(hotpointId);
-     * ```
-     */
-    removeHotpoint(hotpointId: string): void;
-    /**
-     * @description {en} Clears all hotpoints.
-     * @description {zh} 清除所有热点。
-     * @example
-     * ``` typescript
-     * viewer.clearHotpoints();
-     * ```
-     */
-    clearHotpoints(): void;
-    /**
-     * Checks if hotpoint with specific id already exist
-     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
-     * @internal
-     */
-    hasHotpoint(hotpointId: string): boolean;
     /**
      * Gets mouse hit result in world coordinate
      * @example
@@ -1074,16 +1019,16 @@ export declare class DxfViewer extends BaseViewer {
     getCompareChanges(): Record<number, DxfChange> | undefined;
     /**
      * @description {en} Sets background color.
-     * @description {zh} 设置背景颜色.
+     * @description {zh} 设置背景颜色。
      * @param r
-     * - {en} value between 0-1.
-     * - {zh} 0-1之间的值。
+     * - {en} Red channel value between 0 and 1.
+     * - {zh} 红色通道值，介于 0 和 1 之间。
      * @param g
-     * - {en} value between 0-1.
-     * - {zh} 0-1之间的值。
+     * - {en} Green channel value between 0 and 1.
+     * - {zh} 绿色通道值，介于 0 和 1 之间。
      * @param b
-     * - {en} value between 0-1.
-     * -{zh} 0-1之间的值。
+     * - {en} Blue channel value between 0 and 1.
+     * -{zh} 蓝色通道值，介于 0 和 1 之间。
      * @example
      * ``` typescript
      * // {en} Sets background to gray

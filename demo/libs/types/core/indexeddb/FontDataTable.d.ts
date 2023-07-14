@@ -8,6 +8,7 @@ export interface FontDataTableRecord {
     orientation: Orientation;
     baseUp: number;
     baseDown: number;
+    fileName: string;
     fileHeader: string;
     fileVersion: string;
 }

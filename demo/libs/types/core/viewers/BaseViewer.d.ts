@@ -7,10 +7,11 @@ import type { CanvasRender } from "../../core/canvas";
 import type { CameraControlsEx, VRControls } from "../../core/controls";
 import { EventInfo, InputManager } from "../../core/input/InputManager";
 import type { MarkupManager } from "../../core/markup";
-import type { MeasurementManager } from "../../core/measure";
-import type { BaseSection } from "../../core/section";
 import { UndoRedoManager } from "../../core/undo-redo/UndoRedoManager";
 import { Event } from "../../core/utils";
+import { Plugin } from "../../core/viewers/Plugin";
+import type { MeasurementPlugin } from "../../plugins";
+import type { BaseSection } from "../../plugins/sections";
 /**
  * Screenshot result, which contains a result image and,
  * for DxfViewer, it also contains the view extent when the screenshot is taken,
@@ -56,7 +57,7 @@ declare type ViewerEventType = {
 /**
  * @internal
  */
-export declare abstract class BaseViewer<BaseViewerEvents extends Record<string, any> = ViewerEventType> extends Event<BaseViewerEvents> {
+export declare abstract class BaseViewer extends Event<ViewerEventType> {
     /**
      * @internal
      */
@@ -68,7 +69,12 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
     /**
      * @internal
      */
+    parentContainer?: HTMLElement;
+    /**
+     * @internal
+     */
     viewerContainer?: HTMLElement;
+    container?: HTMLElement;
     protected inputManager?: InputManager;
     /**
      * @internal
@@ -125,15 +131,21 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
      * @internal
      */
     protected frustumSize: number;
+    protected plugins: Plugin[];
     constructor(viewerCfg: BaseViewerConfig);
     private initLogLevel;
     private initLocalization;
+    private initContainer;
     /**
      * Creates a viewerContainer under the container that user passed in.
      * There are some benifits to create a new one. e.g., its style won't affect
      * the container div user passed in.
      */
     private initViewerContainer;
+    /**
+     *
+     * @description Create a div for ui widget, if widget need position, just reletive container, maybe remove later.
+     */
     private initWidgetContainer;
     protected initSpinner(): void;
     /**
@@ -152,6 +164,7 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
     destroy(): void;
     /**
      * @internal
+     * @description Global event input manager.eg:mousedown, mouseup, keydown.
      */
     getInputManager(): InputManager | undefined;
     /**
@@ -188,9 +201,10 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
      */
     is3d(): boolean;
     /**
+     * @description Compatible with older versions, use MeasurePlugin instead
      * @internal
      */
-    getMeasurementManager(): MeasurementManager | undefined;
+    get measurePlugin(): MeasurementPlugin | undefined;
     /**
      * @internal
      */
@@ -204,14 +218,19 @@ export declare abstract class BaseViewer<BaseViewerEvents extends Record<string,
     /**
      * @internal
      */
-    showStats(): void;
-    /**
-     * @internal
-     */
-    hideStats(): void;
-    /**
-     * @internal
-     */
     getPixelSizeInWorldCoord(): number;
+    /**
+     * Installs a Plugin.
+     */
+    addPlugin(plugin: Plugin): void;
+    /**
+     * Uninstalls a Plugin, clearing content from it first.
+     */
+    removePlugin(plugin: Plugin): void;
+    /**
+     * Clears all plugins.
+     * A plugin is not created by viewer, thus, won't be destroyed by viewer.
+     */
+    clearPlugins(): void;
 }
 export {};

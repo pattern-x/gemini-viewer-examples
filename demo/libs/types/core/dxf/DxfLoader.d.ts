@@ -377,6 +377,7 @@ export declare class DxfLoader extends THREE.Loader {
     private getDefaultDimensionStyle;
     private getTextEncoding;
     private getTextMesh;
+    private createTextMeshByText;
     private transformTextMesh;
     private drawText;
     private drawAttDef;

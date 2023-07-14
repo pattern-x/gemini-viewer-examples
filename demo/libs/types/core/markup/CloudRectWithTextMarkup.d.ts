@@ -14,12 +14,10 @@ export declare class CloudRectWithTextMarkup extends TextMarkup {
     private controlPoints?;
     private vertexes?;
     private textBounds;
-    private showLeaderLine;
     text: string;
     fontSize: number;
     static LEADER_LINE_WIDTH: number;
     constructor(id: string, points: THREE.Vector3[], text?: string);
-    enableLeaderLine(enable: boolean): void;
     draw(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     private drawCloudRect;
     private drawLeaderLine;
@@ -38,7 +36,6 @@ export declare class CloudRectWithTextMarkup extends TextMarkup {
     getClassType(): string;
     addInput(manager: MarkupManager, x: number, y: number): void;
     updateInputPosition(p1: THREE.Vector2, p2: THREE.Vector2): void;
-    exitEditing(): void;
     handleClick: () => void;
     handleInput: () => void;
     handleCompositionEnd: () => void;

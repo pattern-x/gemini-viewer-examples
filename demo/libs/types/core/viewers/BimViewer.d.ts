@@ -3,12 +3,13 @@ import * as THREE from "three";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { Settings as SettingsType } from "../../components/settings";
 import { Toolbar } from "../../components/toolbar";
-import { BimViewerConfig, CameraConfig, Hotpoint, ModelConfig } from "../../core/Configs";
+import { BimViewerConfig, CameraConfig, ModelConfig } from "../../core/Configs";
 import { SectionType } from "../../core/Constants";
 import { Drawable } from "../../core/canvas";
 import { EventInfo } from "../../core/input/InputManager";
-import { MeasurementData, MeasurementManager, MeasurementType } from "../../core/measure";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
+import { MeasurementData, MeasurementPlugin, MeasurementType } from "../../plugins/measure";
+import { SectionPlugin } from "../../plugins/sections";
 export declare class BimViewer extends BaseViewer {
     /**
      * @internal
@@ -47,15 +48,11 @@ export declare class BimViewer extends BaseViewer {
     /**
      * @internal
      */
-    skyOfGradientRamp?: THREE.Mesh;
-    private stats?;
-    /**
-     * @internal
-     */
     loadedModels: {
         [src: string]: {
             id: number;
             bbox?: THREE.Box3;
+            edges?: THREE.LineSegments[];
         };
     };
     /**
@@ -89,15 +86,12 @@ export declare class BimViewer extends BaseViewer {
     private bloomPass?;
     private unrealBloomPass?;
     private raycaster?;
-    private cameraUpdateInterval?;
     private savedMaterialsForOpacity?;
     private section?;
     /**
      * @internal
      */
     sectionType?: string;
-    private sectionManager?;
-    private measurementManager?;
     private zoomToRectHelper?;
     private datGui?;
     private shadowCameraHelper?;
@@ -108,28 +102,24 @@ export declare class BimViewer extends BaseViewer {
     private clock;
     private renderEnabled;
     private timeoutSymbol?;
+    private enableModelLevelFrustumCulling;
     private isFrustumInsectChecking;
     private lastFrameExecuteTime;
     private maxFps;
     private settings;
     private contextMenu?;
-    private navCube?;
-    private viewCube?;
     private axes?;
-    private axesInScene?;
     private twoDModelCount;
     private vertexNormalsHelpers?;
     /**
      * @internal
      */
     toolbar?: Toolbar<BimViewer>;
-    private bottomBar?;
     /**
      * @internal
      */
     private bbox;
     private anchor?;
-    private hotpointRoot?;
     constructor(viewerCfg: BimViewerConfig, cameraCfg?: CameraConfig);
     /**
      * Initialize everything it needs
@@ -153,13 +143,8 @@ export declare class BimViewer extends BaseViewer {
     private initEvents;
     private initDatGui;
     private initOthers;
-    private initNavCube;
-    private initViewCube;
-    private initAxes;
-    private initStats;
     private initContextMenu;
     private initToolbar;
-    private initBottomBar;
     /**
      * If there is any 2d model loaded
      * @internal
@@ -174,9 +159,11 @@ export declare class BimViewer extends BaseViewer {
     private update3dTiles;
     /**
      * This is a method called in animate() in order to optimize rendering speed.
-     * The idea is to hide any model out of view frustrum.
+     * The idea is to hide any model out of view frustum.
+     * This should have a better performance than THREE's frustum culling, because we did it in
+     * model level to avoid iterating all its objects.
      */
-    private frustrumCullingByModelBBox;
+    private frustumCullingByModelBBox;
     /**
      * In order to have a better performance, it should only render when necessary.
      * Usually, we should enable render for these cases:
@@ -262,6 +249,10 @@ export declare class BimViewer extends BaseViewer {
     /**
      * Handles mouse click event
      */
+    private getClickedObject;
+    /**
+     * Handles mouse click event
+     */
     private handleMouseClick;
     /**
      * Select or unselect an object.
@@ -298,6 +289,10 @@ export declare class BimViewer extends BaseViewer {
      */
     getBBox(): THREE.Box3 | undefined;
     /**
+     * Enables/disables model edges.
+     */
+    enableModelEdges(enable: boolean): void;
+    /**
      * Make camera fly to objects
      */
     protected flyToObjects(objects: THREE.Object3D[]): void;
@@ -311,7 +306,7 @@ export declare class BimViewer extends BaseViewer {
      */
     protected flyToSelectedObject(): void;
     /**
-     * Flies to a random object (by alt + r).
+     * Flies to a random object (by "R" key).
      * It is useful when either the data is wrong or there is bug in program,
      * then we cannot see anything in the scene!
      */
@@ -347,10 +342,6 @@ export declare class BimViewer extends BaseViewer {
      */
     showDirectionalLightHelper(visible: boolean): void;
     /**
-     * Regenerates skybox according to models' location and size
-     */
-    private regenSkyOfGradientRamp;
-    /**
      * Regenerates ground grid according to models' location and size
      */
     private regenGroundGrid;
@@ -363,26 +354,6 @@ export declare class BimViewer extends BaseViewer {
     private onAnchorPointerUp;
     private disposeRotateToCursor;
     /******* Anchor rotation related interface end *********/
-    /**
-     * Adds a hotpoint.
-     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
-     */
-    addHotpoint(hotpoint: Hotpoint): void;
-    /**
-     * Removes a hotpoint by given hotpointId.
-     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
-     */
-    removeHotpoint(hotpointId: string): void;
-    /**
-     * Clears all hotpoints.
-     */
-    clearHotpoints(): void;
-    /**
-     * Checks if hotpoint with specific id already exist
-     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
-     * @internal
-     */
-    hasHotpoint(hotpointId: string): boolean;
     /**
      * Enables or disable Composer
      * @internal
@@ -429,26 +400,38 @@ export declare class BimViewer extends BaseViewer {
      */
     enableUnrealBloomPass(enable: boolean): void;
     /**
+     * @description Compatible with older versions, use SectionPlugin instead
+     * @internal
+     * @deprecated use SectionPlugin instead
+     */
+    get sectionPlugin(): SectionPlugin | undefined;
+    /**
      * Enable section.
      * Currently, it only implemented local(object) box section.
+     * @deprecated use SectionPlugin instead
      */
     activateSection(type?: SectionType, clippingObjectIds?: number[]): void;
     /**
      * Deactivates section
+     * @deprecated use SectionPlugin instead
      */
     deactivateSection(): void;
     /**
      * @internal
+     * @deprecated use SectionPlugin instead
      */
     setSectionClippingObjectIds(clippingObjectIds?: number[]): void;
     /**
      * @internal
+     * @deprecated use SectionPlugin instead
      */
-    getActiveSection(): import("../../core/section").BaseSection | undefined;
+    getActiveSection(): import("../../plugins/sections").BaseSection | undefined;
     /**
+     * @description Compatible with older versions, use MeasurePlugin instead
      * @internal
+     * @description use MeasurementPlugin instead
      */
-    getMeasurementManager(): MeasurementManager | undefined;
+    get measurePlugin(): MeasurementPlugin | undefined;
     /**
      * Gets measurement data
      * @internal
@@ -457,18 +440,22 @@ export declare class BimViewer extends BaseViewer {
     /**
      * Activates one of "Distance", "Area" or "Angle" measurement
      * @param type "Distance", "Area" or "Angle"
+     * @deprecated use MeasurePlugin instead
      */
     activateMeasurement(type: MeasurementType): void;
     /**
      * Deactivates measurement
+     * @deprecated use MeasurePlugin instead
      */
     deactivateMeasurement(): void;
     /**
      * @internal
+     * @deprecated use MeasurePlugin instead
      */
     setMeasurementVisibility(id: string, visible: boolean): boolean;
     /**
      * Clears all measurement results
+     * @deprecated use MeasurePlugin instead
      */
     clearMeasurements(): void;
     /**

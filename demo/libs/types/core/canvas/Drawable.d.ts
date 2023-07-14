@@ -6,12 +6,12 @@ import { Event } from "../../core/utils";
  */
 export declare abstract class Drawable<Handle extends Record<string, unknown> = Record<string, unknown>> extends Event<Handle> {
     protected readonly DEFAULT_LINE_WIDTH = 1;
-    protected readonly DEFAULT_STROKE_STYLE = "#000000";
-    protected readonly DEFAULT_FILL_STYLE = "#000000";
+    protected readonly DEFAULT_STROKE_STYLE: number[];
+    protected readonly DEFAULT_FILL_STYLE: number[];
     id: string;
     protected lineWidth: number;
-    protected lineColor: string;
-    protected fillColor: string;
+    protected lineColor: number[];
+    protected fillColor: number[];
     x: number;
     y: number;
     width: number;
@@ -37,8 +37,8 @@ export declare abstract class Drawable<Handle extends Record<string, unknown> = 
     setData(data: DrawableData): void;
     getVertexes(): THREE.Vector3[];
     setLineWidth(lineWidth?: number): void;
-    setLineColor(color?: string): void;
-    setFillColor(color?: string): void;
+    setLineColor(color?: number[]): void;
+    setFillColor(color?: number[]): void;
     isSelected(): boolean;
     getCenter(): THREE.Vector3;
     transToScreenCoord(vector: THREE.Vector3, camera: THREE.Camera): THREE.Vector2;

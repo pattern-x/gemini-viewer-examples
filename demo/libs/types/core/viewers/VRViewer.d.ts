@@ -54,12 +54,10 @@ export declare class VRViewer extends BaseViewer {
     private fianlCameraPosition?;
     private finalCameraTarget?;
     private loadingPanos;
-    private axes?;
     /**
      * @internal
      */
     toolbar?: Toolbar<VRViewer>;
-    private bottomBar?;
     onHotpointClicked?: (hotpoint: Hotpoint) => void;
     handleDragEnd?: () => void;
     constructor(vrViewerCfg: VRViewerConfig, cameraCfg?: CameraConfig);
@@ -73,11 +71,10 @@ export declare class VRViewer extends BaseViewer {
     private initControls;
     private onKeyDown;
     private initLights;
+    private initInputManager;
     private initEvents;
     private initOthers;
-    private initAxes;
     private initToolbar;
-    private initBottomBar;
     protected animate(): void;
     clearAllCachedPanoramas(): void;
     destroy(): void;
