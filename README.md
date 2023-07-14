@@ -106,8 +106,7 @@ viewer.goToHomeView();
 - Overlay 3d model with dxf
 <img src="public/demo/images/snapshots/overlay_3d_model_with_dxf.gif" width="400">
 - Explode
-<img src="public/demo/images/snapshots/explode.gif" width="400" height="400px">
-<img src="public/demo/images/snapshots/explode_up.gif" width="400" height="400px">
+<img src="public/demo/images/snapshots/explode.gif" width="400" height="400px"><img src="public/demo/images/snapshots/explode_up.gif" width="400" height="400px">
 
 ## Features for VRViewer
 - Load and view a panorama
