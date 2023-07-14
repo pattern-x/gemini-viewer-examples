@@ -104,10 +104,10 @@ viewer.goToHomeView();
 - Section
 ![img](public/demo/images/snapshots/bim_section_plane.png){: width="400px"}
 - Overlay 3d model with dxf
-![img](public/demo/images/snapshots/overlay_3d_model_with_dxf.gif){: width="400px"}
+<img src="public/demo/images/snapshots/overlay_3d_model_with_dxf.gif" width="400">
 - Explode
-![img](public/demo/images/snapshots/explode.gif){: width="400px" height="400px"}
-![img](public/demo/images/snapshots/explode_up.gif){: width="400px" height="400px"}
+<img src="public/demo/images/snapshots/explode.gif" width="400" height="400px">
+<img src="public/demo/images/snapshots/explode_up.gif" width="400" height="400px">
 
 ## Features for VRViewer
 - Load and view a panorama
