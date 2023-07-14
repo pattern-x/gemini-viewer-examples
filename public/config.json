@@ -29,25 +29,25 @@
     "url": "./demo/dxf_2.html"
   }, {
     "title": "Drawing comparison with 1 viewport",
-    "url": "./demo/dxf_3.html"
+    "url": "./demo/dxf_3_compare_with_1_viewport.html"
   }, {
     "title": "Drawing comparison with 2 viewports",
-    "url": "./demo/dxf_8.html"
+    "url": "./demo/dxf_8_compare_with_2_viewports.html"
   }, {
     "title": "Upload files and compare with 2 viewports",
-    "url": "./demo/dxf_10.html"
+    "url": "./demo/dxf_10_upload_files_to_compre.html"
   }, {
     "title": "Markups",
-    "url": "./demo/dxf_5.html"
+    "url": "./demo/dxf_5_markups.html"
   }, {
     "title": "Take screenshot via markup",
-    "url": "./demo/dxf_9.html"
+    "url": "./demo/dxf_9_screenshot.html"
   }, {
     "title": "Hotpoints",
-    "url": "./demo/dxf_6.html"
+    "url": "./demo/dxf_6_hotpoints.html"
   }, {
     "title": "Building 1&2",
-    "url": "./demo/dxf_7.html"
+    "url": "./demo/dxf_7_building1_2.html"
   }]
 }, {
   "title": "Panoramas",

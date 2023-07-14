@@ -16,7 +16,14 @@
         <div id="myCanvas" class="container"></div>
     </div>
     <script type="module">
-        import { BimViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import {
+            AxisGizmoPlugin,
+            BimViewer,
+            BottomBarPlugin,
+            GroundShadowPlugin,
+            NavCubePlugin,
+            ToolbarMenuId,
+        } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const project = {
             id: "Duplex",
@@ -39,18 +46,21 @@
             {
                 containerId: "myCanvas",
                 language: "en",
-                enableAxisGizmo: true,
                 toolbarMenuConfig: {
                     [ToolbarMenuId.Measure]: { visible: false },
                     [ToolbarMenuId.Fullscreen]: { visible: false },
                     [ToolbarMenuId.BimTree]: { visible: false },
                 },
-                enableBottomBar: true,
-                enableNavCube: true,
                 enableContextMenu: true,
             },
             project.camera
         );
+
+        new AxisGizmoPlugin(viewer);
+        new BottomBarPlugin(viewer);
+        new GroundShadowPlugin(viewer);
+        new NavCubePlugin(viewer);
+
         // draco decoder path is needed to load draco encoded models.
         // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.
         const decoderPath = "./demo/three/js/libs/draco/gltf/";

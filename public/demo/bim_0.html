@@ -16,7 +16,14 @@
         <div id="myCanvas" class="container"></div>
     </div>
     <script type="module">
-        import { BimViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import {
+            AxisGizmoPlugin,
+            BimViewer,
+            MeasurementPlugin,
+            NavCubePlugin,
+            SectionPlugin,
+            ToolbarMenuId,
+        } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const project = {
             "id": "rac_basic_sample_project",
@@ -42,6 +49,11 @@
         }, project.camera);
         const toolbar = viewer.toolbar;
         toolbar.updateMenu(ToolbarMenuId.BimTree, { visible: false });
+
+        new AxisGizmoPlugin(viewer);
+        new MeasurementPlugin(viewer);
+        new NavCubePlugin(viewer);
+        new SectionPlugin(viewer);
 
         // draco decoder path is needed to load draco encoded models.
         // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.

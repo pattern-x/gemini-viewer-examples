@@ -57,8 +57,12 @@
 
     <script type="module">
       import {
-        DxfCompareHelper,
-        ToolbarMenuId,
+          AxisGizmoPlugin,
+          DxfCompareHelper,
+          DxfViewer,
+          MeasurementPlugin,
+          ToolbarMenuId,
+          ViewerEvent,
       } from "./demo/libs/gemini-viewer.esm.min.js";
       import DxfComparePanel from "./demo/compare/dxfComparePanel.js";
       import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
@@ -69,22 +73,23 @@
       const compareHelper = new DxfCompareHelper(
         {
           containerId: "myCanvas1",
-          enableAxisGizmo: true,
           enableToolbar: true,
-          enableBottomBar: true,
           enableSelection: true,
         },
         {
           containerId: "myCanvas2",
-          enableAxisGizmo: false,
           enableToolbar: true,
-          enableBottomBar: false,
           enableSelection: false,
         }
       );
       window.compareHelper = compareHelper;
       const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
       await compareHelper.setFont(fontFiles);
+
+      new AxisGizmoPlugin(compareHelper.viewer, { ignoreZAxis: true });
+      new MeasurementPlugin(compareHelper.viewer);
+      new AxisGizmoPlugin(compareHelper.viewer2, { ignoreZAxis: true });
+      new MeasurementPlugin(compareHelper.viewer2);
 
       compareHelper.viewer.toolbar?.updateMenus(
         overrideToolbarConfig(compareHelper.viewer1)

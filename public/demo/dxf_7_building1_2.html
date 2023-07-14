@@ -19,7 +19,13 @@
         <div id="myCanvas" class="container"></div>
     </div>
     <script type="module">
-        import { DxfViewer, ViewerEvent, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import {
+            AxisGizmoPlugin,
+            DxfViewer,
+            MeasurementPlugin,
+            ToolbarMenuId,
+            ViewerEvent,
+        } from "./demo/libs/gemini-viewer.esm.min.js";
         import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
         import LayerManager from './demo/layerManager/LayerManager.js';
 
@@ -32,7 +38,6 @@
         };
         const viewerCfg = {
             containerId: "myCanvas",
-            enableAxisGizmo: true,
             enableToolbar: true,
             enableSpinner: true,
             enableProgressBar: true,
@@ -76,6 +81,9 @@
         const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
         await viewer.setFont(fontFiles);
         window.viewer = viewer;
+
+        new AxisGizmoPlugin(viewer, { ignoreZAxis: true });
+        new MeasurementPlugin(viewer);
 
         const onProgress = (event) => {
             const progress = ((event.loaded * 100) / event.total).toFixed(1);
