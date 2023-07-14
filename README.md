@@ -63,18 +63,18 @@ viewer.goToHomeView();
 - Supported entity types includes: POINT, 3DFACE, ARC, ATTDEF, ATTRIB, CIRCLE, DIMENSION, MLEADER, MULTILEADER, ELLIPSE, HATCH, INSERT, LEADER, LINE, LWPOLYLINE, MTEXT, RAY, POLYLINE, SOLID, SPLINE, TEXT, VERTEX, VIEWPORT, XLINE, etc. IMAGE, OLE2FRAME, REGION are partially supported.
 
 - Load and view dxf file
-![load_and_view.gif](public/demo/images/snapshots/load_and_view.gif)
+![img](public/demo/images/snapshots/load_and_view.gif){: width="400px"}
 - Switch between layouts
-![layouts.gif](public/demo/images/snapshots/layouts.gif)
+![img](public/demo/images/snapshots/layouts.gif){: width="400px"}
 - Distance measurement
-![measure_dist.gif](public/demo/images/snapshots/measure_dist.gif)
+![img](public/demo/images/snapshots/measure_dist.gif){: width="400px"}
 - Area measurement
 - Angle measurement
 - Markups
-![markups.gif](public/demo/images/snapshots/markups.gif)
+![img](public/demo/images/snapshots/markups.gif){: width="400px"}
 - Comparison
-![dxf_compare_2_viewports.gif](public/demo/images/snapshots/dxf_compare_2_viewports.gif)
-![dxf_compare.gif](public/demo/images/snapshots/dxf_compare.png)
+![img](public/demo/images/snapshots/dxf_compare_2_viewports.gif){: width="400px"}
+![img](public/demo/images/snapshots/dxf_compare.png){: width="400px"}
 - Undo/redo
 
 ## DxfViewer limitations
@@ -86,30 +86,33 @@ viewer.goToHomeView();
 
 ## How to integrate DxfViewer into your system
 - Physical structure diagram:
-![physical_structure.png](public/demo/images/physical_structure.png)
+![img](public/demo/images/physical_structure.png){: width="400px"}
 - Logical structure diagram:
-![logical_structure.png](public/demo/images/logical_structure.png)
+![img](public/demo/images/logical_structure.png){: width="400px"}
 
 ## Features for BimViewer
 - Load and view BIM model
-![bim_view_model.png](public/demo/images/snapshots/bim_view_model.png)
+![img](public/demo/images/snapshots/bim_view_model.png){: width="400px"}
 - Orthographic view
-![bim_ortho_camera.png](public/demo/images/snapshots/bim_ortho_camera.png)
+![img](public/demo/images/snapshots/bim_ortho_camera.png){: width="400px"}
 - Selection
-![bim_selection.gif](public/demo/images/snapshots/bim_selection.gif)
+![img](public/demo/images/snapshots/bim_selection.gif){: width="400px"}
 - X-Ray
-![bim_xray.gif](public/demo/images/snapshots/bim_xray.gif)
+![img](public/demo/images/snapshots/bim_xray.gif){: width="400px"}
 - Distance measurement
-![bim_dist_measure.gif](public/demo/images/snapshots/bim_dist_measure.gif)
+![img](public/demo/images/snapshots/bim_dist_measure.gif){: width="400px"}
 - Section
-![bim_section_plane.png](public/demo/images/snapshots/bim_section_plane.png)
+![img](public/demo/images/snapshots/bim_section_plane.png){: width="400px"}
 - Overlay 3d model with dxf
-![overlay_3d_model_with_dxf.gif](public/demo/images/snapshots/overlay_3d_model_with_dxf.gif)
+![img](public/demo/images/snapshots/overlay_3d_model_with_dxf.gif){: width="400px"}
+- Explode
+![img](public/demo/images/snapshots/explode.gif){: width="400px" height="400px"}
+![img](public/demo/images/snapshots/explode_up.gif){: width="400px" height="400px"}
 
 ## Features for VRViewer
 - Load and view a panorama
-![pano_load_and_view.gif](public/demo/images/snapshots/pano_load_and_view.gif)
+![img](public/demo/images/snapshots/pano_load_and_view.gif){: width="400px"}
 - Switch to another panorama
-![pano_switch_panos.gif](public/demo/images/snapshots/pano_switch_panos.gif)
+![img](public/demo/images/snapshots/pano_switch_panos.gif){: width="400px"}
 - Switch between decorations
-![pano_switch_decorations.gif](public/demo/images/snapshots/pano_switch_decorations.gif)
+![img](public/demo/images/snapshots/pano_switch_decorations.gif){: width="400px"}
