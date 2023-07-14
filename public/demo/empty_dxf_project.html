@@ -75,15 +75,22 @@
     </div>
 </div>
 <script type="module">
-    import { DxfViewer, LocalDxfUploader, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+    import {
+        AxisGizmoPlugin,
+        BottomBarPlugin,
+        DxfViewer,
+        LocalDxfUploader,
+        MeasurementPlugin,
+        StatsPlugin,
+        ToolbarMenuId,
+        ViewerEvent,
+    } from "./demo/libs/gemini-viewer.esm.min.js";
     import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
     import LayerManager from './demo/layerManager/LayerManager.js';
 
     const config = {
         containerId: "myCanvas",
-        enableAxisGizmo: true,
         enableToolbar: true,
-        enableBottomBar: true,
         enableSpinner: true,
         enableProgressBar: true,
         enableLayoutBar: true,
@@ -127,6 +134,11 @@
     const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
     await viewer.setFont(fontFiles);
     window.viewer = viewer;
+
+    new AxisGizmoPlugin(viewer);
+    new BottomBarPlugin(viewer);
+    new MeasurementPlugin(viewer);
+    new StatsPlugin(viewer);
 
     const modelUploader = new LocalDxfUploader(viewer);
     modelUploader.onSuccess = () => {

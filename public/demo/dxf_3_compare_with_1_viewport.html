@@ -20,7 +20,14 @@
         <div id="myCanvas" class="container"></div>
     </div>
     <script type="module">
-        import { BaseDxfCompareHelper, DxfViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import {
+            AxisGizmoPlugin,
+            BaseDxfCompareHelper,
+            DxfViewer,
+            MeasurementPlugin,
+            ToolbarMenuId,
+            ViewerEvent,
+        } from "./demo/libs/gemini-viewer.esm.min.js";
         import DxfComparePanel from "./demo/compare/dxfComparePanel.js"
         import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
         import LayerManager from "./demo/layerManager/LayerManager.js";
@@ -29,7 +36,6 @@
         const url2 = "./demo/models/dxf/doors_and_windows_mopdified.dxf";
         const config = {
             containerId: "myCanvas",
-            enableAxisGizmo: true,
             enableToolbar: true,
             enableSpinner: true,
             enableProgressBar: true,
@@ -74,6 +80,10 @@
         const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
         await compareHelper.setFont(fontFiles);
         window.compareHelper = compareHelper;
+
+        const viewer = compareHelper.viewer;
+        new AxisGizmoPlugin(viewer, { ignoreZAxis: true });
+        new MeasurementPlugin(viewer);
 
         const onProgress = (event) => {
             const progress = ((event.loaded * 100) / event.total).toFixed(1);

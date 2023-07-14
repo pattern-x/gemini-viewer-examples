@@ -16,7 +16,14 @@
         <div id="myCanvas" class="container"></div>
     </div>
     <script type="module">
-        import { BimViewer, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import {
+            AxisGizmoPlugin,
+            BimViewer,
+            MeasurementPlugin,
+            NavCubePlugin,
+            SectionPlugin,
+            ToolbarMenuId,
+        } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const project = {
             "id": "building1",
@@ -45,6 +52,11 @@
         }, project.camera);
         const toolbar = viewer.toolbar;
         toolbar.updateMenu(ToolbarMenuId.BimTree, { visible: false });
+
+        new AxisGizmoPlugin(viewer);
+        new MeasurementPlugin(viewer);
+        new NavCubePlugin(viewer);
+        new SectionPlugin(viewer);
 
         // font file is needed for loading dxf
         // const fontFiles = ["./demo/three/fonts/Microsoft_YaHei_Regular.typeface.json"];

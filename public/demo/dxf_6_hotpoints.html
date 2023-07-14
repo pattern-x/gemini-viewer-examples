@@ -94,7 +94,13 @@
         </div>
     </div>
     <script type="module">
-        import { DxfViewer, ViewerEvent, ToolbarMenuId } from "./demo/libs/gemini-viewer.esm.min.js";
+        import {
+            AxisGizmoPlugin,
+            DxfViewer,
+            HotpointPlugin,
+            ToolbarMenuId,
+            ViewerEvent,
+        } from "./demo/libs/gemini-viewer.esm.min.js";
         import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
         import LayerManager from './demo/layerManager/LayerManager.js';
 
@@ -107,7 +113,6 @@
         };
         const viewerCfg = {
             containerId: "myCanvas",
-            enableAxisGizmo: true,
             enableSpinner: true,
             enableProgressBar: true,
             enableLayoutBar: true,
@@ -150,6 +155,9 @@
         const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
         await viewer.setFont(fontFiles);
         window.viewer = viewer;
+
+        new AxisGizmoPlugin(viewer, { ignoreZAxis: true });
+        const hotpointPlugin = new HotpointPlugin(viewer);
 
         const onProgress = (event) => {
             const progress = ((event.loaded * 100) / event.total).toFixed(1);
@@ -225,18 +233,18 @@
                     hotpointsPerLayout[layoutName] = [];
                 }
                 hotpointsPerLayout[layoutName].push(hotpoint);
-                viewer.addHotpoint(hotpoint);
+                hotpointPlugin.add(hotpoint);
                 hotpointCount++;
             }
         };
 
         // manages hotpoints for different layouts
         viewer.addEventListener(ViewerEvent.LayoutChanged, () => {
-            viewer.clearHotpoints();
+            hotpointPlugin.clear();
             const layoutName = viewer.getActiveLayoutName();
             const hotpoints = hotpointsPerLayout[layoutName];
             if (hotpoints) {
-                hotpoints.forEach((h) => viewer.addHotpoint(h));
+                hotpoints.forEach((h) => hotpointPlugin.add(h));
             }
         });
 
@@ -277,15 +285,7 @@
             console.log(`Moving hotpoint '${hotpoint.hotpointId}' from (${n2s(hotpoint.anchorPosition[0])}, ${n2s(hotpoint.anchorPosition[1])}) to (${n2s(location.x)}, ${n2s(location.y)})`);
             hotpoint.anchorPosition[0] = location.x;
             hotpoint.anchorPosition[1] = location.y;
-            // update object position in three.js
-            // DxfViewer desn't have api to update hotpoint position yet, so, we'll hack it
-            const objects = viewer.hotpointRoot?.children || [];
-            let object = objects.find((o) => o.userData.hotpoint?.hotpointId === hotpoint.hotpointId);
-            if (object) {
-                object.position.set(location.x, location.y, 0);
-                object.updateWorldMatrix(false, false);
-                viewer.enableRender();
-            }
+            hotpointPlugin.move(hotpoint.hotpointId, location);
         };
         window.addEventListener("pointerdown", onPointerDown);
     </script>
