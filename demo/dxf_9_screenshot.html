@@ -33,11 +33,13 @@
     </div>
     <script type="module">
       import {
-        DxfViewer,
-        ViewerEvent,
-        MenuTypeEnums,
-        ToolbarMenuId,
-        ScreenshotMode,
+          AxisGizmoPlugin,
+          DxfViewer,
+          MeasurementPlugin,
+          MenuTypeEnums,
+          ScreenshotMode,
+          ToolbarMenuId,
+          ViewerEvent,
       } from "./demo/libs/gemini-viewer.esm.min.js";
       import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
       import LayerManager from "./demo/layerManager/LayerManager.js";
@@ -51,14 +53,10 @@
       };
       const config = {
         containerId: "myCanvas",
-        enableAxisGizmo: true,
-        enableStats: true,
         enableToolbar: true,
         enableSpinner: true,
         enableProgressBar: true,
-        enableBottomBar: true,
         enableLayoutBar: true,
-        enableSelection: true,
         toolbarMenuConfig: {
           [ToolbarMenuId.Settings]: {
             onActive: () => {
@@ -95,7 +93,11 @@
         },
       };
       const viewer = new DxfViewer(config);
-      const fontFiles = [
+
+      new AxisGizmoPlugin(viewer, { ignoreZAxis: true });
+      new MeasurementPlugin(viewer);
+
+    const fontFiles = [
         "./demo/three/fonts/hztxt.shx",
         "./demo/three/fonts/simplex.shx",
       ];
