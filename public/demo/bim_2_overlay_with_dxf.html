@@ -49,7 +49,7 @@
         }
         const viewer = new BimViewer({
             containerId: "myCanvas",
-        }, project.camera);
+        });
         const toolbar = viewer.toolbar;
         toolbar.updateMenu(ToolbarMenuId.BimTree, { visible: false });
 
@@ -68,14 +68,11 @@
         const decoderPath = "./demo/three/js/libs/draco/gltf/";
         viewer.setDracoDecoderPath(decoderPath);
 
-        // loadProjectModel
-        let counter = 0; // to indicate how many models are loading
         project.models.forEach((modelCfg) => {
             if (modelCfg.visible === false) {
                 // visible is true by default
                 return; // only load visible ones
             }
-            counter++;
             viewer.loadModel(modelCfg, (event) => {
                 console.log(`[Demo] Loading model ${modelCfg.src}`);
             }, (event) => {
