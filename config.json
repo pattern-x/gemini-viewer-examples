@@ -12,6 +12,9 @@
   }, {
     "title": "Overlay 3d model with dxf",
     "url": "./demo/bim_2_overlay_with_dxf.html"
+  }, {
+    "title": "Model explode",
+    "url": "./demo/bim_3_explode.html"
   }]
 }, {
   "title": "2D drawings",

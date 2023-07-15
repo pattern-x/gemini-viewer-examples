@@ -25,36 +25,24 @@
             ToolbarMenuId,
         } from "./demo/libs/gemini-viewer.esm.min.js";
 
-        const project = {
-            id: "Duplex",
-            name: "Duplex",
-            models: [
-                {
-                    name: "Duplex",
-                    src: "./demo/models/gltf/Duplex.gltf",
-                    position: [0, 0, 0],
-                    rotation: [0, 0, 0],
-                    scale: [1, 1, 1],
-                    instantiate: false,
-                    merge: false,
-                    edges: true,
-                    visible: true,
-                },
-            ],
+        const filename = "Duplex.gltf";
+        const modelCfg = {
+            modelId: filename,
+            name: filename,
+            src: `./demo/models/gltf/${filename}`,
+            edges: true,
         };
-        const viewer = new BimViewer(
-            {
-                containerId: "myCanvas",
-                language: "en",
-                toolbarMenuConfig: {
-                    [ToolbarMenuId.Measure]: { visible: false },
-                    [ToolbarMenuId.Fullscreen]: { visible: false },
-                    [ToolbarMenuId.BimTree]: { visible: false },
-                },
-                enableContextMenu: true,
+        const viewerCfg = {
+            containerId: "myCanvas",
+            language: "en",
+            toolbarMenuConfig: {
+                [ToolbarMenuId.Measure]: { visible: false },
+                [ToolbarMenuId.Fullscreen]: { visible: false },
+                [ToolbarMenuId.BimTree]: { visible: false },
             },
-            project.camera
-        );
+            enableContextMenu: true,
+        }
+        const viewer = new BimViewer(viewerCfg);
 
         new AxisGizmoPlugin(viewer);
         new BottomBarPlugin(viewer);
@@ -66,22 +54,12 @@
         const decoderPath = "./demo/three/js/libs/draco/gltf/";
         viewer.setDracoDecoderPath(decoderPath);
 
-        // loadProjectModel
-        let counter = 0; // to indicate how many models are loading
-        project.models.forEach((modelCfg) => {
-            if (modelCfg.visible === false) {
-                // visible is true by default
-                return; // only load visible ones
-            }
-            counter++;
-            viewer.loadModel(modelCfg, (event) => {
-                    console.log(`[Demo] Loading model ${modelCfg.src}`);
-                }, (event) => {
-                    console.error("[Demo] Failed to load " + modelCfg.src + ". " + event.message);
-                }
-            ).then(() => {
-                    console.log(`[Demo] Loaded model ${modelCfg.src}`);
-            });
+        viewer.loadModel(modelCfg, (event) => {
+            console.log(`[Demo] Loading model ${modelCfg.src}`);
+        }, (event) => {
+            console.error("[Demo] Failed to load " + modelCfg.src + ". " + event.message);
+        }).then(() => {
+            console.log(`[Demo] Loaded model ${modelCfg.src}`);
         });
     </script>
 </body>
