@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="./demo/global.css" />
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <script type="module">
+        import {
+            BimViewer,
+            ExplodePlugin,
+        } from "./demo/libs/gemini-viewer.esm.min.js";
+
+        const filename = "Duplex.gltf";
+        const modelCfg = {
+            modelId: filename,
+            name: filename,
+            src: `./demo/models/gltf/${filename}`,
+            edges: true,
+        };
+        const viewerCfg = {
+            containerId: "myCanvas",
+            language: "en",
+            enableToolbar: false,
+        }
+        const viewer = new BimViewer(viewerCfg);
+
+        const explodePlugin = new ExplodePlugin(viewer, { explodeUp: false });
+        setTimeout(() => {
+            let scale = 1;
+            let increase = true;
+            setInterval(() => {
+                explodePlugin.explode(scale);
+                scale += (increase ? 0.01 : -0.06);
+                if (scale > 3) {
+                    increase = false;
+                } else if (scale < 1) {
+                    increase = true;
+                }
+            }, 20);
+        }, 3000);
+
+        // draco decoder path is needed to load draco encoded models.
+        // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.
+        const decoderPath = "./demo/three/js/libs/draco/gltf/";
+        viewer.setDracoDecoderPath(decoderPath);
+
+        viewer.loadModel(modelCfg, (event) => {
+            console.log(`[Demo] Loading model ${modelCfg.src}`);
+        }, (event) => {
+            console.error("[Demo] Failed to load " + modelCfg.src + ". " + event.message);
+        }).then(() => {
+            console.log(`[Demo] Loaded model ${modelCfg.src}`);
+        });
+    </script>
+</body>
+
+</html>
