@@ -91,12 +91,8 @@
       new AxisGizmoPlugin(compareHelper.viewer2, { ignoreZAxis: true });
       new MeasurementPlugin(compareHelper.viewer2);
 
-      compareHelper.viewer.toolbar?.updateMenus(
-        overrideToolbarConfig(compareHelper.viewer1)
-      );
-      compareHelper.viewer2.toolbar?.updateMenus(
-        overrideToolbarConfig(compareHelper.viewer2)
-      );
+      compareHelper.viewer.toolbar?.updateMenus(overrideToolbarConfig(compareHelper.viewer));
+      compareHelper.viewer2.toolbar?.updateMenus(overrideToolbarConfig(compareHelper.viewer2));
 
       const syncCameraBtn = document.getElementById("syncCamera");
       let enableSyncCamera = false;
