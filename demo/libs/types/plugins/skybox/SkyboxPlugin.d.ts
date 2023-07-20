@@ -1,27 +1,49 @@
-import { BaseViewer, Plugin } from "../../core";
+import * as THREE from "three";
+import { GradientColorSkybox } from "./GradientColorSkybox";
+import { BaseViewer, Plugin, PluginConfig } from "../../core";
 /**
- * Skybox plugin for BimViewer
+ * Skybox plugin config.
+ */
+export interface SkyboxPluginConfig extends PluginConfig {
+    /**
+     * Initial single color of the skybox.
+     * If specified, it initialize with a single color background. Otherwise,
+     * the skybox initialize with default gradient colors.
+     */
+    color?: number[];
+}
+/**
+ * Skybox plugin. It is mainly used by BimViewer, while can also be used by DxfViewer and VRViewer.
+ * You can set skybox in several means:
+ * 1) Single color, by using setSkyboxByColor().
+ * 2) Gradient colors, by using setSkyboxByGradientColors().
+ * 3) Cube texture, by using setSkyboxByCubeTexture().
  */
 export declare class SkyboxPlugin extends Plugin {
-    private skybox?;
-    constructor(viewer: BaseViewer);
-    private createDefaultSkybox;
-    private updateSkyboxByBox;
+    protected gradientColorSkybox?: GradientColorSkybox;
+    constructor(viewer: BaseViewer, cfg?: SkyboxPluginConfig);
     /**
-     *
-     * @param urls
-     * @description set custom sky box image
+     * Set skybox by a single color.
+     * @param color rgb number array, each value is between 0 and 1. e.g. [0.92, 0.95, 0.96]
      */
-    setSkybox(urls: string[]): void;
+    setSkyboxByColor(color?: number[]): void;
     /**
-     * @description reset default sky box
+     * Sets skybox by 3 gradient colors (top, skyline, bottom).
      */
-    resetDefaultSkybox(): void;
+    setSkyboxByGradientColors(topColor?: number[], // 0x86b6f5
+    skylineColor?: number[], // 0xffffff
+    bottomColor?: number[]): void;
     /**
-     *
-     * @param enable
-     * @description enable sky box
+     * Sets skybox by cube texture (6 images).
      */
-    enableSkybox(enable: boolean): void;
+    setSkyboxByCubeTexture(urls: string[]): void;
+    /**
+     * Updates gradient color skybox when models' bbox changed.
+     */
+    private updateGradientColorSkybox;
     destroy(): void;
+    /**
+     * Converts rgb color number array to THREE.Color.
+     */
+    protected rgb2Color(color: number[]): THREE.Color;
 }

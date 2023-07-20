@@ -2,13 +2,13 @@ import * as THREE from "three";
 import { Tooltip } from "../../components/tool-tip";
 import { mouseButtonAction, singleTouchAction } from "../../core/camera-controls/types";
 import type { EventInfo, InputManager } from "../../core/input/InputManager";
-import type { BimViewer, DxfViewer } from "../../core/viewers";
+import type { BaseViewer } from "../../core/viewers";
 /**
  * Box select an area in screen coordinate.
  * @internal
  */
 export declare class BoxSelectHelper {
-    protected viewer: DxfViewer | BimViewer;
+    protected viewer: BaseViewer;
     protected input: InputManager;
     protected mouseDown: boolean;
     protected mouseMove: boolean;
@@ -25,7 +25,7 @@ export declare class BoxSelectHelper {
     protected resolve?: (value: THREE.Box2 | PromiseLike<THREE.Box2> | undefined) => void;
     protected reject?: (reason: any) => void;
     protected isResolvedOrRejected: boolean;
-    constructor(viewer: DxfViewer | BimViewer);
+    constructor(viewer: BaseViewer);
     private get viewerContainer();
     isActived(): boolean;
     activate(): void;

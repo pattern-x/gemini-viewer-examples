@@ -17,9 +17,9 @@ export declare class HotpointPlugin extends Plugin {
     constructor(viewer: BaseViewer);
     /**
      * @description {en} Adds a hotpoint.
-     * Caller should set a hotpointId that is unique in the session of current DxfViewer.
+     * Caller should set a hotpointId that is unique in the session of current viewer.
      * @description {zh} 添加热点。
-     * 调用者应该设置一个在当前DxfViewer会话中唯一的热点id。
+     * 调用者应该设置一个在当前Viewer会话中唯一的热点id。
      * @param hotpoint
      * - {en} hotpoint data.
      * - {zh} 热点数据。
@@ -31,7 +31,8 @@ export declare class HotpointPlugin extends Plugin {
      *    html: "<div>hotpoint</div>",
      *    visible: true,
      * };
-     * viewer.addHotpoint(hotpoint);
+     * const plugin = new HotpointPlugin(viewer);
+     * plugin.add(hotpoint);
      * ```
      */
     add(hotpoint: Hotpoint): void;
@@ -44,7 +45,8 @@ export declare class HotpointPlugin extends Plugin {
      * @example
      * ``` typescript
      * const hotpointId = "c6ea70a3-ddb0-4dd0-87c8-bd2491936428";
-     * viewer.removeHotpoint(hotpointId);
+     * const plugin = new HotpointPlugin(viewer);
+     * plugin.remove(hotpointId);
      * ```
      */
     remove(hotpointId: string): void;
@@ -53,7 +55,8 @@ export declare class HotpointPlugin extends Plugin {
      * @description {zh} 清除所有热点。
      * @example
      * ``` typescript
-     * viewer.clearHotpoints();
+     * const plugin = new HotpointPlugin(viewer);
+     * plugin.clear();
      * ```
      */
     clear(): void;
@@ -64,11 +67,25 @@ export declare class HotpointPlugin extends Plugin {
      */
     has(hotpointId: string): boolean;
     /**
-     * Moves a hotpoint.
+     * @description {en} Moves a hotpoint.
+     * @description {zh} 移动热点的位置。
+     * @example
+     * ``` typescript
+     * const hotpointId = "c6ea70a3-ddb0-4dd0-87c8-bd2491936428";
+     * const plugin = new HotpointPlugin(viewer);
+     * plugin.move(hotpointId, [10, 10, 0]);
+     * ```
      */
     move(hotpointId: string, position: Vector2 | Vector3): void;
     /**
-     * Hides or show a hotpoint.
+     * @description {en} Hides or show a hotpoint.
+     * @description {zh} 显示或隐藏一个热点。
+     * @example
+     * ``` typescript
+     * const hotpointId = "c6ea70a3-ddb0-4dd0-87c8-bd2491936428";
+     * const plugin = new HotpointPlugin(viewer);
+     * plugin.setVisible(hotpointId, false);
+     * ```
      */
     setVisible(hotpointId: string, visible: boolean): void;
     protected findHotpointObject(hotpointId: string): CSS2DObject | undefined;

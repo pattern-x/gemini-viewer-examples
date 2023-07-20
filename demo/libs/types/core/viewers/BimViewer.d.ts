@@ -36,18 +36,6 @@ export declare class BimViewer extends BaseViewer {
     /**
      * @internal
      */
-    groundGrid?: THREE.Line;
-    /**
-     * @internal
-     */
-    grassGround?: THREE.Mesh;
-    /**
-     * @internal
-     */
-    sceneBackgroundColor: THREE.Color;
-    /**
-     * @internal
-     */
     loadedModels: {
         [src: string]: {
             id: number;
@@ -93,7 +81,6 @@ export declare class BimViewer extends BaseViewer {
      */
     sectionType?: string;
     private zoomToRectHelper?;
-    private datGui?;
     private shadowCameraHelper?;
     private directionalLightHelper?;
     private webcam?;
@@ -141,10 +128,10 @@ export declare class BimViewer extends BaseViewer {
      * Initialize mouse/pointer events
      */
     private initEvents;
-    private initDatGui;
     private initOthers;
     private initContextMenu;
     private initToolbar;
+    private initLoadingProgressBar;
     /**
      * If there is any 2d model loaded
      * @internal
@@ -291,7 +278,7 @@ export declare class BimViewer extends BaseViewer {
     /**
      * Enables/disables model edges.
      */
-    enableModelEdges(enable: boolean): void;
+    enableModelEdges(enable: boolean, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     /**
      * Make camera fly to objects
      */
@@ -341,10 +328,6 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     showDirectionalLightHelper(visible: boolean): void;
-    /**
-     * Regenerates ground grid according to models' location and size
-     */
-    private regenGroundGrid;
     /**** Anchor rotation related interface start ****/
     private setOrbitPoint;
     private onAnchorPointerDown;
@@ -399,6 +382,7 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     enableUnrealBloomPass(enable: boolean): void;
+    enableEdgesPass(enable: boolean, timeoutMs?: number): void;
     /**
      * @description Compatible with older versions, use SectionPlugin instead
      * @internal
@@ -410,17 +394,12 @@ export declare class BimViewer extends BaseViewer {
      * Currently, it only implemented local(object) box section.
      * @deprecated use SectionPlugin instead
      */
-    activateSection(type?: SectionType, clippingObjectIds?: number[]): void;
+    activateSection(type?: SectionType): void;
     /**
      * Deactivates section
      * @deprecated use SectionPlugin instead
      */
     deactivateSection(): void;
-    /**
-     * @internal
-     * @deprecated use SectionPlugin instead
-     */
-    setSectionClippingObjectIds(clippingObjectIds?: number[]): void;
     /**
      * @internal
      * @deprecated use SectionPlugin instead
@@ -499,14 +478,9 @@ export declare class BimViewer extends BaseViewer {
      */
     private updateRaycasterThreshold;
     /**
-     * Instatiates leaf nodes of given object.
-     * If objects' geometry and material are the same, they can be instanced.
-     * @param object
-     */
-    private instantiate;
-    /**
      * Merges leaf nodes of given object.
      * If objects' materials are the same, they can be merged.
+     * TODO: change merge() and MergeUtils.deepMerge to async
      * @param object
      */
     private merge;

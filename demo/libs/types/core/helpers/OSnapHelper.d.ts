@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { CanvasRender, Drawable } from "../../core/canvas";
+import { CanvasRender, Drawable, DrawableList } from "../../core/canvas";
 import { ILine, OSnapMarkerType } from "../../core/utils";
 export declare class SnapDrawable extends Drawable {
     static readonly LINE_COLOR = "rgba(255, 240, 0, 0.8)";
@@ -48,28 +48,47 @@ interface OSnapInfo {
     line?: ILine;
 }
 export declare class OSnapHelper {
-    private drawableList;
-    private overlayRender?;
-    private markers;
-    private activeOSnapType;
-    private snapTolerance;
+    protected drawableList: DrawableList;
+    protected overlayRender?: CanvasRender;
+    protected markers: Record<number, SnapDrawable>;
+    protected activeOSnapType: OSnapType;
+    protected snapToleranceInWorldCoord: number;
+    /**
+     * OSnapType priority. Lower value has a higher priority.
+     */
+    osnapTypePriorities: Record<OSnapType, number>;
     constructor(overlayRender: CanvasRender);
     private initOSnapMarkers;
     /**
-     * Updates snap tolerance in world coordinate
+     * Sets snap tolerance in world coordinate.
      */
-    updateSnapTolerance(tolerance: number): void;
+    setSnapTolerance(toleranceInWorldCoord: number): void;
+    /**
+     * Gets snap tolerance in world coordinate.
+     */
     getSnapTolerance(): number;
     getMarker(type: OSnapType): SnapDrawable;
+    setAllSnapLinesVisible(visible: boolean): void;
     deactivate(): void;
     destroy(): void;
     /**
      * Tries to find a proper snap point and display corresponding marker.
-     * @param intersections
+     * @param intersections The raycaster intersections.
+     * @param is3d If it is a 3d or 2d viewer.
+     * @param lastMouseDownPosition Used in order to to get foot of perpendicular.
      * @returns Target snap point if any
      */
-    handleSnap(mousePosition: THREE.Vector3, intersections: THREE.Intersection[], is3d: boolean, lastMouseDownPosition?: THREE.Vector3): THREE.Vector3 | undefined;
-    private activateMarker;
+    handleSnap(intersections: THREE.Intersection[], is3d: boolean, lastMouseDownPosition?: THREE.Vector3): THREE.Vector3 | undefined;
+    /**
+     * Tries to find a proper snap point and display corresponding marker.
+     * @param mousePosition Mouse position in world coordinate.
+     * @param intersections
+     * @param is3d If it is a 3d or 2d viewer.
+     * @param lastMouseDownPosition Used in order to to get foot of perpendicular.
+     * @returns Target snap point if any
+     */
+    protected getSnapPointAndUpdateMarker(mousePosition: THREE.Vector3, intersections: THREE.Intersection[], is3d: boolean, lastMouseDownPosition?: THREE.Vector3): THREE.Vector3 | undefined;
+    activateMarker(type: OSnapType, osnapInfo?: OSnapInfo): void;
     private getFootOfPerpendicular;
     private getIntersectionPointsAndLines;
     private getSnapInfo;

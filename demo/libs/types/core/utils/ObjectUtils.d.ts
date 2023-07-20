@@ -147,10 +147,10 @@ export declare class ObjectUtils {
      *   It can be used in case for really large models that has a bad performace.
      */
     static createOutlines(object: THREE.Object3D, options?: {
-        visibleOnly: boolean;
+        onlyVisible: boolean;
         meshOnly: boolean;
         replaceOriginalObject: boolean;
-    }): THREE.LineSegments[];
+    }, onProgress?: (event: ProgressEvent) => void): Promise<THREE.LineSegments[]>;
     /**
      * Recursively removes outlines for given object and children
      */

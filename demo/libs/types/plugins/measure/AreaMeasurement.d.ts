@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { AreaMeasureDrawable } from "./AreaMeasureDrawable";
 import { BaseMeasurement } from "./BaseMeasurement";
 import { DrawableList } from "../../core/canvas";
@@ -9,6 +10,7 @@ export declare class AreaMeasurement extends BaseMeasurement {
     activate(): void;
     deactivate(): void;
     protected createMeasureDrawable(): AreaMeasureDrawable | undefined;
+    protected onMouseMove(position: THREE.Vector3): void;
     protected onMouseClick(e: EventInfo): void;
     exitDrawing(): void;
     protected complete(): void;

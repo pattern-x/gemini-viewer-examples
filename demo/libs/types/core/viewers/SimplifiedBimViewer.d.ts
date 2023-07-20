@@ -57,12 +57,15 @@ export declare class SimplifiedBimViewer {
     animate(): void;
     destroy(): void;
     loadLocalModel(url: string, modelCfg: ModelConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    /**
+     * We don't plan to support onProgress really well in this class.
+     */
     loadModel(modelCfg: ModelConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     parseGltf(data: ArrayBuffer | string, modelCfg: ModelConfig, onSuccess: (object: THREE.Object3D) => void, onError?: (event: ErrorEvent) => void): void;
     /**
      * Applies options and add object to scene.
      */
-    applyOptionsAndAddToScene: (url: string, object: THREE.Object3D, modelCfg: ModelConfig) => void;
+    applyOptionsAndAddToScene: (url: string, object: THREE.Object3D, modelCfg: ModelConfig, onProgress?: ((event: ProgressEvent) => void) | undefined) => Promise<void>;
     /**
      * Add newly added object to scene.
      * Also, usually(but not always) we should regenerate sky and go to home view

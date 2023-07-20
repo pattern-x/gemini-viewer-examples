@@ -1,19 +1,19 @@
 import * as THREE from "three";
 import { Tooltip } from "../../components/tool-tip";
 import { EventInfo } from "../../core/input/InputManager";
-import type { DxfViewer } from "../../core/viewers";
+import type { BaseViewer } from "../../core/viewers";
 /**
  * Box select an area in screen coordinate.
  * @internal
  */
 export declare class PickMarkupHelper {
-    protected viewer: DxfViewer;
+    protected viewer: BaseViewer;
     private actived;
     protected tooltip?: Tooltip;
     protected resolve?: (value: THREE.Box2 | PromiseLike<THREE.Box2> | undefined) => void;
     protected reject?: (reason: any) => void;
     protected isResolvedOrRejected: boolean;
-    constructor(viewer: DxfViewer);
+    constructor(viewer: BaseViewer);
     private get viewerContainer();
     private get camera();
     isActived(): boolean;

@@ -10,6 +10,7 @@ export declare class MeasurementPlugin extends Plugin {
     private drawableHelperList;
     private inputManager;
     private osnapHelper;
+    private snapToleranceInPixel;
     private measurements;
     private activeMeasurementType;
     private mobileTouchHelper?;
@@ -20,6 +21,14 @@ export declare class MeasurementPlugin extends Plugin {
     add(drawable: BaseMeasureDrawable, needFireEvent?: boolean): void;
     create(data: MeasurementData): BaseMeasureDrawable;
     remove(drawable: BaseMeasureDrawable, needFireEvent?: boolean): void;
+    /**
+     * Set osnap tolerance in pixcel size. The pixcel size will be converted to a size in world coordinate and pass to OSnapHelper.
+     */
+    setSnapTolerance(toleranceInPixel: number): void;
+    /**
+     * Updates osnap tolerance.
+     * We should call this once camera's zoom, fov or position/target changed, etc.
+     */
     private updateSnapTolerance;
     /**
      *

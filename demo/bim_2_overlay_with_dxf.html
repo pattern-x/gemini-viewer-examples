@@ -74,7 +74,8 @@
                 return; // only load visible ones
             }
             viewer.loadModel(modelCfg, (event) => {
-                console.log(`[Demo] Loading model ${modelCfg.src}`);
+                const progress = ((event.loaded * 100) / event.total).toFixed(1);
+                console.log(`[Demo] Loading '${modelCfg.id || modelCfg.name}' progress: ${progress}%`);
             }, (event) => {
                 console.error("[Demo] Failed to load " + modelCfg.src + ". " + event.message);
             }).then(() => {

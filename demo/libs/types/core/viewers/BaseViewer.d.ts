@@ -131,6 +131,10 @@ export declare abstract class BaseViewer extends Event<ViewerEventType> {
      * @internal
      */
     protected frustumSize: number;
+    /**
+     * @internal
+     */
+    protected loadingProgressBar?: any;
     protected plugins: Plugin[];
     constructor(viewerCfg: BaseViewerConfig);
     private initLogLevel;
@@ -216,6 +220,10 @@ export declare abstract class BaseViewer extends Event<ViewerEventType> {
      */
     screenshot(config: any): Promise<undefined | string>;
     /**
+     * Gets how long a pixel represents in world coordinate.
+     * This works fine for OrthographicCamera.
+     * As for PerspectiveCamera, a pixel represents different size for different position,
+     * depends on how far the camera is and its fov, etc. We'll simply take the camera target as the position to calculate.
      * @internal
      */
     getPixelSizeInWorldCoord(): number;
@@ -232,5 +240,9 @@ export declare abstract class BaseViewer extends Event<ViewerEventType> {
      * A plugin is not created by viewer, thus, won't be destroyed by viewer.
      */
     clearPlugins(): void;
+    /**
+     * Finds a Plugin.
+     */
+    findPlugin(id: string): Plugin | undefined;
 }
 export {};

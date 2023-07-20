@@ -14,7 +14,7 @@ export declare class SectionPlugin extends Plugin {
      * @description {en} Activates one of "ObjectsBoxSection", "AxisPlaneSection" or "PickPlaneSection" Section
      * @description {zh} 激活"剖切盒", "轴向剖切" 或者 "拾取面剖切"
      */
-    activate(type: SectionType, clippingObjectIds?: number[]): void;
+    activate(type: SectionType): void;
     /**
      * @description Deactivate Section plugin
      */
@@ -31,8 +31,15 @@ export declare class SectionPlugin extends Plugin {
      *
      * @param ids
      * @returns
-     * @description Set need section object
+     * @description Set the id of the object that needs to be clipping for all section
      */
-    setSectionClippingObjectIds(ids?: number[]): void;
+    setAllSectionsClippingObjectIds(ids?: number[]): void;
+    /**
+     *
+     * @param ids
+     * @returns
+     * @description Set the id of the object that needs to be clipping for section by section type
+     */
+    setSectionClippingObjectIds(type: SectionType, ids?: number[]): void;
     destroy(): void;
 }

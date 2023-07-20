@@ -161,13 +161,10 @@ export declare class DxfViewer extends BaseViewer {
     protected selected: boolean;
     private markupManager?;
     private zoomToRectHelper?;
-    private boxSelectHelper?;
-    private pickMarkupHelper?;
     private raf?;
     private clock;
     protected renderEnabled: boolean;
     private timeoutSymbol?;
-    private loadingProgressBar?;
     private contextMenu?;
     /**
      * @internal
@@ -198,9 +195,6 @@ export declare class DxfViewer extends BaseViewer {
     private initScene;
     private initRenderer;
     protected initCSS2DRenderer(): void;
-    /**
-     * @internal
-     */
     private initCamera;
     /**
      * @internal
@@ -513,6 +507,7 @@ export declare class DxfViewer extends BaseViewer {
      * const mode = ScreenshotMode.Default;
      * viewer.getScreenshot(mode).then(data => console.log(data));
      * ```
+     * @deprecated use ScreenshotPlugin instead.
      */
     getScreenshot(mode?: ScreenshotMode): Promise<undefined | ScreenshotResult>;
     /**
@@ -833,9 +828,6 @@ export declare class DxfViewer extends BaseViewer {
      * @internal
      */
     deactivateZoomRect(): void;
-    /**
-     * draw compare markups
-     */
     private getLayoutByName;
     private getActiveLayoutInfo;
     private getMsTransformMatrix;

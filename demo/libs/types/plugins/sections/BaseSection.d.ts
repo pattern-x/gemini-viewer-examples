@@ -24,10 +24,10 @@ export declare abstract class BaseSection {
      */
     clippingObjetIds?: number[];
     constructor(viewer: BaseViewer, input: InputManager);
-    get canvas(): HTMLCanvasElement;
+    protected get canvas(): HTMLCanvasElement;
     get isActive(): boolean;
-    get camera(): THREE.Camera;
-    get controls(): CameraControlsEx;
+    protected get camera(): THREE.Camera;
+    protected get controls(): CameraControlsEx;
     private setGlobalClippingEnable;
     private setObjectClippingEnable;
     clearClippingObjectIds(): void;

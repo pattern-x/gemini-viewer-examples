@@ -13,11 +13,11 @@ export interface NavCubePluginConfig extends PluginConfig {
  * the same direction as host renderer's
  */
 export declare class NavCubePlugin extends Plugin {
-    private cfg;
-    renderer?: CSS3DRenderer;
-    navCube?: NavCube;
-    camera?: OrthographicCamera;
-    scene?: Scene;
+    protected cfg: NavCubePluginConfig;
+    protected renderer?: CSS3DRenderer;
+    protected navCube?: NavCube;
+    protected camera?: OrthographicCamera;
+    protected scene?: Scene;
     constructor(viewer: BaseViewer, cfg?: NavCubePluginConfig);
     init(): void;
     initRenderer(): void;

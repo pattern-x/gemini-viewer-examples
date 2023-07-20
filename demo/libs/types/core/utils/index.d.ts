@@ -9,7 +9,6 @@ export * from "./Event";
 export * from "./ExportUtils";
 export * from "./FpsUtils";
 export * from "./GeometryUtils";
-export * from "./GroundUtils";
 export * from "./Locale";
 export * from "./LogUtils";
 export * from "./MaterialUtils";

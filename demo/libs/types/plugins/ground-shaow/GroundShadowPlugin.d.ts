@@ -1,15 +1,19 @@
 import * as THREE from "three";
 import { BaseViewer, Plugin } from "../../core";
-interface GroundShadowConfig {
+/**
+ * Ground shadow config.
+ */
+export interface GroundShadowConfig {
     blur: number;
     darkness: number;
 }
 /**
  * Copied from https://threejs.org/examples/?q=shadow#webgl_shadow_contact
+ * Can be used by BimViewer.
  * @description Ground shadow for models.
  */
 export declare class GroundShadowPlugin extends Plugin {
-    protected config: GroundShadowConfig;
+    protected cfg: GroundShadowConfig;
     protected shadowGroup?: THREE.Group;
     protected blurPlane?: THREE.Mesh;
     protected depthMaterial?: THREE.MeshDepthMaterial;
@@ -40,4 +44,3 @@ export declare class GroundShadowPlugin extends Plugin {
     render(): void;
     destroy(): void;
 }
-export {};

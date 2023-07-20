@@ -31,7 +31,7 @@ export declare class CanvasRender extends Event {
     addDrawableList(drawableList: DrawableList): void;
     render(): void;
     setSize(width: number, height: number): void;
-    getSortedDrawables(): Drawable<Record<string, unknown>>[];
+    getSortedDrawables(onlyVisible?: boolean): Drawable<Record<string, unknown>>[];
     getDrawablesByPosition(p: THREE.Vector3, raycaster?: THREE.Raycaster): Drawable[];
     getDrawableById(id: string): Drawable<Record<string, unknown>> | undefined;
     measureTextLength(text: string, font: string): number;

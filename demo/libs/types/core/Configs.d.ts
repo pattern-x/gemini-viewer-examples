@@ -56,26 +56,6 @@ export interface ModelConfig {
      */
     matrix?: number[];
     /**
-     * @internal
-     * @deprecated Uses matrix instead
-     */
-    position?: number[];
-    /**
-     * @internal
-     * @deprecated Uses matrix instead
-     */
-    rotation?: number[];
-    /**
-     * @internal
-     * @deprecated Uses matrix instead
-     */
-    scale?: number[];
-    /**
-     * If we want to do instantiate to the model
-     * @internal
-     */
-    instantiate?: boolean;
-    /**
      * If we want to merge meshes/lines/points with the same material
      * @internal
      * @default false
@@ -161,6 +141,10 @@ export interface BaseViewerConfig {
      */
     enableSpinner?: boolean;
     /**
+     * @internal
+     */
+    enableProgressBar?: boolean;
+    /**
      * @description just for react native
      * @internal
      */
@@ -193,11 +177,6 @@ export interface BimViewerConfig extends BaseViewerConfig {
      * @deprecated use StatsPlugin instead
      */
     enableStats?: boolean;
-    /**
-     * Shows the stats output.
-     * @internal
-     */
-    enableDatGui?: boolean;
     /**
      * Enables toolbar.
      * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
@@ -257,10 +236,6 @@ export interface DxfViewerConfig extends BaseViewerConfig {
      * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
      */
     enableToolbar?: boolean;
-    /**
-     * @internal
-     */
-    enableProgressBar?: boolean;
     /**
      * @internal
      * @deprecated use BottomBarPlugin instead

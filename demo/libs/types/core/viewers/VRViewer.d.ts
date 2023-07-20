@@ -18,6 +18,7 @@ export declare class VRViewer extends BaseViewer {
         [src: string]: {
             id: number;
             bbox?: THREE.Box3;
+            edges?: THREE.LineSegments[];
         };
     };
     /**
@@ -224,12 +225,6 @@ export declare class VRViewer extends BaseViewer {
      * @param position target position to look to
      */
     lookToPosition(position: [number, number, number]): void;
-    /**
-     * Instatiates leaf nodes of given object.
-     * If objects' geometry and material are the same, they can be instanced.
-     * @param object
-     */
-    private instantiate;
     /**
      * Merges leaf nodes of given object.
      * If objects' materials are the same, they can be merged.
