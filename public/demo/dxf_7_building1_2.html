@@ -4,7 +4,6 @@
     <link rel="icon" href="./demo/favicon.ico">
     <link rel="stylesheet" type="text/css" href="./demo/global.css">
     <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css">
-    <link rel="stylesheet" href="./demo/layerManager/layerManager.css">
     <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
     <style>
         #myCanvas {
@@ -22,12 +21,12 @@
         import {
             AxisGizmoPlugin,
             DxfViewer,
+            LayerManagerPlugin,
             MeasurementPlugin,
             ToolbarMenuId,
             ViewerEvent,
         } from "./demo/libs/gemini-viewer.esm.min.js";
         import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
-        import LayerManager from './demo/layerManager/LayerManager.js';
 
         const filename = "building_1_2";
         const modelCfg = {
@@ -63,15 +62,12 @@
                     onActive: () => {
                         console.log("[Toolbar]", "Activate Layers");
                         if (!window.layerManager) {
-                            window.layerManager = new LayerManager(window.viewer);
+                            window.layerManager = new LayerManagerPlugin(window.viewer);
                         }
                         window.layerManager.show();
                     },
                     onDeactive: () => {
                         console.log("[Toolbar]", "Deactivate Layers");
-                        if (!window.layerManager) {
-                            window.layerManager = new LayerManager(window.viewer);
-                        }
                         window.layerManager.hide();
                     },
                 },
