@@ -10,6 +10,7 @@ export * from "./indexeddb";
 export * from "./local-model-uploader";
 export * from "./input";
 export * from "./markup";
+export * from "./pdf";
 export * from "./shp-js";
 export * from "./shx-parser";
 export * from "./utils";

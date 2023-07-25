@@ -1,6 +1,7 @@
 export * from "./axis-gizmo";
 export * from "./bottom-bar";
 export * from "./dat-gui";
+export * from "./layer-manager";
 export * from "./explode";
 export * from "./ground-grass";
 export * from "./ground-grid";

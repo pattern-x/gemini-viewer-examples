@@ -107,6 +107,12 @@ export declare class BimViewer extends BaseViewer {
      */
     private bbox;
     private anchor?;
+    private edgesVisible;
+    private edgesPassTimeout?;
+    /**
+     * @internal
+     */
+    edgesPassTimeoutMs: number;
     constructor(viewerCfg: BimViewerConfig, cameraCfg?: CameraConfig);
     /**
      * Initialize everything it needs
@@ -188,7 +194,7 @@ export declare class BimViewer extends BaseViewer {
     /**
      * Sets decoder path for draco loader.
      * Draco decoder will be used if a model is draco encoded.
-     * @param decoderPath e.g., "three/js/libs/draco/gltf/"
+     * @param decoderPath e.g., "libs/draco/gltf/"
      * @internal
      */
     setDracoDecoderPath(path: string): void;
@@ -382,7 +388,14 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     enableUnrealBloomPass(enable: boolean): void;
-    enableEdgesPass(enable: boolean, timeoutMs?: number): void;
+    private updateEdgesVisibility;
+    private handleCameraControl;
+    private handleCameraSleep;
+    /**
+     * Enables or disable delay render edges.
+     * @internal
+     */
+    delayRenderEdges(enable: boolean): void;
     /**
      * @description Compatible with older versions, use SectionPlugin instead
      * @internal

@@ -41,7 +41,7 @@ export declare class LoadingHelper {
     setFont(font: Font | ShxFont): void;
     /**
      * Sets decoder path for draco loader.
-     * @param decoderPath e.g., "three/js/libs/draco/gltf/"
+     * @param decoderPath e.g., "libs/draco/gltf/"
      */
     static setDracoDecoderPath(path: string): void;
     private getGltfLoader;

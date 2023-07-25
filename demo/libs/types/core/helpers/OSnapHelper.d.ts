@@ -53,6 +53,7 @@ export declare class OSnapHelper {
     protected markers: Record<number, SnapDrawable>;
     protected activeOSnapType: OSnapType;
     protected snapToleranceInWorldCoord: number;
+    protected tempEdgeMaterial: THREE.LineBasicMaterial;
     /**
      * OSnapType priority. Lower value has a higher priority.
      */
@@ -78,7 +79,7 @@ export declare class OSnapHelper {
      * @param lastMouseDownPosition Used in order to to get foot of perpendicular.
      * @returns Target snap point if any
      */
-    handleSnap(intersections: THREE.Intersection[], is3d: boolean, lastMouseDownPosition?: THREE.Vector3): THREE.Vector3 | undefined;
+    handleSnap(intersections: THREE.Intersection[], is3d: boolean, raycaster?: THREE.Raycaster, lastMouseDownPosition?: THREE.Vector3): THREE.Vector3 | undefined;
     /**
      * Tries to find a proper snap point and display corresponding marker.
      * @param mousePosition Mouse position in world coordinate.
@@ -92,5 +93,9 @@ export declare class OSnapHelper {
     private getFootOfPerpendicular;
     private getIntersectionPointsAndLines;
     private getSnapInfo;
+    /**
+     * Used for 3d scene to get outline info by faces.
+     */
+    private getIntersectsIncludeOutline;
 }
 export {};

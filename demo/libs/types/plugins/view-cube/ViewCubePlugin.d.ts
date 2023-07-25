@@ -21,12 +21,13 @@ export declare class ViewCubePlugin extends Plugin {
     private requestAnimationFrameHandle?;
     private raycaster;
     private renderEnabled;
-    private inputManager;
+    private inputManager?;
     private viewCube?;
     private lastCoords?;
     constructor(viewer: BaseViewer, cfg?: ViewCubePluginConfig);
     private init;
     private initDom;
+    private initInputManager;
     private initScene;
     private initCamera;
     private initRenderer;

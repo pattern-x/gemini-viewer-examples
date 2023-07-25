@@ -18,7 +18,6 @@ export declare class Viewer3DUtils {
     /**
      * Gets camera's new position and target(lookAt) by given bbox and view
      */
-    static getCameraPositionByBboxAndView(bbox: THREE.Box3, view: Views | string, eye: THREE.Vector3, look: THREE.Vector3, cameraProjectionMatrix?: THREE.Matrix4): void;
     /**
      * Gets camera's new position and target(lookAt) by given bbox and expected camera direction
      */

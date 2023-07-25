@@ -67,13 +67,13 @@ export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
     protected mouseDowned: boolean;
     protected touchDowned: boolean;
     protected lastMoveEvent?: EventInfo;
+    protected lastMouseDownPosition?: THREE.Vector3;
     protected mouseDownPositionX: number;
     protected mouseDownPositionY: number;
     protected currentMeasureDrawable?: BaseMeasureDrawable;
     protected drawingPoints?: THREE.Vector3[];
     protected lastClickTime?: number;
     protected tooltip?: Tooltip;
-    protected tempEdgeMaterial: THREE.LineBasicMaterial;
     protected snapPoint?: THREE.Vector3 | undefined;
     protected completed?: boolean;
     protected clickedOnMeasurementDrawable?: BaseMeasureDrawable;
@@ -122,8 +122,5 @@ export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
      * @param e
      */
     getIntersections: (e: EventInfo) => THREE.Intersection[];
-    private getIntersectsIncludeOutline;
-    lastMouseDownPosition?: THREE.Vector3;
-    private handleSnap;
 }
 export {};

@@ -7,7 +7,7 @@ export declare class SectionPlane extends THREE.Mesh {
     vertices: THREE.Vector3[];
     edge: THREE.Line;
     constructor(actionType: string, vertices: THREE.Vector3[]);
-    private createIgnoreClipMateriasl;
+    private createIgnoreClipMaterials;
     createEdge(vertices: THREE.Vector3[]): THREE.Line<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.LineBasicMaterial>;
     update(vertices: THREE.Vector3[]): void;
     rotatePlane(axis: THREE.Vector3, angle: number): void;
