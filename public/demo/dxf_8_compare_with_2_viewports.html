@@ -4,7 +4,6 @@
     <link rel="stylesheet" type="text/css" href="./demo/global.css" />
     <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css" />
     <link rel="stylesheet" href="./demo/compare/dxfComparePanel.css" />
-    <link rel="stylesheet" href="./demo/layerManager/layerManager.css" />
     <link rel="stylesheet" href="./demo/settings/SettingsPanel.css" />
     <style>
       body {
@@ -60,13 +59,13 @@
           AxisGizmoPlugin,
           DxfCompareHelper,
           DxfViewer,
+          LayerManagerPlugin,
           MeasurementPlugin,
           ToolbarMenuId,
           ViewerEvent,
       } from "./demo/libs/gemini-viewer.esm.min.js";
       import DxfComparePanel from "./demo/compare/dxfComparePanel.js";
       import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
-      import LayerManager from "./demo/layerManager/LayerManager.js";
 
       const url1 = "./demo/models/dxf/doors_and_windows.dxf";
       const url2 = "./demo/models/dxf/doors_and_windows_mopdified.dxf";
@@ -147,15 +146,12 @@
               onActive: () => {
                 console.log("[Toolbar]", "Activate Layers");
                 if (!viewer.layerManager) {
-                  viewer.layerManager = new LayerManager(viewer);
+                  viewer.layerManager = new LayerManagerPlugin(viewer);
                 }
                 viewer.layerManager.show();
               },
               onDeactive: () => {
                 console.log("[Toolbar]", "Deactivate Layers");
-                if (!viewer.layerManager) {
-                  viewer.layerManager = new LayerManager(viewer);
-                }
                 viewer.layerManager.hide();
               },
             },

@@ -3,7 +3,6 @@
 <head>
     <link rel="icon" href="./demo/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="./demo/global.css" />
-    <link rel="stylesheet" href="./demo/layerManager/layerManager.css">
     <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
     <style>
         #myCanvas {
@@ -79,6 +78,7 @@
         AxisGizmoPlugin,
         BottomBarPlugin,
         DxfViewer,
+        LayerManagerPlugin,
         LocalDxfUploader,
         MeasurementPlugin,
         StatsPlugin,
@@ -86,7 +86,6 @@
         ViewerEvent,
     } from "./demo/libs/gemini-viewer.esm.min.js";
     import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
-    import LayerManager from './demo/layerManager/LayerManager.js';
 
     const config = {
         containerId: "myCanvas",
@@ -115,15 +114,12 @@
                     onActive: () => {
                         console.log("[Toolbar]", "Activate Layers");
                         if (!window.layerManager) {
-                            window.layerManager = new LayerManager(window.viewer);
+                            window.layerManager = new LayerManagerPlugin(window.viewer);
                         }
                         window.layerManager.show();
                     },
                     onDeactive: () => {
                         console.log("[Toolbar]", "Deactivate Layers");
-                        if (!window.layerManager) {
-                            window.layerManager = new LayerManager(window.viewer);
-                        }
                         window.layerManager.hide();
                     },
                 },
@@ -142,7 +138,7 @@
 
     const modelUploader = new LocalDxfUploader(viewer);
     modelUploader.onSuccess = () => {
-        !viewer.layerManager && (viewer.layerManager = new LayerManager(viewer));
+        !window.layerManager && (window.layerManager = new LayerManagerPlugin(viewer));
     }
     document.getElementById("uploadModelFile").onclick = function() {
         modelUploader.openFileBrowserToUpload();
@@ -152,7 +148,7 @@
         if (url) {
             viewer.loadModelAsync({ src: url, merge: true }).then(() => {
                 console.log(`[Demo] Loaded model ${url}`);
-                !viewer.layerManager && (viewer.layerManager = new LayerManager(viewer));
+                !window.layerManager && (window.layerManager = new LayerManagerPlugin(viewer));
             })
         }
     }
