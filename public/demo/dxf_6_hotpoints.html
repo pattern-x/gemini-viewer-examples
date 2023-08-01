@@ -32,9 +32,6 @@
             cursor: pointer;
             padding: 2px;
         }
-        .btn-active {
-            background-color: cornflowerblue;
-        }
         .hotpoint {
             opacity: 0.8;
             top: 0px;
@@ -57,9 +54,6 @@
             border-color: red;
             border-radius: 50%;
         }
-        .hide {
-            display: none;
-        }
     </style>
 </head>
 
@@ -68,9 +62,7 @@
         <div id="myCanvas" class="container"></div>
         <div id="myCanvas2" class="container"></div>
         <div class="hotpoint-toolbar">
-            <button id="AddHotpoint" class="hotpoint-toolbar-btn">Add hotpoint</button>
             <button id="ClearHotpoints" class="hotpoint-toolbar-btn" title="Clear all hotpoints">Clear</button>
-            <button id="AddHotpoint2" class="hotpoint-toolbar-btn">Add hotpoint 2</button>
             <button id="ClearHotpoints2" class="hotpoint-toolbar-btn" title="Clear all hotpoints">Clear 2</button>
         </div>
     </div>
@@ -84,126 +76,62 @@
         const filename = "rac_basic_sample_project";
         const modelCfg = {
             modelId: filename,
-            name: filename,
             src: `./demo/models/dxf/${filename}.dxf`,
         };
-        const viewerCfg = {
-            containerId: "myCanvas",
-            enableSpinner: true,
-            enableProgressBar: true,
-        };
-        const viewerCfg2 = {
-            containerId: "myCanvas2",
-            enableSpinner: true,
-            enableProgressBar: true,
-        }
-        const viewer = new DxfViewer(viewerCfg);
-        const viewer2 = new DxfViewer(viewerCfg2);
+
+        const viewer = new DxfViewer({ containerId: "myCanvas" });
+        const viewer2 = new DxfViewer({ containerId: "myCanvas2" });
+        await viewer.loadModelAsync(modelCfg);
+        await viewer2.loadModelAsync(modelCfg);
 
         const hotpointPlugin = new HotpointPlugin(viewer);
         const hotpointPlugin2 = new HotpointPlugin(viewer2);
 
-        await viewer.loadModelAsync(modelCfg);
-        await viewer2.loadModelAsync(modelCfg);
-
-        let addingHotpoint = false;
-        let addingHotpoint2 = false;
         let hotpointCount = 0; // used to generate unique id
-        const hotpointsPerLayout = {}; // a map, the key is layoutName
-        const hotpointsPerLayout2 = {}; // a map, the key is layoutName
+        let hotpointCount2 = 0; // used to generate unique id
 
-        const addHotpointBtn = document.getElementById("AddHotpoint");
-        const addHotpointBtn2 = document.getElementById("AddHotpoint2");
         const clearHotpointsBtn = document.getElementById("ClearHotpoints");
         const clearHotpointsBtn2 = document.getElementById("ClearHotpoints2");
-        addHotpointBtn.onclick = () => {
-            if (addHotpointBtn.classList.contains("btn-active")) {
-                addHotpointBtn.classList.remove("btn-active")
-                addingHotpoint = false;
-            } else {
-                addHotpointBtn.classList.add("btn-active")
-                addingHotpoint = true;
-            }
-        };
-        addHotpointBtn2.onclick = () => {
-            if (addHotpointBtn2.classList.contains("btn-active")) {
-                addHotpointBtn2.classList.remove("btn-active")
-                addingHotpoint2 = false;
-            } else {
-                addHotpointBtn2.classList.add("btn-active")
-                addingHotpoint2 = true;
-            }
-        };
         clearHotpointsBtn.onclick = () => {
-            addHotpointBtn.classList.remove("btn-active");
-            addingHotpoint = false;
             hotpointPlugin.clear();
-            Object.keys(hotpointsPerLayout).forEach((key) => {
-                hotpointsPerLayout[key] = [];
-            });
         };
         clearHotpointsBtn2.onclick = () => {
-            addHotpointBtn2.classList.remove("btn-active");
-            addingHotpoint2 = false;
             hotpointPlugin2.clear();
-            Object.keys(hotpointsPerLayout2).forEach((key) => {
-                hotpointsPerLayout2[key] = [];
-            });
         };
 
         const createHotpoint = (event) => {
-            const target = event.target;
-
-            // create hotpoint...
-            if (addingHotpoint && target instanceof HTMLCanvasElement) {
-                const location = viewer.getHitResult(event);
-                if (!location) {
-                    return;
-                }
-                const hotpointId = `hotpoint_${hotpointCount}`;
-                const hotpoint = {
-                    hotpointId,
-                    anchorPosition: [location.x, location.y],
-                    visible: true,
-                    html: `<div class="hotpoint" id="hotpoint_${hotpointId}">
-                                <div class="hotpoint-dot" id="hotpoint-dot_${hotpointId}"></div>
-                            </div>`,
-                }
-                const layoutName = viewer.getActiveLayoutName();
-                if (!hotpointsPerLayout[layoutName]) {
-                    hotpointsPerLayout[layoutName] = [];
-                }
-                hotpointsPerLayout[layoutName].push(hotpoint);
-                hotpointPlugin.add(hotpoint);
-                hotpointCount++;
+            const location = viewer.getHitResult(event);
+            if (!location) {
+                return;
             }
+            const hotpointId = `hotpoint_${hotpointCount}`;
+            const hotpoint = {
+                hotpointId,
+                anchorPosition: [location.x, location.y],
+                visible: true,
+                html: `<div class="hotpoint" id="hotpoint_${hotpointId}">
+                            <div class="hotpoint-dot" id="hotpoint-dot_${hotpointId}"></div>
+                        </div>`,
+            }
+            hotpointPlugin.add(hotpoint);
+            hotpointCount++;
         };
         const createHotpoint2 = (event) => {
-            const target = event.target;
-
-            // create hotpoint...
-            if (addingHotpoint2 && target instanceof HTMLCanvasElement) {
-                const location = viewer2.getHitResult(event);
-                if (!location) {
-                    return;
-                }
-                const hotpointId = `hotpoint_${hotpointCount}`;
-                const hotpoint = {
-                    hotpointId,
-                    anchorPosition: [location.x, location.y],
-                    visible: true,
-                    html: `<div class="hotpoint" id="hotpoint_${hotpointId}">
-                                <div class="hotpoint-dot" id="hotpoint-dot_${hotpointId}"></div>
-                            </div>`,
-                }
-                const layoutName = viewer2.getActiveLayoutName();
-                if (!hotpointsPerLayout2[layoutName]) {
-                    hotpointsPerLayout2[layoutName] = [];
-                }
-                hotpointsPerLayout2[layoutName].push(hotpoint);
-                hotpointPlugin2.add(hotpoint);
-                hotpointCount++;
+            const location = viewer2.getHitResult(event);
+            if (!location) {
+                return;
             }
+            const hotpointId = `hotpoint_${hotpointCount2}`;
+            const hotpoint = {
+                hotpointId,
+                anchorPosition: [location.x, location.y],
+                visible: true,
+                html: `<div class="hotpoint" id="hotpoint_${hotpointId}">
+                            <div class="hotpoint-dot" id="hotpoint-dot_${hotpointId}"></div>
+                        </div>`,
+            }
+            hotpointPlugin2.add(hotpoint);
+            hotpointCount2++;
         };
 
         const myCanvas = document.getElementById("myCanvas");
