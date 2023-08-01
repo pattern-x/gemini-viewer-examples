@@ -7,8 +7,19 @@
     <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
     <style>
         #myCanvas {
-            width: 100%;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 50%;
             height: 100%;
+        }
+        #myCanvas2 {
+            position: absolute;
+            top: 0px;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            border-left: 2px gray solid;
         }
         .hotpoint-toolbar {
             position: absolute;
@@ -46,38 +57,6 @@
             border-color: red;
             border-radius: 50%;
         }
-        .hotpoint-panel {
-            min-width: 150px;
-            min-height: 30px;
-            opacity: 0.8;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: white;
-            border-radius: 0px;
-            border: 1px solid rgba(127,255,255,0.25);
-            box-shadow: 0px 0px 3px rgba(0,255,255,0.5);
-            vertical-align: middle;
-            font-size: 12px;
-        }
-        .hotpoint-panel:hover {
-            opacity: 1;
-            box-shadow: 0px 0px 12px rgba(0,255,255,0.75);
-            border: 1px solid rgba(127,255,255,0.75);
-        }
-        .hotpoint-close {
-            color: black;
-            font-size: 14px;
-            font-family: monospace;
-            background-color: lightskyblue;
-            text-align: right;
-            padding-right: 3px;
-            cursor: pointer;
-        }
-        .hotpoint-body {
-            padding: 3px;
-            min-height: 40px;
-        }
         .hide {
             display: none;
         }
@@ -87,19 +66,18 @@
 <body>
     <div id="app">
         <div id="myCanvas" class="container"></div>
+        <div id="myCanvas2" class="container"></div>
         <div class="hotpoint-toolbar">
             <button id="AddHotpoint" class="hotpoint-toolbar-btn">Add hotpoint</button>
             <button id="ClearHotpoints" class="hotpoint-toolbar-btn" title="Clear all hotpoints">Clear</button>
+            <button id="AddHotpoint2" class="hotpoint-toolbar-btn">Add hotpoint 2</button>
+            <button id="ClearHotpoints2" class="hotpoint-toolbar-btn" title="Clear all hotpoints">Clear 2</button>
         </div>
     </div>
     <script type="module">
         import {
-            AxisGizmoPlugin,
             DxfViewer,
             HotpointPlugin,
-            LayerManagerPlugin,
-            ToolbarMenuId,
-            ViewerEvent,
         } from "./demo/libs/gemini-viewer.esm.min.js";
         import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
 
@@ -108,67 +86,36 @@
             modelId: filename,
             name: filename,
             src: `./demo/models/dxf/${filename}.dxf`,
-            merge: true,
         };
         const viewerCfg = {
             containerId: "myCanvas",
             enableSpinner: true,
             enableProgressBar: true,
-            enableLayoutBar: true,
-            toolbarMenuConfig: {
-                [ToolbarMenuId.Settings]: {
-                    onActive: () => {
-                        console.log("[Toolbar]", "Activate Settings");
-                        if (!window.dxfSettingsPanel) {
-                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
-                        }
-                        window.dxfSettingsPanel.show();
-                    },
-                    onDeactive: () => {
-                        console.log("[Toolbar]", "Deactivate Settings");
-                        if (!window.dxfSettingsPanel) {
-                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
-                        }
-                        window.dxfSettingsPanel.hide();
-                    },
-                },
-                [ToolbarMenuId.Layers]: {
-                    onActive: () => {
-                        console.log("[Toolbar]", "Activate Layers");
-                        if (!window.layerManager) {
-                            window.layerManager = new LayerManagerPlugin(window.viewer);
-                        }
-                        window.layerManager.show();
-                    },
-                    onDeactive: () => {
-                        console.log("[Toolbar]", "Deactivate Layers");
-                        window.layerManager.hide();
-                    },
-                },
-            },
         };
+        const viewerCfg2 = {
+            containerId: "myCanvas2",
+            enableSpinner: true,
+            enableProgressBar: true,
+        }
         const viewer = new DxfViewer(viewerCfg);
-        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
-        await viewer.setFont(fontFiles);
-        window.viewer = viewer;
+        const viewer2 = new DxfViewer(viewerCfg2);
 
-        new AxisGizmoPlugin(viewer, { ignoreZAxis: true });
         const hotpointPlugin = new HotpointPlugin(viewer);
+        const hotpointPlugin2 = new HotpointPlugin(viewer2);
 
-        const onProgress = (event) => {
-            const progress = ((event.loaded * 100) / event.total).toFixed(1);
-            console.log(`[Demo] Loading progress: ${progress}%`);
-        };
-        await viewer.loadModelAsync(modelCfg, onProgress);
-        console.log(`[Demo] Loaded model ${modelCfg.src}`);
+        await viewer.loadModelAsync(modelCfg);
+        await viewer2.loadModelAsync(modelCfg);
 
         let addingHotpoint = false;
+        let addingHotpoint2 = false;
         let hotpointCount = 0; // used to generate unique id
         const hotpointsPerLayout = {}; // a map, the key is layoutName
-        let draggingHotpointId = "";
+        const hotpointsPerLayout2 = {}; // a map, the key is layoutName
 
         const addHotpointBtn = document.getElementById("AddHotpoint");
+        const addHotpointBtn2 = document.getElementById("AddHotpoint2");
         const clearHotpointsBtn = document.getElementById("ClearHotpoints");
+        const clearHotpointsBtn2 = document.getElementById("ClearHotpoints2");
         addHotpointBtn.onclick = () => {
             if (addHotpointBtn.classList.contains("btn-active")) {
                 addHotpointBtn.classList.remove("btn-active")
@@ -176,6 +123,15 @@
             } else {
                 addHotpointBtn.classList.add("btn-active")
                 addingHotpoint = true;
+            }
+        };
+        addHotpointBtn2.onclick = () => {
+            if (addHotpointBtn2.classList.contains("btn-active")) {
+                addHotpointBtn2.classList.remove("btn-active")
+                addingHotpoint2 = false;
+            } else {
+                addHotpointBtn2.classList.add("btn-active")
+                addingHotpoint2 = true;
             }
         };
         clearHotpointsBtn.onclick = () => {
@@ -186,24 +142,17 @@
                 hotpointsPerLayout[key] = [];
             });
         };
+        clearHotpointsBtn2.onclick = () => {
+            addHotpointBtn2.classList.remove("btn-active");
+            addingHotpoint2 = false;
+            hotpointPlugin2.clear();
+            Object.keys(hotpointsPerLayout2).forEach((key) => {
+                hotpointsPerLayout2[key] = [];
+            });
+        };
 
-        const n2s = (n) => n.toFixed(1);
-
-        const createOrToggleHotpoint = (event) => {
-            // if clicked on "close" button, close the hotpoint panel
-            // if clicked on hotpoint, open the hotpoint panel
+        const createHotpoint = (event) => {
             const target = event.target;
-            if (target.classList.contains("hotpoint-close")) {
-                target.parentElement.classList.add("hide");
-            } else if (target.classList.contains("hotpoint-dot")) {
-                const hotpointId = target.id.replace("hotpoint-dot_", "");
-                const hotpointPanel = document.getElementById(`hotpoint-panel_${hotpointId}`);
-                if (hotpointPanel.classList.contains("hide")) {
-                    hotpointPanel.classList.remove("hide");
-                } else {
-                    hotpointPanel.classList.add("hide");
-                }
-            }
 
             // create hotpoint...
             if (addingHotpoint && target instanceof HTMLCanvasElement) {
@@ -218,10 +167,6 @@
                     visible: true,
                     html: `<div class="hotpoint" id="hotpoint_${hotpointId}">
                                 <div class="hotpoint-dot" id="hotpoint-dot_${hotpointId}"></div>
-                                <div class="hotpoint-panel" id="hotpoint-panel_${hotpointId}">
-                                    <div class="hotpoint-close">X</div>
-                                    <div class="hotpoint-body">This is a hotpoint with id 'hotpoint_${hotpointCount}'</br></br>You can drag the dot to change its location.</div>
-                                </div>
                             </div>`,
                 }
                 const layoutName = viewer.getActiveLayoutName();
@@ -233,57 +178,38 @@
                 hotpointCount++;
             }
         };
+        const createHotpoint2 = (event) => {
+            const target = event.target;
 
-        // manages hotpoints for different layouts
-        viewer.addEventListener(ViewerEvent.LayoutChanged, () => {
-            hotpointPlugin.clear();
-            const layoutName = viewer.getActiveLayoutName();
-            const hotpoints = hotpointsPerLayout[layoutName];
-            if (hotpoints) {
-                hotpoints.forEach((h) => hotpointPlugin.add(h));
+            // create hotpoint...
+            if (addingHotpoint2 && target instanceof HTMLCanvasElement) {
+                const location = viewer2.getHitResult(event);
+                if (!location) {
+                    return;
+                }
+                const hotpointId = `hotpoint_${hotpointCount}`;
+                const hotpoint = {
+                    hotpointId,
+                    anchorPosition: [location.x, location.y],
+                    visible: true,
+                    html: `<div class="hotpoint" id="hotpoint_${hotpointId}">
+                                <div class="hotpoint-dot" id="hotpoint-dot_${hotpointId}"></div>
+                            </div>`,
+                }
+                const layoutName = viewer2.getActiveLayoutName();
+                if (!hotpointsPerLayout2[layoutName]) {
+                    hotpointsPerLayout2[layoutName] = [];
+                }
+                hotpointsPerLayout2[layoutName].push(hotpoint);
+                hotpointPlugin2.add(hotpoint);
+                hotpointCount++;
             }
-        });
+        };
 
-        // enable to drag the hotpoint
-        const onPointerDown = (e) => {
-            if (event.isPrimary === false) {
-                return;
-            }
-            const t = e.target;
-            if (t.classList.contains(`hotpoint-dot`)) {
-                // get the hotpoint id
-                draggingHotpointId = t.id.replace("hotpoint-dot_", "");
-                viewer.controls.enabled = false; // disable controls
-                window.addEventListener("pointermove", onPointerMove);
-                window.addEventListener("pointerup", onPointerUp);
-                console.log("Going to drag hotpoint with id: ", draggingHotpointId);
-            } else if (e.button === 0) { // left button
-                createOrToggleHotpoint(e);
-            }
-        };
-        const onPointerUp = (e) => {
-            viewer.controls.enabled = true; // recover controls
-            window.removeEventListener("pointermove", onPointerMove);
-            window.removeEventListener("pointerup", onPointerUp);
-            draggingHotpointId = "";
-        };
-        const onPointerMove = (e) => {
-            if (event.isPrimary === false) {
-                return;
-            }
-            const location = viewer.getHitResult(event);
-            if (!location) {
-                return;
-            }
-            const layoutName = viewer.getActiveLayoutName();
-            const hotpoint = hotpointsPerLayout[layoutName].find((h) => h.hotpointId === draggingHotpointId);
-            // console.log(hotpoint);
-            console.log(`Moving hotpoint '${hotpoint.hotpointId}' from (${n2s(hotpoint.anchorPosition[0])}, ${n2s(hotpoint.anchorPosition[1])}) to (${n2s(location.x)}, ${n2s(location.y)})`);
-            hotpoint.anchorPosition[0] = location.x;
-            hotpoint.anchorPosition[1] = location.y;
-            hotpointPlugin.move(hotpoint.hotpointId, location);
-        };
-        window.addEventListener("pointerdown", onPointerDown);
+        const myCanvas = document.getElementById("myCanvas");
+        const myCanvas2 = document.getElementById("myCanvas2");
+        myCanvas.addEventListener("pointerdown", createHotpoint);
+        myCanvas2.addEventListener("pointerdown", createHotpoint2);
     </script>
 </body>
 
