@@ -30,6 +30,40 @@ export interface DxfLayers {
     modelId: string;
     layers: Record<string, DxfLayer>;
 }
+export interface PdfLayers {
+    modelId: string;
+    layers: Record<string, PdfLayer>;
+}
+export interface PdfLayer {
+    name: string;
+    id: string;
+    index: string;
+    visible: boolean;
+}
+export interface PdfData {
+    threejsObject: THREE.Object3D;
+    layers: Record<string, PdfLayer>;
+    layersAndThreejsObjects?: Record<string, THREE.Object3D[]>;
+    loadedEntityCount: number;
+}
+/**
+ * Loaded 2d model info for DxfViewer.
+ */
+export interface Model2d {
+    /**
+     * modelId that is unique for loaded models
+     */
+    modelId: string;
+    /**
+     * Used for dxf data.
+     */
+    dxfData?: DxfData;
+    pdfData?: PdfData;
+    /**
+     * Model space transform matrix.
+     */
+    msTransformMatrix?: THREE.Matrix4;
+}
 /**
  * Threejs objects are organized in tree view as below:
  *
@@ -146,10 +180,7 @@ export declare class DxfViewer extends BaseViewer {
      * The record "key" is modelId or src.
      * @internal
      */
-    loadedModels: Record<string, {
-        dxfData?: DxfData;
-        msTransformMatrix?: THREE.Matrix4;
-    }>;
+    loadedModels: Model2d[];
     /**
      * @internal
      */
@@ -295,6 +326,13 @@ export declare class DxfViewer extends BaseViewer {
      */
     unloadDxf(): void;
     /**
+     *
+     * @param model
+     * @returns
+     * @description add model data to viewer
+     */
+    addModel(model: Model2d): void;
+    /**
      * If it is under compare mode
      * @deprecated use DxfCompareHelper2 instead
      */
@@ -388,7 +426,7 @@ export declare class DxfViewer extends BaseViewer {
      * }
      * ```
      */
-    getLayers(): DxfLayers[];
+    getLayers(): (DxfLayers | PdfLayers)[];
     /**
      * Sets model's (aka, a dxf file) visibility.
      * @throws Throws exception if modelId doesn't exist.
@@ -449,6 +487,7 @@ export declare class DxfViewer extends BaseViewer {
      * ```
      */
     setFont(urls: string[]): Promise<void>;
+    getFont(): Font | undefined;
     /**
      * Sets loading manager.
      * @internal
@@ -858,6 +897,7 @@ export declare class DxfViewer extends BaseViewer {
      * Also, usually(but not always) we should regenerate sky and go to home view
      * @param object
      * @internal
+     * @deprecated
      */
     addLoadedModelToScene(object: THREE.Object3D, modelCfg: ModelConfig, dxfData: DxfData): Promise<void>;
     /**

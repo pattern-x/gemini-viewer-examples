@@ -28,6 +28,11 @@ export declare enum ViewerEvent {
      */
     AfterRender = "AfterRender",
     /**
+     * Triggered when animate() is executed.
+     * @internal
+     */
+    OnAnimate = "OnAnimate",
+    /**
      * Triggered when bimviewer switch camera
      * @internal
      */

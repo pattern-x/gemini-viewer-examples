@@ -87,6 +87,38 @@ export interface DxfModelConfig extends ModelConfig {
      * @default false
      */
     ignorePaperSpace?: boolean;
+    /**
+     * Applies this color to everything in this model.
+     * This allows user to show a drawing with a pure color (black, white, etc.).
+     * Color value is between 0 and 1, e.g., [1, 0, 0] means 'red'.
+     */
+    overrideColor?: number[];
+}
+/**
+ * Loaded 3d model info for BimViewer.
+ */
+export interface Model3d {
+    /**
+     * modelId that is unique for loaded models
+     */
+    modelId: string;
+    /**
+     * Three.js object id.
+     */
+    objectId: number;
+    /**
+     * Bounding box of the model.
+     */
+    bbox?: THREE.Box3;
+    /**
+     * Edge objects of the model.
+     */
+    edges?: THREE.LineSegments[];
+    /**
+     * TilesRenderer for 3dTiles
+     * @internal
+     */
+    tilesRenderer?: any;
 }
 /**
  * Context for ContextMenu

@@ -4,7 +4,7 @@ import { Event } from "../../core/utils";
 /**
  * @internal
  */
-export declare abstract class Drawable<Handle extends Record<string, unknown> = Record<string, unknown>> extends Event<Handle> {
+export declare abstract class Drawable<DrawableEvents extends Record<string, unknown> = Record<string, unknown>> extends Event<DrawableEvents> {
     protected readonly DEFAULT_LINE_WIDTH = 1;
     protected readonly DEFAULT_STROKE_STYLE: number[];
     protected readonly DEFAULT_FILL_STYLE: number[];
@@ -27,7 +27,8 @@ export declare abstract class Drawable<Handle extends Record<string, unknown> = 
     renderOrder: number;
     needsFrustumCulled: boolean;
     protected editPointSize: number;
-    protected editPointColor: string;
+    protected editPointFillColor: string;
+    protected editPointStrokeColor: string;
     protected matrix: THREE.Matrix4;
     protected ctx?: CanvasRenderingContext2D;
     constructor(id?: string);

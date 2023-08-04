@@ -1,8 +1,7 @@
-import * as THREE from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 import { Toolbar } from "../../components/toolbar";
-import { CameraConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint } from "../../core/Configs";
+import { Model3d, CameraConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint } from "../../core/Configs";
 import { Vector3 } from "../../core/Constants";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 export declare class VRViewer extends BaseViewer {
@@ -14,13 +13,7 @@ export declare class VRViewer extends BaseViewer {
     /**
      * @internal
      */
-    loadedModels: {
-        [src: string]: {
-            id: number;
-            bbox?: THREE.Box3;
-            edges?: THREE.LineSegments[];
-        };
-    };
+    loadedModels: Model3d[];
     /**
      * @internal
      */
@@ -40,8 +33,6 @@ export declare class VRViewer extends BaseViewer {
     private raycaster;
     private autoRotate;
     private events;
-    private lastFrameExecuteTime;
-    private maxFps;
     private isMousePressing;
     private settings;
     private viewpoints;

@@ -85,7 +85,7 @@ export interface EventInfo {
     timestamp: number;
     originalEvent?: NativeEvent;
 }
-export declare type InputEvent = {
+export declare type InputEvents = {
     pointerdown: EventInfo;
     pointermove: EventInfo;
     pointerup: EventInfo;
@@ -106,7 +106,7 @@ export declare type InputEvent = {
     keyup: EventInfo;
     resize: EventInfo;
 };
-export declare class InputManager extends Event<InputEvent> {
+export declare class InputManager extends Event<InputEvents> {
     private element;
     private enable;
     protected mouseDownPositionX: number;

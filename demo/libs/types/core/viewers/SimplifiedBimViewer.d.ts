@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { IsolateObjectsParam, ModelConfig } from "../../core/Configs";
+import { Model3d, IsolateObjectsParam, ModelConfig } from "../../core/Configs";
 import { CameraControlsEx } from "../../core/controls/CameraControlsEx";
 /**
  * @internal
@@ -21,12 +21,7 @@ export declare class SimplifiedBimViewer {
     renderTarget?: THREE.WebGLRenderTarget;
     controls?: CameraControlsEx;
     selectedObject: any | undefined;
-    loadedModels: {
-        [src: string]: {
-            id: number;
-            bbox?: THREE.BoxHelper;
-        };
-    };
+    loadedModels: Model3d[];
     pmremGenerator?: THREE.PMREMGenerator;
     private clock;
     private viewerMode;

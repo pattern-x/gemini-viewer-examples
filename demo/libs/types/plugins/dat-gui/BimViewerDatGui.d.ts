@@ -58,7 +58,8 @@ export declare class BimViewerDatGuiPlugin extends Plugin {
         ssaaEnabled: boolean;
         bloomEnabled: boolean;
         unrealBloomEnabled: boolean;
-        delayRenderEdges: boolean;
+        enableFastOperation: boolean;
+        distanceCullingFactor: number;
     };
     /**
      * Init dat.GUI

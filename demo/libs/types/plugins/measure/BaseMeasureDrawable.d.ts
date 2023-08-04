@@ -4,9 +4,9 @@ import type { MeasurementData } from "./BaseMeasurement";
 import { Drawable } from "../../core/canvas/Drawable";
 export declare abstract class BaseMeasureDrawable extends Drawable {
     type: MeasurementType;
-    static readonly MAJOR_COLOR: number[];
-    static readonly MINOR_COLOR: number[];
-    static readonly AREA_FILL_COLOR: number[];
+    static readonly MAJOR_COLOR = "rgba(249, 157, 11, 0.9)";
+    static readonly MINOR_COLOR = "rgb(255, 255, 255)";
+    static readonly AREA_FILL_COLOR = "rgba(249, 157, 11, 0.3)";
     static readonly LINE_WIDTH = 2;
     static readonly POINT_RADIUS = 5;
     static readonly LABEL_FONT_SIZE = 14;

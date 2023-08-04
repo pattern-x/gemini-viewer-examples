@@ -142,23 +142,20 @@ export declare class ObjectUtils {
     private static OUTLINE_MATERIAL;
     /**
      * Creates outlines for given object and children
-     * @param object
-     * @param options 'replaceOriginalObject' must be used carefully, it removes original objects and cannot get back for now.
-     *   It can be used in case for really large models that has a bad performace.
      */
     static createOutlines(object: THREE.Object3D, options?: {
         onlyVisible: boolean;
         meshOnly: boolean;
-        replaceOriginalObject: boolean;
     }, onProgress?: (event: ProgressEvent) => void): Promise<THREE.LineSegments[]>;
     /**
      * Recursively removes outlines for given object and children
      */
     static removeOutlines(object: THREE.Object3D): void;
     /**
-     * Recursively checks if an object or children has outline already
+     * Checks if an object has outline already
+     * @param checkChildren If it checks children recursively.
      */
-    static hasOutline(object: THREE.Object3D): boolean;
+    static hasOutline(object: THREE.Object3D, checkChildren?: boolean): boolean;
     /**
      * Sets outline visiblility for given object and children
      */
@@ -166,11 +163,10 @@ export declare class ObjectUtils {
     /**
      * Creates outline for given geometry
      */
-    static createOutline(geometry: THREE.BufferGeometry, material?: THREE.LineBasicMaterial): THREE.LineSegments;
+    static createOutline(geometry: THREE.BufferGeometry, material?: THREE.LineBasicMaterial, matrix?: THREE.Matrix4): THREE.LineSegments;
     /**
      * Creates outline for given geometry
      */
-    static createOutlineSync(geometry: THREE.BufferGeometry, matrix: THREE.Matrix4, material?: THREE.LineBasicMaterial): THREE.LineSegments;
     /**
      * Clones object
      * @param object target object to be cloned

@@ -23,7 +23,7 @@ export declare enum MeasurementType {
  * Serializable measurement data
  */
 export declare type MeasurementData = DrawableData;
-declare type MeasureHandler = {
+declare type MeasurementEvents = {
     /**
      * Triggered when clicked measure
      */
@@ -56,7 +56,7 @@ declare type MeasureHandler = {
 /**
  * BaseMeasurement class
  */
-export declare abstract class BaseMeasurement extends Event<MeasureHandler> {
+export declare abstract class BaseMeasurement extends Event<MeasurementEvents> {
     protected type: MeasurementType;
     protected viewer: BaseViewer;
     private inputManager;

@@ -2,13 +2,11 @@ import * as THREE from "three";
 import { CanvasRender, Drawable, DrawableList } from "../../core/canvas";
 import { ILine, OSnapMarkerType } from "../../core/utils";
 export declare class SnapDrawable extends Drawable {
-    static readonly LINE_COLOR = "rgba(255, 240, 0, 0.8)";
-    static readonly FILL_COLOR = "rgba(135, 206, 250, 0.5)";
+    static readonly LINE_COLOR = "rgba(255, 119, 0, 1)";
     static readonly FILL_COLOR_NONE = "rgba(0, 0, 0, 0)";
     static readonly SNAP_LINE_COLOR = "rgba(255, 240, 0, 0.3)";
-    static readonly LINE_WIDTH_1 = 0.8;
-    static readonly LINE_WIDTH = 2.5;
-    static readonly SNAP_ICON_SIZE = 10;
+    static readonly LINE_WIDTH = 2;
+    static readonly SNAP_ICON_SIZE = 14;
     needsFrustumCulled: boolean;
     renderOrder: number;
     snapType: OSnapMarkerType;
@@ -22,11 +20,30 @@ export declare class SnapDrawable extends Drawable {
     drawSelect(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     isPointInPath(p: THREE.Vector3): boolean;
     drawSnapLine(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
-    drawDot(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
+    /**
+     *      p1
+     *      |
+     *      | point (origin)
+     *     / \
+     *   /     \
+     *  p2      p3
+     */
+    drawTripleCorss(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     drawSquare(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     drawTriangle(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
+    /**
+     * Snap marker for circle center.
+     */
     drawCircleWithCross(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     drawCross(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
+    /**
+     * p4|\
+     *   |  \
+     * p2|____\ p1 (origin)
+     *   |    | \
+     *   |____|___\
+     * P5     p3   P6
+     */
     drawPerpendicular(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     update(osnapInfo: OSnapInfo): void;
     getClassType(): string;
@@ -53,7 +70,7 @@ export declare class OSnapHelper {
     protected markers: Record<number, SnapDrawable>;
     protected activeOSnapType: OSnapType;
     protected snapToleranceInWorldCoord: number;
-    protected tempEdgeMaterial: THREE.LineBasicMaterial;
+    protected intersectionLimit: number;
     /**
      * OSnapType priority. Lower value has a higher priority.
      */
@@ -68,6 +85,8 @@ export declare class OSnapHelper {
      * Gets snap tolerance in world coordinate.
      */
     getSnapTolerance(): number;
+    setIntersectionLimit(val: number): void;
+    getIntersectionLimit(): number;
     getMarker(type: OSnapType): SnapDrawable;
     setAllSnapLinesVisible(visible: boolean): void;
     deactivate(): void;

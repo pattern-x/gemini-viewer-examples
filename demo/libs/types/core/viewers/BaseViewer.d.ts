@@ -51,13 +51,13 @@ export declare enum ViewerName {
     DxfViewer = "DxfViewer",
     VRViewer = "VRViewer"
 }
-declare type ViewerEventType = {
+declare type ViewerEvents = {
     [K in ViewerEvent]: any;
 };
 /**
  * @internal
  */
-export declare abstract class BaseViewer extends Event<ViewerEventType> {
+export declare abstract class BaseViewer extends Event<ViewerEvents> {
     /**
      * @internal
      */
@@ -135,6 +135,8 @@ export declare abstract class BaseViewer extends Event<ViewerEventType> {
      * @internal
      */
     protected loadingProgressBar?: any;
+    protected lastFrameExecuteTime: number;
+    protected minFrameInterval: number;
     protected plugins: Plugin[];
     constructor(viewerCfg: BaseViewerConfig);
     private initLogLevel;

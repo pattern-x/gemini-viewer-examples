@@ -1,4 +1,4 @@
-import { DxfLayers, DxfViewer, Plugin, PluginConfig } from "../../core";
+import { DxfLayers, DxfViewer, PdfLayers, Plugin, PluginConfig } from "../../core";
 /**
  * Dxf layer manager config.
  */
@@ -13,20 +13,26 @@ export interface LayerManagerPluginConfig extends PluginConfig {
     visible?: boolean;
 }
 /**
- * Dxf layer manager plugin events.
+ * Layer manager plugin events.
  */
+declare type LayerManagerPluginEvents = {
+    /**
+     * Panel visibility change handler.
+     */
+    Visibilitychange: boolean;
+};
 /**
  * Dxf layer manager.
  * Can be used by DxfViewer.
  */
-export declare class LayerManagerPlugin extends Plugin {
+export declare class LayerManagerPlugin extends Plugin<LayerManagerPluginEvents> {
     protected cfg: LayerManagerPluginConfig;
     protected container?: HTMLDivElement;
     protected layerMgrRoot?: HTMLDivElement;
     protected layerList?: HTMLDivElement;
     protected headerText?: HTMLSpanElement;
     protected closeBtn?: HTMLSpanElement;
-    protected dxfLayersArray?: DxfLayers[];
+    protected dxfLayersArray?: (DxfLayers | PdfLayers)[];
     protected checkboxes?: HTMLInputElement[];
     constructor(viewer: DxfViewer, cfg?: LayerManagerPluginConfig);
     protected init(): void;
@@ -36,10 +42,11 @@ export declare class LayerManagerPlugin extends Plugin {
     destroy(): void;
     buildPage(): void;
     addContent(): void;
-    generateListItem(layer: string, visible: boolean, color: string): string;
+    generateListItem(layer: string, visible: boolean, color?: string): string;
     addEventHandlers(): void;
     checkboxHandler(checkbox: HTMLInputElement): void;
     updatePage(): void;
     updateHeaderText(): void;
-    convertDecimalToHex(decimal: number): string;
+    convertDecimalToHex(decimal: number): string | undefined;
 }
+export {};

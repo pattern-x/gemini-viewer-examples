@@ -1,10 +1,9 @@
-import { TilesRenderer } from "3d-tiles-renderer";
 import * as THREE from "three";
 import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { Settings as SettingsType } from "../../components/settings";
 import { Toolbar } from "../../components/toolbar";
-import { BimViewerConfig, CameraConfig, ModelConfig } from "../../core/Configs";
-import { SectionType } from "../../core/Constants";
+import { Model3d, BimViewerConfig, CameraConfig, ModelConfig } from "../../core/Configs";
+import { SectionType, Vector3 } from "../../core/Constants";
 import { Drawable } from "../../core/canvas";
 import { EventInfo } from "../../core/input/InputManager";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
@@ -36,23 +35,11 @@ export declare class BimViewer extends BaseViewer {
     /**
      * @internal
      */
-    loadedModels: {
-        [src: string]: {
-            id: number;
-            bbox?: THREE.Box3;
-            edges?: THREE.LineSegments[];
-        };
-    };
+    loadedModels: Model3d[];
     /**
      * @internal
      */
-    loaded3dTiles: {
-        [src: string]: {
-            id: number;
-            bbox: THREE.Box3;
-            renderer: TilesRenderer;
-        };
-    };
+    loaded3dTiles: Model3d[];
     /**
      * @internal
      */
@@ -91,13 +78,21 @@ export declare class BimViewer extends BaseViewer {
     private timeoutSymbol?;
     private enableModelLevelFrustumCulling;
     private isFrustumInsectChecking;
-    private lastFrameExecuteTime;
-    private maxFps;
     private settings;
     private contextMenu?;
-    private axes?;
     private twoDModelCount;
     private vertexNormalsHelpers?;
+    enableFastOperation: boolean;
+    private operationTimeout?;
+    private edgesVisible;
+    /**
+     * @internal
+     */
+    distanceCullingFactor: number;
+    /**
+     * @internal
+     */
+    operationTimeoutMs: number;
     /**
      * @internal
      */
@@ -107,12 +102,6 @@ export declare class BimViewer extends BaseViewer {
      */
     private bbox;
     private anchor?;
-    private edgesVisible;
-    private edgesPassTimeout?;
-    /**
-     * @internal
-     */
-    edgesPassTimeoutMs: number;
     constructor(viewerCfg: BimViewerConfig, cameraCfg?: CameraConfig);
     /**
      * Initialize everything it needs
@@ -145,9 +134,13 @@ export declare class BimViewer extends BaseViewer {
     get has2dModel(): boolean;
     private showContextMenu;
     private handleRightClick;
-    private sycnCameraPosition;
-    private sycnControls;
-    setToOrthographicCamera(isOrthCamera?: boolean): void;
+    private sycnCameraAndControls;
+    /**
+     * Sets to orthographic or perspective camera.
+     * @param toOrtho Set to orthographic camera if true.
+     * @returns
+     */
+    setToOrthographicCamera(toOrtho?: boolean): void;
     protected animate(): void;
     private update3dTiles;
     /**
@@ -208,6 +201,7 @@ export declare class BimViewer extends BaseViewer {
      * @param object
      */
     private addLoadedModelToScene;
+    private calculateMeshSurfaceArea;
     /**
      * We won't set a opacity directly, because that way will lose model's original opacity value
      * @param isAdd is add or remove the opacity we added
@@ -388,14 +382,14 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     enableUnrealBloomPass(enable: boolean): void;
-    private updateEdgesVisibility;
-    private handleCameraControl;
-    private handleCameraSleep;
     /**
-     * Enables or disable delay render edges.
-     * @internal
+     * Triggered when there is any operation, like pan, rotate, zoom, etc.
+     * We'll do these at this time:
+     * - Enable distance culling
+     * - Hide object edge if there is
+     * - Disable shadow
      */
-    delayRenderEdges(enable: boolean): void;
+    onOperation: () => void;
     /**
      * @description Compatible with older versions, use SectionPlugin instead
      * @internal
@@ -507,4 +501,21 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     computeBoundingBox(): THREE.Box3;
+    /**
+     * Sets distance culling factor in order to improve performance.
+     * 0 means distance culling is disabled.
+     * 100 means a 1x1 squre mesh is visible within 100.
+     */
+    setDistanceCullingFactor(val: number): void;
+    /**
+     * Gets distance culling factor.
+     */
+    getDistanceCullingFactor(): number;
+    /**
+     * Gets camera position and direction.
+     */
+    getCameraPositionAndDirection(): {
+        position: Vector3;
+        direction: Vector3;
+    } | undefined;
 }

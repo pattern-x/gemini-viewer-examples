@@ -5,6 +5,6 @@ export { BaseViewer, BimViewer, DxfViewer, VRViewer, ScreenshotResult, Simplifie
 export { DxfDetailChanges, DxfChangeType, DxfChange, DxfLayer } from "./core/dxf";
 export { ILayer } from "./core/dxf-parser";
 export { MarkupType } from "./core/markup";
+export { ProgressBar } from "./components/progress-bar";
 export { ToolbarMenuId } from "./components/toolbar";
-export { LocalDxfUploader, LocalModelUploader, LocalImageUploader } from "./core/local-model-uploader";
-export { AxisGizmoPlugin, AxisGizmoPluginConfig, BaseMeasureDrawable, BaseSection, ExplodePlugin, GroundShadowPlugin, GroundShadowConfig, HotpointPlugin, MeasurementData, MeasurementPlugin, MeasurementType, NavCubePlugin, NavCubePluginConfig, SectionPlugin, SkyboxPlugin, SkyboxPluginConfig, StatsPlugin, ViewCubePlugin, ViewCubePluginConfig, } from "./plugins";
+export { AxisGizmoPlugin, AxisGizmoPluginConfig, BaseMeasureDrawable, BaseSection, ExplodePlugin, GroundShadowPlugin, GroundShadowConfig, HotpointPlugin, LocalDxfUploader, LocalModelUploader, LocalImageUploader, MeasurementData, MeasurementPlugin, MeasurementType, NavCubePlugin, NavCubePluginConfig, SectionPlugin, SkyboxPlugin, SkyboxPluginConfig, StatsPlugin, ViewCubePlugin, ViewCubePluginConfig, } from "./plugins";

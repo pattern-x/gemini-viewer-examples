@@ -92,6 +92,31 @@ export declare class CommonUtils {
      * Twinkle the object several times
      */
     static twinkle(obj: THREE.Object3D, ms?: number): Promise<void>;
+    /**
+     * Gets a function to update progress.
+     * @param onProgress onProgress callback.
+     */
+    static getUpdateProgressFunc(onProgress?: (e: ProgressEvent) => void): (progress: number) => void;
+    /**
+     * Gets an async function to update progress.
+     * The reason to use async function is, in order to give UI thread chance to update the progress!
+     * @param onProgress onProgress callback.
+     */
+    static getUpdateProgressFuncAsync(onProgress?: (e: ProgressEvent) => void): (progress: number) => Promise<void>;
+    /**
+     * Gets an async function to update progress for a for/while loop.
+     * @param total Total number of a for/while loop.
+     * @param onProgress onProgress callback.
+     */
+    static getUpdateProgressFuncForLoop(total: number, onProgress?: (e: ProgressEvent) => void): (i: number) => Promise<void>;
+    /**
+     * Gets a function to update sub progress, which has a progress range limitation according to its parent progress.
+     * @param min Min range number between 0-100
+     * @param max Max range number between 0-100
+     * @param onProgress onProgress callback.
+     * @returns
+     */
+    static getUpdateSubProgressFunc(min: number, max: number, onProgress?: (e: ProgressEvent) => void): (e: ProgressEvent) => void;
 }
 /**
  * @internal

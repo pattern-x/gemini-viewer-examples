@@ -1,7 +1,7 @@
 import { DrawableData } from "./Constants";
 import { Drawable } from "./Drawable";
 import { Event } from "../../core/utils";
-declare type DrawableListHandler = {
+declare type DrawableListEvents = {
     addDrawable: DrawableData;
     updateDrawable: DrawableData;
     removeDrawable: DrawableData;
@@ -10,7 +10,7 @@ declare type DrawableListHandler = {
  * A group of Drawlables for a certain category
  * @internal
  */
-export declare class DrawableList extends Event<DrawableListHandler> {
+export declare class DrawableList extends Event<DrawableListEvents> {
     private category;
     private drawableMap;
     constructor(category: string);

@@ -184,6 +184,11 @@ export interface DxfLoaderConfig {
      * File encoding, can be used by dxf. Common encoding include "UTF-8", "gb2312", etc.
      */
     encoding?: string;
+    /**
+     * Apply this color to everything in this model.
+     * Color value between 0 and 1.
+     */
+    overrideColor?: number[];
 }
 /**
  * Dxf file loader.
@@ -197,6 +202,7 @@ export declare class DxfLoader extends THREE.Loader {
     private ignorePaperSpace;
     font?: Font | ShxFont;
     private encoding;
+    private overrideColor?;
     angBase: number | IPoint;
     angDir: number | IPoint;
     private header;

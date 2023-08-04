@@ -5,12 +5,12 @@ import { CanvasRender, DrawableData } from "../../core/canvas";
 import type { EventInfo, InputManager } from "../../core/input/InputManager";
 import { Event } from "../../core/utils";
 import type { BaseViewer } from "../../core/viewers";
-declare type MarkupHandler = {
+declare type MarkupEvents = {
     StartDraw: BaseMarkup;
     EndDraw: BaseMarkup;
     EndEdit: BaseMarkup;
 };
-export declare class MarkupManager extends Event<MarkupHandler> {
+export declare class MarkupManager extends Event<MarkupEvents> {
     private viewer;
     private inputManager;
     overlayRender?: CanvasRender;
