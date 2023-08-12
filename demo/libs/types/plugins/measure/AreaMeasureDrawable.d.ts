@@ -3,7 +3,8 @@ import { BaseMeasureDrawable } from "./BaseMeasureDrawable";
 import { MeasurementType } from "./BaseMeasurement";
 export declare class AreaMeasureDrawable extends BaseMeasureDrawable {
     type: MeasurementType;
-    constructor(id: string, points: THREE.Vector3[]);
+    scale?: number;
+    constructor(id: string, points: THREE.Vector3[], scale?: number);
     draw(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     drawText(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     calculateArea(points: THREE.Vector3[]): number;

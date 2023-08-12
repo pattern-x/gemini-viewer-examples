@@ -62,6 +62,8 @@ export declare class OverviewMapPlugin extends Event<{
     private imgBBox?;
     private translateStart;
     private rotateStart;
+    private markerRotateState;
+    private markerTranslateState;
     private isMarkerRotating;
     private isMarkerTranslating;
     private isUpdateWhenPawnMove;
@@ -94,6 +96,8 @@ export declare class OverviewMapPlugin extends Event<{
     private handlePointerDown;
     private onCameraMove;
     private handlePointerUp;
+    private handlePointerLeave;
+    private handlePointerEnter;
     private handleDblClick;
     private handlePointerMove;
     private syncCamera;

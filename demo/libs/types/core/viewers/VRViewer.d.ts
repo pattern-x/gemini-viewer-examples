@@ -1,9 +1,19 @@
-import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 import { Toolbar } from "../../components/toolbar";
 import { Model3d, CameraConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint } from "../../core/Configs";
 import { Vector3 } from "../../core/Constants";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
+import { BaseVRMesh } from "../../core/vr";
+interface ViewpointAssets {
+    panoramas: [
+        {
+            id: string;
+            box: BaseVRMesh;
+        }
+    ];
+    css2dObjects: CSS2DObject[];
+}
 export declare class VRViewer extends BaseViewer {
     /**
      * @internal
@@ -36,11 +46,9 @@ export declare class VRViewer extends BaseViewer {
     private isMousePressing;
     private settings;
     private viewpoints;
-    private previousViewpointId;
-    private previousPanoramaId;
     private activeViewpointId;
     private activePanoramaId;
-    private viewpointAssetsMap;
+    viewpointAssetsMap: Map<string, ViewpointAssets>;
     private controlsHelper?;
     private cameraUpdateInterval?;
     private fianlCameraPosition?;
@@ -169,7 +177,7 @@ export declare class VRViewer extends BaseViewer {
      * Activates a panorama by viewpointId and panoramaId
      */
     activatePanoramaById(viewpointId: string, panoramaId: string, setCameraToInitialDirection?: boolean, animate?: boolean, onSuccess?: (viewpoint: VRViewpoint) => void, onError?: (event: ErrorEvent) => void): void;
-    removeCachedPanoramas(): void;
+    removeCachedPanoramas(excludePanoramas?: Record<string, string[]>): void;
     /**
      * Unlimits controls and show all assets. This is useful for debugging.
      * @internal
@@ -223,3 +231,4 @@ export declare class VRViewer extends BaseViewer {
      */
     private merge;
 }
+export {};

@@ -112,6 +112,17 @@ export declare class MeasurementPlugin extends Plugin {
      */
     unselect(renderEnabled?: boolean): void;
     /**
+     * Gets the scale value.
+     * Scale is the ratio of real world value and the value in three.js(pdf, a map, etc.).
+     * e.g., Real world distance is 1000, and the value in three.js is 1, then scale is 1000.
+     * We should display 1000 rather than 1 while measuring.
+     */
+    getScale(): number | undefined;
+    /**
+     * Sets the scale value.
+     */
+    setScale(scale: number | undefined): void;
+    /**
      * @description Destroy measure plugin
      */
     destroy(): void;

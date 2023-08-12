@@ -44,6 +44,12 @@ export declare class PdfLoader extends THREE.Loader {
     currentTransform: THREE.Matrix4;
     transformStack: THREE.Matrix4[];
     currentPath?: THREE.Shape;
+    clipPaths?: THREE.Shape[];
+    clipType: any;
+    paths: THREE.Shape[];
+    private pointsMaterials;
+    private lineBasicMaterials;
+    private meshBasicMaterials;
     font?: ShxFont | Font;
     constructor(cfg: PdfLoaderConfig);
     load(modelCfg: DxfModelConfig, onLoad: (data: Model2d) => void, onProgress: (event: ProgressEvent) => void, onError: (error: any) => void): void;
@@ -54,6 +60,10 @@ export declare class PdfLoader extends THREE.Loader {
      * @returns
      */
     loadAsync(modelCfg: DxfModelConfig, onProgress: (event: ProgressEvent) => void): Promise<Model2d>;
+    private mergePdfObjects;
+    private getPointsMaterial;
+    private getLineBasicMaterial;
+    private getMeshBasicMaterial;
     private createTextMeshByText;
     getTransformByMatrix4(matrix: THREE.Matrix4): number[];
     getObject(data: any, fallback?: null): any;
@@ -187,8 +197,8 @@ declare class CanvasExtraState {
     textHScale: number;
     textRenderingMode: number;
     textRise: number;
-    fillColor: THREE.Color;
-    strokeColor: THREE.Color;
+    fillColor: number;
+    strokeColor: number;
     patternFill: boolean;
     fillAlpha: number;
     strokeAlpha: number;
@@ -203,6 +213,9 @@ declare class CanvasExtraState {
     maxX: number;
     minY: number;
     maxY: number;
+    lineCap: number;
+    lineJoin: number;
+    miterLimit: number;
     constructor(width: number, height: number);
     clone(): any;
     setCurrentPoint(x: number, y: number): void;

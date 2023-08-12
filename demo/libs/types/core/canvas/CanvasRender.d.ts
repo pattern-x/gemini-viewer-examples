@@ -45,7 +45,7 @@ export declare class CanvasRender extends Event {
         type: string;
         quality: number;
     }): Promise<string | undefined>;
-    getImage(filter: (drawabkle: Drawable) => boolean): Promise<HTMLImageElement>;
+    getImage(filter: (drawable: Drawable) => boolean): Promise<HTMLImageElement>;
     getCanvas(): HTMLCanvasElement | undefined;
     destroy(): void;
 }

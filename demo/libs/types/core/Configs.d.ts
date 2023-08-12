@@ -226,6 +226,12 @@ export interface BimViewerConfig extends BaseViewerConfig {
      */
     enableContextMenu?: boolean;
     /**
+     * If user can select an entity by mouse click
+     * @internal
+     * @default true
+     */
+    enableSelection?: boolean;
+    /**
      * Default is `meters`
      * @internal
      */

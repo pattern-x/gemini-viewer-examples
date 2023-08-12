@@ -2,11 +2,11 @@ import * as THREE from "three";
 import { CanvasRender, Drawable, DrawableList } from "../../core/canvas";
 import { ILine, OSnapMarkerType } from "../../core/utils";
 export declare class SnapDrawable extends Drawable {
-    static readonly LINE_COLOR = "rgba(255, 119, 0, 1)";
+    static lineColor: string;
     static readonly FILL_COLOR_NONE = "rgba(0, 0, 0, 0)";
     static readonly SNAP_LINE_COLOR = "rgba(255, 240, 0, 0.3)";
-    static readonly LINE_WIDTH = 2;
-    static readonly SNAP_ICON_SIZE = 14;
+    static lineWidth: number;
+    static iconSize: number;
     needsFrustumCulled: boolean;
     renderOrder: number;
     snapType: OSnapMarkerType;
@@ -87,6 +87,32 @@ export declare class OSnapHelper {
     getSnapTolerance(): number;
     setIntersectionLimit(val: number): void;
     getIntersectionLimit(): number;
+    /**
+     * Gets osnap marker line color.
+     * @returns rgb/rgba number array, each value is between 0 and 1. e.g. [0.92, 0.95, 0.96].
+     */
+    getMarkerLineColor(): number[];
+    /**
+     * Sets osnap marker line color.
+     * @param color rgb/rgba number array, each value is between 0 and 1. e.g. [0.92, 0.95, 0.96].
+     */
+    setMarkerLineColor(color: number[]): void;
+    /**
+     * Gets osnap marker line width.
+     */
+    getMarkerLineWidth(): number;
+    /**
+     * Sets osnap marker line width.
+     */
+    setMarkerLineWidth(width: number): void;
+    /**
+     * Gets osnap marker icon size in pixel.
+     */
+    getMarkerIconSize(): number;
+    /**
+     * Sets osnap marker icon size in pixel.
+     */
+    setMarkerIconSize(size: number): void;
     getMarker(type: OSnapType): SnapDrawable;
     setAllSnapLinesVisible(visible: boolean): void;
     deactivate(): void;

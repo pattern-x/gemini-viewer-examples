@@ -7,5 +7,6 @@ import { BaseVRMesh } from "./BaseVRMesh";
 export declare class VRCube extends BaseVRMesh {
     constructor(images: string[], thumbnailImages?: string[], size?: number);
     create(): Promise<void>;
+    private updateMesh;
     protected createMesh(): Promise<void>;
 }

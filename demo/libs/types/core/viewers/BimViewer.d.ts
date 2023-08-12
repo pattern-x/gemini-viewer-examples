@@ -28,6 +28,7 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     hemisphereLight?: THREE.HemisphereLight;
+    enableSelection: boolean;
     /**
      * @internal
      */

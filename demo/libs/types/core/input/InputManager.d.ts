@@ -108,13 +108,17 @@ export declare type InputEvents = {
 };
 export declare class InputManager extends Event<InputEvents> {
     private element;
-    private enable;
+    private enabled;
+    private keyboardEnabled;
     protected mouseDownPositionX: number;
     protected mouseDownPositionY: number;
     protected lastLeftPointerUpTime: number;
     private pointers;
     constructor(element: HTMLElement);
-    setEnable(enable: boolean): void;
+    getEnabled(): boolean;
+    setEnabled(enable: boolean): void;
+    getkKeyboardEnabled(): boolean;
+    setkKeyboardEnabled(enable: boolean): void;
     setCursor(cursorStyle: string): void;
     bindEvents(): void;
     private handleClick;
