@@ -19,7 +19,7 @@ export declare class BoxSelectHelper {
     protected tempEnableRotate: boolean;
     protected rectDom?: HTMLDivElement;
     protected tooltip?: Tooltip;
-    private actived;
+    private active;
     static readonly BORDER_COLOR = "#fff000";
     static readonly BORDER_WIDTH = "2px";
     protected resolve?: (value: THREE.Box2 | PromiseLike<THREE.Box2> | undefined) => void;
@@ -27,7 +27,7 @@ export declare class BoxSelectHelper {
     protected isResolvedOrRejected: boolean;
     constructor(viewer: BaseViewer);
     private get viewerContainer();
-    isActived(): boolean;
+    isActive(): boolean;
     activate(): void;
     deactivate(): void;
     private mousedown;

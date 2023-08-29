@@ -8,7 +8,7 @@ import type { BaseViewer } from "../../core/viewers";
  */
 export declare class PickMarkupHelper {
     protected viewer: BaseViewer;
-    private actived;
+    private active;
     protected tooltip?: Tooltip;
     protected resolve?: (value: THREE.Box2 | PromiseLike<THREE.Box2> | undefined) => void;
     protected reject?: (reason: any) => void;
@@ -16,7 +16,7 @@ export declare class PickMarkupHelper {
     constructor(viewer: BaseViewer);
     private get viewerContainer();
     private get camera();
-    isActived(): boolean;
+    isActive(): boolean;
     private mouseClicked;
     activate(): void;
     deactivate(): void;

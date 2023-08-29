@@ -62,11 +62,12 @@ export declare class SimplifiedBimViewer {
      */
     applyOptionsAndAddToScene: (url: string, object: THREE.Object3D, modelCfg: ModelConfig, onProgress?: ((event: ProgressEvent) => void) | undefined) => Promise<void>;
     /**
-     * Add newly added object to scene.
-     * Also, usually(but not always) we should regenerate sky and go to home view
-     * @param object
+     *
+     * @param model
+     * @returns
+     * @description Add model data to viewer.
      */
-    private addLoadedModelToScene;
+    addModel(model: Model3d): void;
     /**
      * We won't set a opacity or highlight directly, because that way will lose model's original opacity or color value
      * @param isAdd is add or remove the opacity we added

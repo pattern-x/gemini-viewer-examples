@@ -19,17 +19,17 @@ export declare class NavCubePlugin extends Plugin {
     protected camera?: OrthographicCamera;
     protected scene?: Scene;
     constructor(viewer: BaseViewer, cfg?: NavCubePluginConfig);
-    init(): void;
-    initRenderer(): void;
-    initScene(): void;
-    render(): void;
-    animate(): void;
-    update(): void;
+    protected init(): void;
+    protected initRenderer(): void;
+    protected initScene(): void;
+    protected render(): void;
+    protected animate(): void;
+    protected update(): void;
     /**
      * Update navCube according to camera direction.
      * Camera's direction is the only input factor for this class. It always look at the origin.
      * @param direction
      */
-    updateCameraDirection(direction: Vector3, up: Vector3): void;
+    protected updateCameraDirection(direction: Vector3, up: Vector3): void;
     destroy(): void;
 }

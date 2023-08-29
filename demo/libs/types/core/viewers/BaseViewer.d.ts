@@ -55,7 +55,7 @@ declare type ViewerEvents = {
     [K in ViewerEvent]: any;
 };
 /**
- * @internal
+ * Abstract base class for DxfViewer, BimViewer, etc.
  */
 export declare abstract class BaseViewer extends Event<ViewerEvents> {
     /**
@@ -215,7 +215,13 @@ export declare abstract class BaseViewer extends Event<ViewerEvents> {
      * @internal
      */
     getMarkupManager(): MarkupManager | undefined;
+    /**
+     * @deprecated
+     */
     deactivateMeasurement(): void;
+    /**
+     * @deprecated
+     */
     setMeasurementVisibility(id: string, visible: boolean): boolean;
     /**
      * @internal
@@ -229,6 +235,10 @@ export declare abstract class BaseViewer extends Event<ViewerEvents> {
      * @internal
      */
     getPixelSizeInWorldCoord(): number;
+    /**
+     * Gets an unique modelId in case the expected id is duplicated.
+     */
+    protected getUniqueModelId(expectedModelId: string): string;
     /**
      * Installs a Plugin.
      */

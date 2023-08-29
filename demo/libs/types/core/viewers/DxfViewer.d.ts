@@ -1,12 +1,11 @@
 import * as THREE from "three";
-import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
-import { Toolbar } from "../../components/toolbar";
-import { DxfCompareConfig, DxfModelConfig, DxfViewerConfig, ModelConfig } from "../../core/Configs";
+import { DxfCompareConfig, DxfModelConfig, DxfViewerConfig } from "../../core/Configs";
 import { Box2, ScreenshotMode, Vector2 } from "../../core/Constants";
 import { Drawable, DrawableData } from "../../core/canvas";
 import { DxfChange, DxfData, DxfLayer } from "../../core/dxf";
 import { ILayoutObject } from "../../core/dxf-parser";
+import { FontManager } from "../../core/font";
 import { EventInfo } from "../../core/input/InputManager";
 import { MarkupManager, MarkupType } from "../../core/markup";
 import { BaseViewer, ScreenshotResult, ViewerName } from "../../core/viewers/BaseViewer";
@@ -58,9 +57,13 @@ export interface Model2d {
      * Used for dxf data.
      */
     dxfData?: DxfData;
+    /**
+     * Used for pdf data.
+     */
     pdfData?: PdfData;
     /**
      * Model space transform matrix.
+     * @internal
      */
     msTransformMatrix?: THREE.Matrix4;
 }
@@ -148,7 +151,6 @@ export interface Model2d {
  * ``` typescript
  * const viewerCfg = {
  *     containerId: "myCanvas",
- *     enableToolbar: true,
  *     enableSpinner: true,
  *     enableLayoutBar: true,
  * };
@@ -173,7 +175,7 @@ export declare class DxfViewer extends BaseViewer {
     private readonly CAMERA_MIN_ZOOM;
     private timer;
     protected css2dRenderer?: CSS2DRenderer;
-    protected font?: Font;
+    protected fontManager?: FontManager;
     protected enableSelection?: boolean;
     protected selectedObject?: THREE.Object3D | Drawable;
     /**
@@ -196,11 +198,6 @@ export declare class DxfViewer extends BaseViewer {
     private clock;
     protected renderEnabled: boolean;
     private timeoutSymbol?;
-    private contextMenu?;
-    /**
-     * @internal
-     */
-    toolbar?: Toolbar<DxfViewer>;
     private enableHideVisuallySmallObjects;
     private sortedHidableObjects;
     private lastCameraZoom;
@@ -238,7 +235,6 @@ export declare class DxfViewer extends BaseViewer {
      */
     private initEvents;
     protected initOthers(): void;
-    private initToolbar;
     private initLoadingProgressBar;
     /**
      * Shows the layout bar
@@ -329,7 +325,7 @@ export declare class DxfViewer extends BaseViewer {
      *
      * @param model
      * @returns
-     * @description add model data to viewer
+     * @description Add model data to viewer.
      */
     addModel(model: Model2d): void;
     /**
@@ -487,7 +483,7 @@ export declare class DxfViewer extends BaseViewer {
      * ```
      */
     setFont(urls: string[]): Promise<void>;
-    getFont(): Font | undefined;
+    getFont(): FontManager | undefined;
     /**
      * Sets loading manager.
      * @internal
@@ -686,6 +682,7 @@ export declare class DxfViewer extends BaseViewer {
      * const markupType = MarkupType.Arrow;
      * viewer.activateMarkup(markupType);
      * ```
+     * @deprecated
      */
     activateMarkup(type: MarkupType): void;
     /**
@@ -892,14 +889,6 @@ export declare class DxfViewer extends BaseViewer {
     private getObjectsByBoundingBox;
     private getDxfUnits;
     private generateSectionsBySpatialFilter;
-    /**
-     * Add newly added object to scene.
-     * Also, usually(but not always) we should regenerate sky and go to home view
-     * @param object
-     * @internal
-     * @deprecated
-     */
-    addLoadedModelToScene(object: THREE.Object3D, modelCfg: ModelConfig, dxfData: DxfData): Promise<void>;
     /**
      * @description {en} resize viewer
      * @description {zh} 重置视图大小

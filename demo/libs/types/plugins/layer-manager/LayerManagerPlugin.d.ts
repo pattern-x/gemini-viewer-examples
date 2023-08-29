@@ -34,6 +34,8 @@ export declare class LayerManagerPlugin extends Plugin<LayerManagerPluginEvents>
     protected closeBtn?: HTMLSpanElement;
     protected dxfLayersArray?: (DxfLayers | PdfLayers)[];
     protected checkboxes?: HTMLInputElement[];
+    protected mouseDownPositionX: number;
+    protected mouseDownPositionY: number;
     constructor(viewer: DxfViewer, cfg?: LayerManagerPluginConfig);
     protected init(): void;
     setVisible(visible: boolean): void;
@@ -43,7 +45,11 @@ export declare class LayerManagerPlugin extends Plugin<LayerManagerPluginEvents>
     buildPage(): void;
     addContent(): void;
     generateListItem(layer: string, visible: boolean, color?: string): string;
+    closePanel(): void;
     addEventHandlers(): void;
+    protected onPointerDown: (e: MouseEvent) => void;
+    protected onPointerMove: (e: MouseEvent) => void;
+    protected onPointerUp: () => void;
     checkboxHandler(checkbox: HTMLInputElement): void;
     updatePage(): void;
     updateHeaderText(): void;

@@ -16,8 +16,8 @@ export declare class MeasurementPlugin extends Plugin {
     private mobileTouchHelper?;
     constructor(viewer: BaseViewer);
     private initEvents;
-    get canvas(): HTMLCanvasElement;
-    get raycaster(): THREE.Raycaster | undefined;
+    protected get canvas(): HTMLCanvasElement;
+    protected get raycaster(): THREE.Raycaster | undefined;
     add(drawable: BaseMeasureDrawable, needFireEvent?: boolean): void;
     create(data: MeasurementData): BaseMeasureDrawable;
     remove(drawable: BaseMeasureDrawable, needFireEvent?: boolean): void;
@@ -46,7 +46,7 @@ export declare class MeasurementPlugin extends Plugin {
     /**
      *
      * @returns {boolean}
-     * @description Is measure plugin actived
+     * @description Is measure plugin active
      */
     isActive(): boolean;
     /**

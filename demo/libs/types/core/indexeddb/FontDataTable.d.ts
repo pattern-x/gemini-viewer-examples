@@ -1,9 +1,9 @@
 import { BaseTable } from "./BaseTable";
-import type { Orientation, ShxFontType } from "../../core/shx-parser";
+import type { Orientation, ShxFontType } from "../../core/font/shx";
 export interface FontDataTableRecord {
-    url: string;
-    type: ShxFontType;
-    codes: Record<number, Uint8Array>;
+    fontType?: ShxFontType;
+    order: number;
+    data: Record<number, Uint8Array>;
     info: string;
     orientation: Orientation;
     baseUp: number;
@@ -27,6 +27,6 @@ export declare class FontDataTable extends BaseTable {
      * Queires a dxf data
      * @param fileId should be a unique id to identify different dxf files
      */
-    query(url: string, successCallback?: any, errorCallback?: any): void;
+    query(fileName: string): Promise<FontDataTableRecord>;
     queryAll(): Promise<FontDataTableRecord[]>;
 }

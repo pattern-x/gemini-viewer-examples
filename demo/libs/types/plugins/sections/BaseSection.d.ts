@@ -2,6 +2,9 @@ import * as THREE from "three";
 import type { CameraControlsEx } from "../../core/controls/CameraControlsEx";
 import { EventInfo, InputManager } from "../../core/input/InputManager";
 import type { BaseViewer } from "../../core/viewers";
+/**
+ * Abstract base class for AxisPlaneSection, ObjectsBoxSection, etc.
+ */
 export declare abstract class BaseSection {
     protected viewer: BaseViewer;
     protected inputManager: InputManager;
@@ -18,7 +21,10 @@ export declare abstract class BaseSection {
     protected selectedObject?: THREE.Object3D;
     protected refrencePlane: THREE.Plane;
     protected active: boolean;
-    isShowSectionPlane: boolean;
+    /**
+     * If to show section plane or not.
+     */
+    showSectionPlane: boolean;
     /**
      * @internal
      */
@@ -28,27 +34,27 @@ export declare abstract class BaseSection {
     get isActive(): boolean;
     protected get camera(): THREE.Camera;
     protected get controls(): CameraControlsEx;
-    private setGlobalClippingEnable;
-    private setObjectClippingEnable;
+    private setGlobalClippingEnabled;
+    private setObjectClippingEnabled;
     clearClippingObjectIds(): void;
-    setClippingEnable(enable: boolean): void;
+    setClippingEnabled(enable: boolean): void;
     activate(): void;
     deactivate(): void;
     protected enableDefaultControl(enable: boolean): void;
-    mousedown: (e: EventInfo) => void;
-    mousemove: (e: EventInfo) => void;
-    mouseup: (e: EventInfo) => void;
-    keydown: (e: EventInfo) => void;
+    protected mousedown: (e: EventInfo) => void;
+    protected mousemove: (e: EventInfo) => void;
+    protected mouseup: (e: EventInfo) => void;
+    protected keydown: (e: EventInfo) => void;
     protected getIntersections(e: EventInfo): THREE.Intersection | undefined;
-    updateRaycasterByMouse(e: EventInfo): void;
+    protected updateRaycasterByMouse(e: EventInfo): void;
     destroy(): void;
-    abstract onDragStart(e: EventInfo): void;
-    abstract onDragMove(e: EventInfo): void;
-    abstract onDragEnd(e: EventInfo): void;
-    abstract getIntersectObjects(): THREE.Object3D[];
-    abstract activateSelectedObject(active: boolean): void;
-    abstract initOrUpdateSectionPlane(): void;
-    abstract initOrUpdateClipPlane(): void;
-    abstract resetSection(): void;
-    abstract setSectionVisible(visible: boolean): void;
+    protected abstract onDragStart(e: EventInfo): void;
+    protected abstract onDragMove(e: EventInfo): void;
+    protected abstract onDragEnd(e: EventInfo): void;
+    protected abstract getIntersectObjects(): THREE.Object3D[];
+    protected abstract activateSelectedObject(active: boolean): void;
+    protected abstract initOrUpdateSectionPlane(): void;
+    protected abstract initOrUpdateClipPlane(): void;
+    protected abstract resetSection(): void;
+    protected abstract setSectionVisible(visible: boolean): void;
 }

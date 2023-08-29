@@ -1,10 +1,9 @@
-import { Font } from "three/examples/jsm/loaders/FontLoader.js";
-import { BaseViewer, DxfModelConfig, Model2d, Plugin, PluginConfig, ShxFont } from "../../core";
+import { BaseViewer, DxfModelConfig, FontManager, Model2d, Plugin, PluginConfig } from "../../core";
 /**
  * Pdf loader plugin config.
  */
 export interface PdfLoaderPluginConfig extends PluginConfig {
-    font: ShxFont | Font;
+    font: FontManager;
     pdfWorker: string;
 }
 /**

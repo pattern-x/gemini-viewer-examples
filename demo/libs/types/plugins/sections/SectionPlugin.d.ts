@@ -6,7 +6,7 @@ export declare class SectionPlugin extends Plugin {
     private sections;
     private activeSectionType?;
     constructor(viewer: BaseViewer);
-    get raycaster(): import("three").Raycaster | undefined;
+    protected get raycaster(): import("three").Raycaster | undefined;
     /**
      *
      * @param {SectionType} type
@@ -22,24 +22,30 @@ export declare class SectionPlugin extends Plugin {
     resetSection(): void;
     /**
      *
-     * @returns {boolean} Is Section actived
+     * @returns {boolean} Is Section active
      */
     isActive(): boolean;
+    /**
+     * Gets the active section type.
+     */
     getActiveSectionType(): SectionType | undefined;
+    /**
+     * Gets the active section.
+     */
     getActiveSection(): BaseSection | undefined;
     /**
-     *
+     * Sets clipping object ids for all sections.
      * @param ids
      * @returns
      * @description Set the id of the object that needs to be clipping for all section
      */
-    setAllSectionsClippingObjectIds(ids?: number[]): void;
+    protected setClippingObjectIds(ids?: number[]): void;
     /**
-     *
+     * Sets clipping object ids for a specific SectionType.
      * @param ids
      * @returns
      * @description Set the id of the object that needs to be clipping for section by section type
      */
-    setSectionClippingObjectIds(type: SectionType, ids?: number[]): void;
+    protected setClippingObjectIdsForType(type: SectionType, ids?: number[]): void;
     destroy(): void;
 }

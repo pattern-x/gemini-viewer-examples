@@ -5,5 +5,4 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 export * from "./core";
 export * from "./components/progress-bar";
-export * from "./components/toolbar";
 export * from "./plugins";

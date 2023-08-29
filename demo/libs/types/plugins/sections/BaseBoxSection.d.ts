@@ -146,7 +146,7 @@ export declare class BoxFace extends Mesh {
     setFromPoints(vertices: Vector3[]): void;
     /**
      * Sets to active or inactive
-     * @param isActive
+     * @param active
      */
-    setActive(isActive: boolean): void;
+    setActive(active: boolean): void;
 }

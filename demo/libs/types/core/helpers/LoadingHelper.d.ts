@@ -1,7 +1,6 @@
 import * as THREE from "three";
-import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import type { DxfData, DxfLoaderConfig } from "../../core/dxf";
-import type { ShxFont } from "../../core/shx-parser";
+import type { FontManager } from "../../core/font";
 export declare class LoadingHelper {
     private static decoderPath;
     private gltfLoader?;
@@ -38,7 +37,7 @@ export declare class LoadingHelper {
      * Sets font.
      * Font is required for DxfViewer to view Chinese, etc.
      */
-    setFont(font: Font | ShxFont): void;
+    setFont(font: FontManager): void;
     /**
      * Sets decoder path for draco loader.
      * @param decoderPath e.g., "libs/draco/gltf/"

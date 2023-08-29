@@ -101,6 +101,11 @@ export declare const SECTION_PLANE_NAME = "plane-section-boxface";
  */
 export declare const GROUND_PLANE_RENDER_ORDER = -1000;
 /**
+ * @internal
+ * Angle threshold at which two plane normals are parallel. Used to calculate edges.
+ */
+export declare const ANGLE_THRESHOLD_FOR_EDGE = 10;
+/**
  * Section type
  */
 export declare enum SectionType {

@@ -1,5 +1,3 @@
-import { ToolbarMenuConfig, ToolbarMenuId } from "../components/toolbar";
-import type { BimViewer, DxfViewer, VRViewer } from "../core/viewers";
 /**
  * Camera config
  */
@@ -103,9 +101,9 @@ export interface Model3d {
      */
     modelId: string;
     /**
-     * Three.js object id.
+     * Three.js object.
      */
-    objectId: number;
+    object: THREE.Object3D;
     /**
      * Bounding box of the model.
      */
@@ -119,38 +117,6 @@ export interface Model3d {
      * @internal
      */
     tilesRenderer?: any;
-}
-/**
- * Context for ContextMenu
- * @internal
- */
-export interface Context {
-    bimViewer: BimViewer;
-    hit?: any;
-    instanceId?: number;
-    batchId?: number;
-}
-/**
- * @internal
- */
-export interface ContextMenuConfig {
-    context: Context;
-    id?: string;
-    container?: HTMLElement;
-    items?: ContextMenuItem[][];
-    hideOnMouseDown?: boolean;
-}
-/**
- * @internal
- */
-export interface ContextMenuItem {
-    title?: string;
-    enabled?: boolean;
-    shown?: boolean;
-    getTitle?: (context: Context) => string;
-    getEnabled?: (context: Context) => boolean;
-    getShown?: (context: Context) => boolean;
-    doAction?: (context: Context) => void;
 }
 /**
  * Common viewer config
@@ -213,6 +179,7 @@ export interface BimViewerConfig extends BaseViewerConfig {
      * Enables toolbar.
      * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
      * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
+     * @deprecated Use ToolbarPlugin instead
      */
     enableToolbar?: boolean;
     /**
@@ -223,6 +190,7 @@ export interface BimViewerConfig extends BaseViewerConfig {
     enableBottomBar?: boolean;
     /**
      * Shows the context-menu.
+     * @deprecated Use ContextMenuPlugin instead.
      */
     enableContextMenu?: boolean;
     /**
@@ -241,12 +209,6 @@ export interface BimViewerConfig extends BaseViewerConfig {
      * @internal
      */
     locale?: "cn" | "en";
-    /**
-     * @internal
-     */
-    toolbarMenuConfig?: {
-        [key in ToolbarMenuId]?: ToolbarMenuConfig<BimViewer>;
-    };
 }
 /**
  * This wrappers most config for DxfViewer
@@ -272,6 +234,7 @@ export interface DxfViewerConfig extends BaseViewerConfig {
      * Enables toolbar.
      * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
      * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
+     * @deprecated Use ToolbarPlugin instead
      */
     enableToolbar?: boolean;
     /**
@@ -292,12 +255,6 @@ export interface DxfViewerConfig extends BaseViewerConfig {
      * @default false
      */
     enableSelection?: boolean;
-    /**
-     * @internal
-     */
-    toolbarMenuConfig?: {
-        [key in ToolbarMenuId]?: ToolbarMenuConfig<DxfViewer>;
-    };
 }
 /**
  * Dxf compare config.
@@ -317,14 +274,9 @@ export interface VRViewerConfig extends BaseViewerConfig {
      * Enables toolbar.
      * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
      * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
+     * @deprecated Use ToolbarPlugin instead
      */
     enableToolbar?: boolean;
-    /**
-     * @internal
-     */
-    toolbarMenuConfig?: {
-        [key in ToolbarMenuId]?: ToolbarMenuConfig<VRViewer>;
-    };
 }
 /**
  * VR Viewpoint's hotpoint, which can be a user defined html element.
@@ -374,11 +326,6 @@ export interface VRViewpoint {
  * @internal
  */
 export declare const DEFAULT_BIM_VIEWER_CONFIG: BimViewerConfig;
-/**
- * A simple BimViewerConfig as a template, which disables most plugins.
- * @internal
- */
-export declare const SIMPLE_BIM_VIEWER_CONFIG: BimViewerConfig;
 /**
  * @internal
  */

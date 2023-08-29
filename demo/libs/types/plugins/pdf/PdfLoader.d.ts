@@ -1,12 +1,11 @@
 import * as pdfjsLib from "pdfjs-dist";
 import type { PDFOperatorList } from "pdfjs-dist/types/src/display/api";
 import * as THREE from "three";
-import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { DxfModelConfig } from "../../core/Configs";
-import { ShxFont } from "../../core/shx-parser";
+import { FontManager } from "../../core/font";
 import { Model2d, PdfLayer } from "../../core/viewers";
 export interface PdfLoaderConfig {
-    font: ShxFont | Font;
+    font: FontManager;
     pdfWorker: string;
 }
 /**
@@ -50,7 +49,9 @@ export declare class PdfLoader extends THREE.Loader {
     private pointsMaterials;
     private lineBasicMaterials;
     private meshBasicMaterials;
-    font?: ShxFont | Font;
+    fontManager?: FontManager;
+    modelCfg?: DxfModelConfig;
+    private lineWithWidthCount;
     constructor(cfg: PdfLoaderConfig);
     load(modelCfg: DxfModelConfig, onLoad: (data: Model2d) => void, onProgress: (event: ProgressEvent) => void, onError: (error: any) => void): void;
     /**
@@ -60,15 +61,18 @@ export declare class PdfLoader extends THREE.Loader {
      * @returns
      */
     loadAsync(modelCfg: DxfModelConfig, onProgress: (event: ProgressEvent) => void): Promise<Model2d>;
+    private getOperatorList;
+    private _pumpOperatorList;
+    private tryCleanup;
     private mergePdfObjects;
     private getPointsMaterial;
     private getLineBasicMaterial;
     private getMeshBasicMaterial;
-    private createTextMeshByText;
     getTransformByMatrix4(matrix: THREE.Matrix4): number[];
     getObject(data: any, fallback?: null): any;
     beginDrawing(viewport: pdfjsLib.PageViewport): void;
     endDrawing(): void;
+    private releaseData;
     buildLayers(page: pdfjsLib.PDFPageProxy): Promise<{
         layerCount: number;
         layersMap: Record<string, PdfLayer>;
@@ -137,7 +141,7 @@ export declare class PdfLoader extends THREE.Loader {
     setLeadingMoveText(): void;
     setTextMatrix(a: number, b: number, c: number, d: number, e: number, f: number): void;
     nextLine(): void;
-    paintChar(character: string, x: number, y: number, patternTransform: number[]): void;
+    paintChar(character: string, x: number, y: number): THREE.BufferGeometry<THREE.NormalBufferAttributes> | import("three/examples/jsm/geometries/TextGeometry").TextGeometry | undefined;
     showText(glyphs: any[]): void;
     showType3Text(glyphs: any): void;
     setCharWidth(xWidth: any, yWidth: any): void;

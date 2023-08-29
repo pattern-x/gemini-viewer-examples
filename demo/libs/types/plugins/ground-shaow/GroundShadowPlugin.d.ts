@@ -8,9 +8,9 @@ export interface GroundShadowConfig {
     darkness: number;
 }
 /**
- * Copied from https://threejs.org/examples/?q=shadow#webgl_shadow_contact
+ * Ground shadow plugin is used to show shadow for models.
  * Can be used by BimViewer.
- * @description Ground shadow for models.
+ * @description
  */
 export declare class GroundShadowPlugin extends Plugin {
     protected cfg: GroundShadowConfig;
@@ -24,8 +24,8 @@ export declare class GroundShadowPlugin extends Plugin {
     protected renderTargetBlur?: THREE.WebGLRenderTarget;
     private modelCount;
     constructor(viewer: BaseViewer, cfg?: GroundShadowConfig);
-    get scene(): THREE.Scene | undefined;
-    get renderer(): THREE.WebGLRenderer | undefined;
+    protected get scene(): THREE.Scene | undefined;
+    protected get renderer(): THREE.WebGLRenderer | undefined;
     /**
      * We'll need to update shadow when
      * - Model loaded/unloaded
@@ -41,6 +41,6 @@ export declare class GroundShadowPlugin extends Plugin {
     private initRenderTarget;
     private createGroundShadowByBBox;
     private blurShadow;
-    render(): void;
+    protected render(): void;
     destroy(): void;
 }

@@ -1,10 +1,9 @@
 import * as THREE from "three";
-import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { Settings as SettingsType } from "../../components/settings";
-import { Toolbar } from "../../components/toolbar";
 import { Model3d, BimViewerConfig, CameraConfig, ModelConfig } from "../../core/Configs";
 import { SectionType, Vector3 } from "../../core/Constants";
 import { Drawable } from "../../core/canvas";
+import { FontManager } from "../../core/font";
 import { EventInfo } from "../../core/input/InputManager";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 import { MeasurementData, MeasurementPlugin, MeasurementType } from "../../plugins/measure";
@@ -15,7 +14,7 @@ export declare class BimViewer extends BaseViewer {
      */
     name: ViewerName;
     private timer;
-    protected font?: Font;
+    protected fontManager?: FontManager;
     /**
      * @internal
      */
@@ -37,10 +36,6 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     loadedModels: Model3d[];
-    /**
-     * @internal
-     */
-    loaded3dTiles: Model3d[];
     /**
      * @internal
      */
@@ -80,7 +75,6 @@ export declare class BimViewer extends BaseViewer {
     private enableModelLevelFrustumCulling;
     private isFrustumInsectChecking;
     private settings;
-    private contextMenu?;
     private twoDModelCount;
     private vertexNormalsHelpers?;
     enableFastOperation: boolean;
@@ -94,10 +88,6 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     operationTimeoutMs: number;
-    /**
-     * @internal
-     */
-    toolbar?: Toolbar<BimViewer>;
     /**
      * @internal
      */
@@ -125,16 +115,7 @@ export declare class BimViewer extends BaseViewer {
      */
     private initEvents;
     private initOthers;
-    private initContextMenu;
-    private initToolbar;
     private initLoadingProgressBar;
-    /**
-     * If there is any 2d model loaded
-     * @internal
-     */
-    get has2dModel(): boolean;
-    private showContextMenu;
-    private handleRightClick;
     private sycnCameraAndControls;
     /**
      * Sets to orthographic or perspective camera.
@@ -197,11 +178,12 @@ export declare class BimViewer extends BaseViewer {
      */
     private applyOptionsAndAddToScene;
     /**
-     * Add newly added object to scene.
-     * Also, usually(but not always) we should regenerate sky and go to home view
-     * @param object
+     *
+     * @param model
+     * @returns
+     * @description Add model data to viewer.
      */
-    private addLoadedModelToScene;
+    addModel(model: Model3d): void;
     private calculateMeshSurfaceArea;
     /**
      * We won't set a opacity directly, because that way will lose model's original opacity value
@@ -390,7 +372,7 @@ export declare class BimViewer extends BaseViewer {
      * - Hide object edge if there is
      * - Disable shadow
      */
-    onOperation: () => void;
+    protected onOperation: () => void;
     /**
      * @description Compatible with older versions, use SectionPlugin instead
      * @internal
@@ -472,6 +454,9 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     setEnvironmentFromDataArray(data?: Uint16Array): void;
+    /**
+     * @internal
+     */
     takeObjectsScreenshot(uniqueIds: string[]): Promise<unknown>;
     /**
      * Sets object to a specific color. Note that:
@@ -506,10 +491,12 @@ export declare class BimViewer extends BaseViewer {
      * Sets distance culling factor in order to improve performance.
      * 0 means distance culling is disabled.
      * 100 means a 1x1 squre mesh is visible within 100.
+     * @internal
      */
     setDistanceCullingFactor(val: number): void;
     /**
      * Gets distance culling factor.
+     * @internal
      */
     getDistanceCullingFactor(): number;
     /**

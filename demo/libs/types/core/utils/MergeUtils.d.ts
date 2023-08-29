@@ -104,6 +104,7 @@ export declare class MergeUtils {
     static isMergedMesh(mesh: THREE.Mesh): boolean;
     static isFaceIndexInBatch(geometry: THREE.BufferGeometry, batch: Batch, faceIndex: number): boolean;
     static getBatchByFaceIndex(mesh: THREE.Mesh, faceIndex: number): Batch | undefined;
+    static getBatchByLineIndex(line: THREE.Line, index: number): Batch | undefined;
     /**
      * Gets batchId by faceIndex for a merged mesh
      */

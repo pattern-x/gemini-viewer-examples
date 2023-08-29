@@ -5,6 +5,7 @@ export * from "./CoordinateConversionUtils";
 export * from "./CSS2DObjectUtils";
 export * from "./DecimalPrecisionUtils";
 export * from "./DeviceUtils";
+export * from "./EdgeUtils";
 export * from "./Event";
 export * from "./ExportUtils";
 export * from "./FpsUtils";

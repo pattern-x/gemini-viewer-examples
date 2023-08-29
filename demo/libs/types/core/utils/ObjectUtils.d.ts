@@ -165,9 +165,6 @@ export declare class ObjectUtils {
      */
     static createOutline(geometry: THREE.BufferGeometry, material?: THREE.LineBasicMaterial, matrix?: THREE.Matrix4): THREE.LineSegments;
     /**
-     * Creates outline for given geometry
-     */
-    /**
      * Clones object
      * @param object target object to be cloned
      * @param cloneMaterial if it needs to clone material or not

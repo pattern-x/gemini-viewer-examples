@@ -1,5 +1,6 @@
 export * from "./axis-gizmo";
 export * from "./bottom-bar";
+export * from "./context-menu";
 export * from "./dat-gui";
 export * from "./layer-manager";
 export * from "./explode";
@@ -15,5 +16,6 @@ export * from "./screenshot";
 export * from "./stats";
 export * from "./skybox";
 export * from "./sections";
+export * from "./toolbars";
 export * from "./view-cube";
 export * from "./overview-map";

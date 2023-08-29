@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { DxfChange } from "./DxfCompare";
 import { DxfObject } from "./DxfObject";
 import { Units } from "../../core/Units";
@@ -7,7 +6,7 @@ import { IBlock, IDxf, IEntity, ILayer, ILayoutObject, IPoint, IViewport, IViewp
 import { ImageFlags } from "../../core/dxf-parser/entities/image";
 import { IMLeaderContextData } from "../../core/dxf-parser/entities/mleader";
 import { ISpatialFilterObject } from "../../core/dxf-parser/objects/spatialfilter";
-import { ShxFont } from "../../core/shx-parser";
+import { FontManager } from "../../core/font";
 /**
  * @internal
  */
@@ -200,7 +199,7 @@ export declare class DxfLoader extends THREE.Loader {
     static readonly SHOW_SNAP_OBJECT = false;
     private timer;
     private ignorePaperSpace;
-    font?: Font | ShxFont;
+    font?: FontManager;
     private encoding;
     private overrideColor?;
     angBase: number | IPoint;
@@ -294,7 +293,7 @@ export declare class DxfLoader extends THREE.Loader {
     /**
      * Sets font.
      */
-    setFont(font: Font | ShxFont): void;
+    setFont(font: FontManager): void;
     /**
      * Downloads dxf file content
      */
@@ -333,6 +332,7 @@ export declare class DxfLoader extends THREE.Loader {
      * @returns the promise of DxfData
      */
     loadEntities(data: IDxf, onProgress?: (event: ProgressEvent) => void): Promise<DxfData>;
+    private getFontFilesFromDxf;
     /**
      * Loads entities from two dxf data for comparing.
      * It also generates DxfChange information for each change.

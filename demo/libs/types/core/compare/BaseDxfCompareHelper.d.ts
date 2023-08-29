@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import { Font } from "three/examples/jsm/loaders/FontLoader.js";
 import { ProgressBar } from "../../components/progress-bar";
 import { DxfCompareConfig, DxfModelConfig, DxfViewerConfig } from "../../core/Configs";
 import { DxfChange, DxfLoader } from "../../core/dxf";
+import { FontManager } from "../../core/font";
 import { DxfViewer } from "../../core/viewers/DxfViewer";
 /**
  * Dxf compare helper with one viewport.
@@ -28,7 +28,7 @@ export declare class BaseDxfCompareHelper {
      * DxfViewer of DxfCompareHelper.
      */
     viewer: DxfViewer;
-    protected font?: Font;
+    protected fontManager?: FontManager;
     protected loader: DxfLoader;
     protected loadingManager?: THREE.LoadingManager;
     protected changes?: Record<string, DxfChange>;

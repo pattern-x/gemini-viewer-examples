@@ -10,7 +10,7 @@ export * from "./indexeddb";
 export * from "./input";
 export * from "./markup";
 export * from "./shp-js";
-export * from "./shx-parser";
+export * from "./font";
 export * from "./utils";
 export * from "./viewers";
 export * from "./vr";

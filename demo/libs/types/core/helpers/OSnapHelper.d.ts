@@ -50,10 +50,10 @@ export declare class SnapDrawable extends Drawable {
 }
 export declare enum OSnapType {
     None = 0,
-    PointOnLine = 1,
-    StartPoint = 2,
-    EndPoint = 4,
-    MiddlePoint = 8,
+    Vertex = 1,
+    MiddlePoint = 2,
+    Edge = 4,
+    Face = 8,
     FootOfPerpendicular = 16,
     Intersection = 32,
     CircleCenter = 64
@@ -75,8 +75,17 @@ export declare class OSnapHelper {
      * OSnapType priority. Lower value has a higher priority.
      */
     osnapTypePriorities: Record<OSnapType, number>;
+    protected enabledOSnapTypes: number;
     constructor(overlayRender: CanvasRender);
     private initOSnapMarkers;
+    /**
+     * If a specific OSnapType is enabled.
+     */
+    isOSnapTypeEnabled(type: OSnapType): boolean;
+    /**
+     * Enables a specific OSnapType.
+     */
+    setOSnapTypeEnabled(type: OSnapType, enabled: boolean): void;
     /**
      * Sets snap tolerance in world coordinate.
      */
@@ -119,12 +128,12 @@ export declare class OSnapHelper {
     destroy(): void;
     /**
      * Tries to find a proper snap point and display corresponding marker.
-     * @param intersections The raycaster intersections.
+     * @param intersections The raycaster intersections, must have been sorted by distance.
      * @param is3d If it is a 3d or 2d viewer.
      * @param lastMouseDownPosition Used in order to to get foot of perpendicular.
      * @returns Target snap point if any
      */
-    handleSnap(intersections: THREE.Intersection[], is3d: boolean, raycaster?: THREE.Raycaster, lastMouseDownPosition?: THREE.Vector3): THREE.Vector3 | undefined;
+    handleSnap(rayCasterResult: THREE.Intersection[], is3d: boolean, lastMouseDownPosition?: THREE.Vector3): THREE.Vector3 | undefined;
     /**
      * Tries to find a proper snap point and display corresponding marker.
      * @param mousePosition Mouse position in world coordinate.
@@ -136,8 +145,11 @@ export declare class OSnapHelper {
     protected getSnapPointAndUpdateMarker(mousePosition: THREE.Vector3, intersections: THREE.Intersection[], is3d: boolean, lastMouseDownPosition?: THREE.Vector3): THREE.Vector3 | undefined;
     activateMarker(type: OSnapType, osnapInfo?: OSnapInfo): void;
     private getFootOfPerpendicular;
-    private getIntersectionPointsAndLines;
     private getSnapInfo;
+    private getOsnapInfoListFromMesh;
+    private getOsnapInfoFromSegment;
+    private getOsnapInfoListFromLine;
+    private getOsnapInfoListFromPoint;
     /**
      * Used for 3d scene to get outline info by faces.
      */

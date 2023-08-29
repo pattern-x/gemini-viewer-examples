@@ -1,6 +1,5 @@
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
-import { Toolbar } from "../../components/toolbar";
 import { Model3d, CameraConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint } from "../../core/Configs";
 import { Vector3 } from "../../core/Constants";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
@@ -54,10 +53,6 @@ export declare class VRViewer extends BaseViewer {
     private fianlCameraPosition?;
     private finalCameraTarget?;
     private loadingPanos;
-    /**
-     * @internal
-     */
-    toolbar?: Toolbar<VRViewer>;
     onHotpointClicked?: (hotpoint: Hotpoint) => void;
     handleDragEnd?: () => void;
     constructor(vrViewerCfg: VRViewerConfig, cameraCfg?: CameraConfig);
@@ -74,7 +69,6 @@ export declare class VRViewer extends BaseViewer {
     private initInputManager;
     private initEvents;
     private initOthers;
-    private initToolbar;
     protected animate(): void;
     clearAllCachedPanoramas(): void;
     destroy(): void;
@@ -141,11 +135,12 @@ export declare class VRViewer extends BaseViewer {
      */
     private applyOptionsAndAddToScene;
     /**
-     * Add newly added object to scene.
-     * Also, usually(but not always) we should regenerate sky and go to home view
-     * @param object
+     *
+     * @param model
+     * @returns
+     * @description Add model data to viewer.
      */
-    private addLoadedModelToScene;
+    addModel(model: Model3d): void;
     /**
      * Adds a panorama to a viewpoint
      */
