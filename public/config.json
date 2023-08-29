@@ -17,9 +17,9 @@
     "url": "./demo/bim_3_explode.html"
   }]
 }, {
-  "title": "2D drawings",
+  "title": "2D drawings / PDFs",
   "subMenus": [{
-    "title": "Upload your local dxf",
+    "title": "Upload your local dxf or pdf",
     "url": "./demo/empty_dxf_project.html"
   }, {
     "title": "Rac basic sample project dwg",
@@ -48,6 +48,9 @@
   }, {
     "title": "Building 1&2",
     "url": "./demo/dxf_7_building1_2.html"
+  }, {
+    "title": "Rac basic sample project pdf",
+    "url": "./demo/pdf_0.html"
   }]
 }, {
   "title": "Panoramas",

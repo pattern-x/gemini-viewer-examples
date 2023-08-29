@@ -1,0 +1,115 @@
+<html>
+
+<head>
+    <link rel="icon" href="./demo/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./demo/global.css">
+    <link rel="stylesheet" type="text/css" href="./demo/iconfont/iconfont.css">
+    <link rel="stylesheet" href="./demo/settings/SettingsPanel.css">
+    <script src="./demo/libs/pdf/pdf.min.js"></script>
+    <style>
+        #myCanvas {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <script type="module">
+        import {
+            AxisGizmoPlugin,
+            BottomBarPlugin,
+            DxfViewer,
+            DxfViewerToolbarPlugin,
+            LayerManagerPlugin,
+            MeasurementPlugin,
+            PdfLoaderPlugin,
+            ProgressBar,
+            ScreenshotPlugin,
+            StatsPlugin,
+            ToolbarMenuId,
+            FontManager
+        } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
+
+        const config = {
+            containerId: "myCanvas",
+            language: "en",
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableLayoutBar: true,
+        };
+        const viewer = new DxfViewer(config);
+        const fontFiles = ["./demo/libs/fonts/hztxt.shx", "./demo/libs/fonts/simplex.shx"];
+        await viewer.setFont(fontFiles);
+
+        const menuConfig = {
+            [ToolbarMenuId.Settings]: {
+                onActive: () => {
+                    console.log("[Toolbar]", "Activate Settings");
+                    if (!window.dxfSettingsPanel) {
+                        window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                    }
+                    window.dxfSettingsPanel.show();
+                },
+                onDeactive: () => {
+                    console.log("[Toolbar]", "Deactivate Settings");
+                    window.dxfSettingsPanel.hide();
+                },
+            },
+            [ToolbarMenuId.Layers]: {
+                onActive: () => {
+                    console.log("[Toolbar]", "Activate Layers");
+                    if (!window.layerManager) {
+                        window.layerManager = new LayerManagerPlugin(window.viewer)
+                        window.layerManager.addEventListener("Visibilitychange", (visible) => {
+                            window.toolbar.setActive("Layers", visible);
+                        });
+                    }
+                    window.layerManager.show();
+                },
+                onDeactive: () => {
+                    console.log("[Toolbar]", "Deactivate Layers");
+                    window.layerManager.hide();
+                },
+            },
+        };
+        new AxisGizmoPlugin(viewer, { ignoreZAxis: true });
+        new BottomBarPlugin(viewer);
+        new MeasurementPlugin(viewer);
+        new ScreenshotPlugin(viewer);
+        new StatsPlugin(viewer);
+        window.toolbar = new DxfViewerToolbarPlugin(viewer, { menuConfig });
+
+        const filename = "rac_basic_sample_project";
+        const modelCfg = {
+            modelId: "rac_basic_sample_project",
+            name: "rac_basic_sample_project",
+            src: `./demo/models/pdf/${filename}.pdf`,
+            merge: true,
+        }
+        const loadingProgressBar = new ProgressBar(viewer.widgetContainer);
+        const progressItemId = "progressItemId_0";
+        loadingProgressBar.addProgressItem(progressItemId);
+
+        const onProgress = (event) => {
+            const progress = (event.loaded * 100) / event.total;
+            loadingProgressBar?.updateProgress(progressItemId, "Loading", progress);
+            console.log(`[Demo] Loading '${modelCfg.modelId}' progress: ${progress.toFixed(1)}%`);
+        };
+        const pdfLoader = new PdfLoaderPlugin(viewer, { font: viewer.fontManager, pdfWorker: "./demo/libs/pdf/pdf.worker.min.js" });
+        const model = await pdfLoader.loadAsync(modelCfg, onProgress);
+        console.log(model);
+        viewer.addModel(model);
+        loadingProgressBar.delayRemoveProgressItem(progressItemId);
+
+        window.viewer = viewer;
+
+    </script>
+</body>
+
+</html>
