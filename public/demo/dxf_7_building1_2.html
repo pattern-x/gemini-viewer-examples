@@ -21,8 +21,10 @@
         import {
             AxisGizmoPlugin,
             DxfViewer,
+            DxfViewerToolbarPlugin,
             LayerManagerPlugin,
             MeasurementPlugin,
+            ScreenshotPlugin,
             ToolbarMenuId,
             ViewerEvent,
         } from "./demo/libs/gemini-viewer.esm.min.js";
@@ -37,49 +39,50 @@
         };
         const viewerCfg = {
             containerId: "myCanvas",
-            enableToolbar: true,
             enableSpinner: true,
             enableProgressBar: true,
             enableLayoutBar: true,
-            toolbarMenuConfig: {
-                [ToolbarMenuId.Settings]: {
-                    onActive: () => {
-                        console.log("[Toolbar]", "Activate Settings");
-                        if (!window.dxfSettingsPanel) {
-                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
-                        }
-                        window.dxfSettingsPanel.show();
-                    },
-                    onDeactive: () => {
-                        console.log("[Toolbar]", "Deactivate Settings");
-                        if (!window.dxfSettingsPanel) {
-                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
-                        }
-                        window.dxfSettingsPanel.hide();
-                    },
-                },
-                [ToolbarMenuId.Layers]: {
-                    onActive: () => {
-                        console.log("[Toolbar]", "Activate Layers");
-                        if (!window.layerManager) {
-                            window.layerManager = new LayerManagerPlugin(window.viewer);
-                        }
-                        window.layerManager.show();
-                    },
-                    onDeactive: () => {
-                        console.log("[Toolbar]", "Deactivate Layers");
-                        window.layerManager.hide();
-                    },
-                },
-            },
-        };
+        }
         const viewer = new DxfViewer(viewerCfg);
         const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
         await viewer.setFont(fontFiles);
         window.viewer = viewer;
 
+        const menuConfig = {
+            [ToolbarMenuId.Settings]: {
+                onActive: () => {
+                    console.log("[Toolbar]", "Activate Settings");
+                    if (!window.dxfSettingsPanel) {
+                        window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                    }
+                    window.dxfSettingsPanel.show();
+                },
+                onDeactive: () => {
+                    console.log("[Toolbar]", "Deactivate Settings");
+                    window.dxfSettingsPanel.hide();
+                },
+            },
+            [ToolbarMenuId.Layers]: {
+                onActive: () => {
+                    console.log("[Toolbar]", "Activate Layers");
+                    if (!window.layerManager) {
+                        window.layerManager = new LayerManagerPlugin(window.viewer)
+                        window.layerManager.addEventListener("Visibilitychange", (visible) => {
+                            window.toolbar.setActive("Layers", visible);
+                        });
+                    }
+                    window.layerManager.show();
+                },
+                onDeactive: () => {
+                    console.log("[Toolbar]", "Deactivate Layers");
+                    window.layerManager.hide();
+                },
+            },
+        };
         new AxisGizmoPlugin(viewer, { ignoreZAxis: true });
         new MeasurementPlugin(viewer);
+        new ScreenshotPlugin(viewer);
+        window.toolbar = new DxfViewerToolbarPlugin(viewer, { menuConfig });
 
         const onProgress = (event) => {
             const progress = ((event.loaded * 100) / event.total).toFixed(1);

@@ -19,10 +19,10 @@
         import {
             AxisGizmoPlugin,
             BimViewer,
+            BimViewerToolbarPlugin,
             MeasurementPlugin,
             NavCubePlugin,
             SectionPlugin,
-            ToolbarMenuId,
         } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const project = {
@@ -50,10 +50,9 @@
         const viewer = new BimViewer({
             containerId: "myCanvas",
         });
-        const toolbar = viewer.toolbar;
-        toolbar.updateMenu(ToolbarMenuId.BimTree, { visible: false });
 
         new AxisGizmoPlugin(viewer);
+        new BimViewerToolbarPlugin(viewer);
         new MeasurementPlugin(viewer);
         new NavCubePlugin(viewer);
         new SectionPlugin(viewer);

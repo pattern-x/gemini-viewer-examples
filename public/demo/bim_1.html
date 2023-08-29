@@ -19,10 +19,11 @@
         import {
             AxisGizmoPlugin,
             BimViewer,
+            BimViewerToolbarPlugin,
             BottomBarPlugin,
+            ContextMenuPlugin,
             GroundShadowPlugin,
             NavCubePlugin,
-            ToolbarMenuId,
         } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const filename = "Duplex.gltf";
@@ -35,18 +36,14 @@
         const viewerCfg = {
             containerId: "myCanvas",
             language: "en",
-            toolbarMenuConfig: {
-                [ToolbarMenuId.Measure]: { visible: false },
-                [ToolbarMenuId.Fullscreen]: { visible: false },
-                [ToolbarMenuId.BimTree]: { visible: false },
-            },
-            enableContextMenu: true,
             enableProgressBar: true,
         }
         const viewer = new BimViewer(viewerCfg);
 
         new AxisGizmoPlugin(viewer);
+        new BimViewerToolbarPlugin(viewer);
         new BottomBarPlugin(viewer);
+        new ContextMenuPlugin(viewer);
         new GroundShadowPlugin(viewer);
         new NavCubePlugin(viewer);
 
