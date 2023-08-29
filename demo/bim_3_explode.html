@@ -52,7 +52,7 @@
 
         // draco decoder path is needed to load draco encoded models.
         // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.
-        const decoderPath = "./demo/three/js/libs/draco/gltf/";
+        const decoderPath = "./demo/libs/draco/gltf/";
         viewer.setDracoDecoderPath(decoderPath);
 
         viewer.loadModel(modelCfg, (event) => {
