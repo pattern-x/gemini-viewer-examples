@@ -2,8 +2,21 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
+input[type="text"] {
+    border: 1px solid gray;
+    padding: 0 2px
+}
+
+input[type="button"] {
+    border: 1px solid gray;
+    padding: 0 2px;
+    margin-left: 1px;
+    cursor: pointer;
+}
+
 table {
-    width: 100%;
+    width: calc(100% - 10px);
+    margin: 5px;
 }
 
 .panel-container {
@@ -13,14 +26,15 @@ table {
     width: 330px;
     height: auto;
     border-radius: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.7);
-    background-color: rgba(255, 255, 255, 0.7);
-    z-index: 1000;
+    /* border: 1px solid rgba(0, 0, 0, 0.7); */
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 1px 3px 10px 0 rgba(0,0,0,.4);
+    z-index: 1;
     overflow: hidden;
 }
 
 .panel-container:hover {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.95);
 }
 
 .panel-hide {
@@ -43,6 +57,7 @@ table {
     height: 40px;
     border-bottom: 1px solid #ccc;
     background-color: #00000022;
+    cursor: move;
 }
 
 .panel-body {
@@ -57,4 +72,23 @@ table {
     margin: 2px;
     cursor: pointer;
     font-size: 0px; /* do not see the text at all */
+}
+
+.bim-setting {
+    list-style: none;
+}
+
+.bim-setting li {
+    list-style: none;
+    margin: 15px;
+}
+
+.bim-setting span {
+    display: inline-block;
+    margin-right: 5px;
+    width: 120px;
+}
+
+.bim-setting select {
+    border: 1px solid #000;
 }

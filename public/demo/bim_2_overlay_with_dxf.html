@@ -58,13 +58,13 @@
         new SectionPlugin(viewer);
 
         // font file is needed for loading dxf
-        // const fontFiles = ["./fonts/Microsoft_YaHei_Regular.typeface.json"];
-        const fontFiles = ["./fonts/hztxt.shx", "./fonts/simplex.shx"];
+        // const fontFiles = ["./demo/libs/fonts/Microsoft_YaHei_Regular.typeface.json"];
+        const fontFiles = ["./demo/libs/fonts/hztxt.shx", "./demo/libs/fonts/simplex.shx"];
         await viewer.setFont(fontFiles);
 
         // draco decoder path is needed to load draco encoded models.
         // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.
-        const decoderPath = "./demo/three/js/libs/draco/gltf/";
+        const decoderPath = "./demo/libs/draco/gltf/";
         viewer.setDracoDecoderPath(decoderPath);
 
         project.models.forEach((modelCfg) => {
