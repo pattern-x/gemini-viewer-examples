@@ -19,6 +19,8 @@
         import {
             AxisGizmoPlugin,
             BimViewer,
+            BimViewerToolbarPlugin,
+            ContextMenuPlugin,
             MeasurementPlugin,
             NavCubePlugin,
             SectionPlugin,
@@ -39,10 +41,14 @@
             enableProgressBar: true,
         }
         const viewer = new BimViewer(viewerCfg);
-        const toolbar = viewer.toolbar;
-        toolbar.updateMenu(ToolbarMenuId.BimTree, { visible: false });
 
+        const menuConfig = {
+            [ToolbarMenuId.Measure]: { visible: true },
+            [ToolbarMenuId.Fullscreen]: { visible: false },
+        };
         new AxisGizmoPlugin(viewer);
+        new BimViewerToolbarPlugin(viewer, { menuConfig });
+        new ContextMenuPlugin(viewer);
         new MeasurementPlugin(viewer);
         new NavCubePlugin(viewer);
         new SectionPlugin(viewer);

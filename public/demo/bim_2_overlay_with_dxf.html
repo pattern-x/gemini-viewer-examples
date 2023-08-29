@@ -19,10 +19,10 @@
         import {
             AxisGizmoPlugin,
             BimViewer,
+            BimViewerToolbarPlugin,
             MeasurementPlugin,
             NavCubePlugin,
             SectionPlugin,
-            ToolbarMenuId,
         } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const project = {
@@ -50,17 +50,16 @@
         const viewer = new BimViewer({
             containerId: "myCanvas",
         });
-        const toolbar = viewer.toolbar;
-        toolbar.updateMenu(ToolbarMenuId.BimTree, { visible: false });
 
         new AxisGizmoPlugin(viewer);
+        new BimViewerToolbarPlugin(viewer);
         new MeasurementPlugin(viewer);
         new NavCubePlugin(viewer);
         new SectionPlugin(viewer);
 
         // font file is needed for loading dxf
-        // const fontFiles = ["./demo/three/fonts/Microsoft_YaHei_Regular.typeface.json"];
-        const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
+        // const fontFiles = ["./fonts/Microsoft_YaHei_Regular.typeface.json"];
+        const fontFiles = ["./fonts/hztxt.shx", "./fonts/simplex.shx"];
         await viewer.setFont(fontFiles);
 
         // draco decoder path is needed to load draco encoded models.

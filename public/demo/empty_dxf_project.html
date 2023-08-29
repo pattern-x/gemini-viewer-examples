@@ -8,18 +8,17 @@
         #myCanvas {
             width: 100%;
             height: 100%;
+            overflow: hidden;
         }
         .upload-btn {
             margin-top: 2em;
+            display: inline-block;
         }
 
         .upload-btn button {
             width: 0.1px;
             height: 0.1px;
             opacity: 0;
-            overflow: hidden;
-            position: absolute;
-            z-index: -1;
         }
 
         .upload-btn label {
@@ -50,112 +49,327 @@
             margin-top: -0.25em;
             margin-right: 0.25em;
         }
+
+        .markup-toolbar {
+            position: absolute;
+            right: 5px;
+            top: 10%;
+            background-color: #eee;
+        }
+        .toolbar-item {
+            padding: 2px 0;
+        }
+        .toolbar-item span {
+            text-align: center;
+            display: inline-block;
+            padding: 5px 5px;
+            border-radius: 4px;
+            width: 5em;
+            color: #666666;
+        }
+        .toolbar-item .toolbar-item-active {
+            background-color: #2c7be5;
+            color: #ffffff;
+        }
     </style>
 </head>
 
 <body>
-<div id="app">
-    <div id="myCanvas" class="container"></div>
-</div>
-<div style="position: absolute; top: 10px; opacity: 0.6; width: 100%;text-align: center;">
-    <div class="upload-btn" id="uploadBtn">
-        <button id="uploadModelFile" type="button">点此上传本地模型文件</button>
-        <label for="uploadModelFile" title="">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17"><path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path></svg>
-            <span>Upload dxf</span>
-        </label>
-        <div style="margin-top: 1em;">
+    <div id="app">
+        <div id="myCanvas" class="container"></div>
+    </div>
+    <div style="position: absolute; top: 10px; opacity: 0.6; width: 100%;text-align: center;pointer-events: none;">
+        <div class="upload-btn" id="uploadBtn" style="pointer-events: auto;">
+            <button id="uploadModelFile" type="button">Click to upload dxf/pdf file(s)</button>
+            <label for="uploadModelFile" title="Choose one or more dxf/pdf files to load">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
+                    <path
+                        d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z">
+                    </path>
+                </svg>
+                <span>Upload dxf/pdf</span>
+            </label>
+        </div>
+        <div style="margin-top: 1em; pointer-events: auto; width: fit-content; left: calc(50% - 200px); position: absolute;">
             <input id="fileUrlInput" style="display: inline-block; width: 20em; height: 2em;">
             <button
-                style="width: 8em; height: 2em; color: #fff; overflow: auto; z-index: 1; opacity: 1; background: #000;"
-                id="loadDxf">加载DXF
+                style="width: 8em; height: 2em; color: #fff; opacity: 1; background: #000; cursor: pointer;"
+                id="loadDxf">Load dxf/pdf
             </button>
         </div>
     </div>
-</div>
-<script type="module">
-    import {
-        AxisGizmoPlugin,
-        BottomBarPlugin,
-        DxfViewer,
-        LayerManagerPlugin,
-        LocalDxfUploader,
-        MeasurementPlugin,
-        StatsPlugin,
-        ToolbarMenuId,
-        ViewerEvent,
-    } from "./demo/libs/gemini-viewer.esm.min.js";
-    import DxfSettingsPanel from './demo/settings/DxfSettingsPanel.js';
+    <script type="module">
+        import {
+            AxisGizmoPlugin,
+            BottomBarPlugin,
+            DxfViewer,
+            DxfViewerToolbarPlugin,
+            LayerManagerPlugin,
+            LocalDxfUploader,
+            MarkupType,
+            MeasurementPlugin,
+            ScreenshotPlugin,
+            StatsPlugin,
+            ToolbarMenuId,
+            ViewerEvent,
+        } from "./demo/libs/gemini-viewer.esm.min.js";
+        import DxfComparePanel from "./demo/compare/dxfComparePanel.js"
+        import DxfSettingsPanel from "./demo/settings/DxfSettingsPanel.js";
 
-    const config = {
-        containerId: "myCanvas",
-        enableToolbar: true,
-        enableSpinner: true,
-        enableProgressBar: true,
-        enableLayoutBar: true,
-        toolbarMenuConfig: {
-                [ToolbarMenuId.Settings]: {
-                    onActive: () => {
-                        console.log("[Toolbar]", "Activate Settings");
-                        if (!window.dxfSettingsPanel) {
-                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
-                        }
-                        window.dxfSettingsPanel.show();
-                    },
-                    onDeactive: () => {
-                        console.log("[Toolbar]", "Deactivate Settings");
-                        if (!window.dxfSettingsPanel) {
-                            window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
-                        }
-                        window.dxfSettingsPanel.hide();
-                    },
+        // keep markup data and measurementData
+        const markupData = [];
+        const measurementData = [];
+        let isShowMarkup = true;
+
+        const config = {
+            containerId: "myCanvas",
+            enableSpinner: true,
+            enableProgressBar: true,
+            enableLayoutBar: true,
+            enableLocalCache: false,
+            enableSelection: true,
+        };
+        
+        // fix mobile markup toolbar
+        const isMobile = /mobile/i.test(navigator.userAgent);
+        if (isMobile) {
+            config.toolbarMenuConfig[ToolbarMenuId.Markup] = {
+                onClick: (viewer, toolbar) => {
+                    // decative measure
+                    viewer.deactivateMeasurement();
+                    viewer.toolbar?.updateMenu(ToolbarMenuId.Measure, { defaultActive: false });
+                    viewer.deactivateZoomRect();
+                    viewer.toolbar?.setActive(ToolbarMenuId.ZoomToRectangle, false);
+
+                    // show all markup first
+                    const markups = viewer.getMarkups();
+                    markups.forEach((m) => viewer.setMarkupVisibility(m.id, true));
+                    viewer.toolbar?.setActive(ToolbarMenuId.MarkupVisibility, false);
+
+                    viewer.activateMarkup(MarkupType.CloudLineRectangle);
+                    // hide main toolbar
+                    toolbar.hide();
+
+                    // show markup toolbar
+                    createMarkupToolbar();
                 },
-                [ToolbarMenuId.Layers]: {
-                    onActive: () => {
-                        console.log("[Toolbar]", "Activate Layers");
-                        if (!window.layerManager) {
-                            window.layerManager = new LayerManagerPlugin(window.viewer);
-                        }
-                        window.layerManager.show();
-                    },
-                    onDeactive: () => {
-                        console.log("[Toolbar]", "Deactivate Layers");
-                        window.layerManager.hide();
-                    },
+            }
+        }
+
+        const viewer = new DxfViewer(config);
+        // const fontFiles = ["./fonts/Microsoft_YaHei_Regular.typeface.json"];
+        const fontFiles = ["./fonts/hztxt.shx", "./fonts/simplex.shx", "./fonts/arial.ttf", "./fonts/Microsoft_YaHei.ttf"];
+        await viewer.setFont(fontFiles);
+
+        window.viewer = viewer;
+
+        const menuConfig = {
+            [ToolbarMenuId.Settings]: {
+                onActive: () => {
+                    console.log("[Toolbar]", "Activate Settings");
+                    if (!window.dxfSettingsPanel) {
+                        window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                    }
+                    window.dxfSettingsPanel.show();
+                },
+                onDeactive: () => {
+                    console.log("[Toolbar]", "Deactivate Settings");
+                    if (!window.dxfSettingsPanel) {
+                        window.dxfSettingsPanel = new DxfSettingsPanel(window.viewer);
+                    }
+                    window.dxfSettingsPanel.hide();
                 },
             },
-    };
-    const viewer = new DxfViewer(config);
-    // const fontFiles = ["./demo/three/fonts/Microsoft_YaHei_Regular.typeface.json"];
-    const fontFiles = ["./demo/three/fonts/hztxt.shx", "./demo/three/fonts/simplex.shx"];
-    await viewer.setFont(fontFiles);
-    window.viewer = viewer;
+            [ToolbarMenuId.Layers]: {
+                onActive: () => {
+                    console.log("[Toolbar]", "Activate Layers");
+                    if (!window.layerManager) {
+                        window.layerManager = new LayerManagerPlugin(window.viewer);
+                    }
+                    window.layerManager.show();
+                },
+                onDeactive: () => {
+                    console.log("[Toolbar]", "Deactivate Layers");
+                    window.layerManager.hide();
+                },
+            },
+            [ToolbarMenuId.MarkupVisibility]: {
+                onActive: (viewer) => {
+                    isShowMarkup = false;
+                    const markups = viewer.getMarkups();
+                    markups.forEach((m) => viewer.setMarkupVisibility(m.id, isShowMarkup));
+                },
+                onDeactive: (viewer) => {
+                    isShowMarkup = true;
+                    const markups = viewer.getMarkups();
+                    markups.forEach((m) => viewer.setMarkupVisibility(m.id, isShowMarkup));
+                },
+            },
+        };
 
-    new AxisGizmoPlugin(viewer);
-    new BottomBarPlugin(viewer);
-    new MeasurementPlugin(viewer);
-    new StatsPlugin(viewer);
+        new AxisGizmoPlugin(viewer, { ignoreZAxis: true });
+        new BottomBarPlugin(viewer);
+        new MeasurementPlugin(viewer);
+        new ScreenshotPlugin(viewer);
+        new StatsPlugin(viewer);
+        window.toolbar = new DxfViewerToolbarPlugin(viewer, { menuConfig });
 
-    const modelUploader = new LocalDxfUploader(viewer);
-    modelUploader.onSuccess = () => {
-        !window.layerManager && (window.layerManager = new LayerManagerPlugin(viewer));
-    }
-    document.getElementById("uploadModelFile").onclick = function() {
-        modelUploader.openFileBrowserToUpload();
-    }
-    document.getElementById("loadDxf").onclick = function() {
-        const url = document.getElementById("fileUrlInput").value;
-        if (url) {
-            viewer.loadModelAsync({ src: url, merge: true }).then(() => {
-                console.log(`[Demo] Loaded model ${url}`);
-                !window.layerManager && (window.layerManager = new LayerManagerPlugin(viewer));
-            })
+        const modelUploader = new LocalDxfUploader(viewer);
+        const pdfWorker = "./demo/libs/pdf/pdf.worker.min.js";
+        if (modelUploader.setPdfWorker) {
+            modelUploader.setPdfWorker(pdfWorker);
         }
-    }
+        modelUploader.onSuccess = (event) => {
+            if (event && event.compare) {
+                !viewer.dxfComparePanel && (viewer.dxfComparePanel = new DxfComparePanel(viewer));
+            }
+        }
+        document.getElementById("uploadModelFile").onclick = function () {
+            modelUploader.openFileBrowserToUpload();
+        }
+        document.getElementById("loadDxf").onclick = function () {
+            const url = document.getElementById("fileUrlInput").value;
+            if (url) {
+                viewer.loadModelAsync({ src: url, merge: true }).then(() => {
+                    console.log(`[Demo] Loaded model ${url}`);
+                })
+            }
+        }
 
-    // as a demo page, add dxfSettingsPanel to window!
-    window.dxfSettingsPanel = new DxfSettingsPanel(viewer);
-</script>
+        viewer.addEventListener(ViewerEvent.LayoutChanged, () => {
+            const layoutName = viewer.getActiveLayoutName();
+            viewer.setMarkups(markupData.filter(markup => markup.layoutName === layoutName));
+            viewer.setMeasurements(measurementData.filter(measure => measure.layoutName === layoutName));
+        });
+
+        viewer.addEventListener(ViewerEvent.MarkupAdded, (data) => {
+            console.log("MarkupAdded", data);
+            const layoutName = viewer.getActiveLayoutName();
+            // Markup and layout correlation
+            data.layoutName = layoutName;
+            const index = markupData.findIndex(markup => markup.id === data.id);
+            if (index > -1) {
+                markupData.splice(index, 1, data);
+            } else {
+                markupData.push(data);
+            }
+        })
+        viewer.addEventListener(ViewerEvent.MarkupUpdated, (data) => {
+            const {oldData, newData} = data;
+            console.log("MarkupUpdated", oldData, newData);
+            const layoutName = viewer.getActiveLayoutName();
+            newData.layoutName = layoutName;
+            const index = markupData.findIndex(markup => markup.id === newData.id);
+            markupData.splice(index, 1, newData);
+        })
+        viewer.addEventListener(ViewerEvent.MarkupRemoved, (data) => {
+            console.log("MarkupRemoved", data);
+            const index = markupData.findIndex(markup => markup.id === data.id);
+            markupData.splice(index, 1);
+        })
+
+        viewer.addEventListener(ViewerEvent.MeasurementAdded, (data) => {
+            console.log("MeasurementAdded", data);
+            const layoutName = viewer.getActiveLayoutName();
+            // Measurement and layout correlation
+            data.layoutName = layoutName;
+            const index = measurementData.findIndex(measurement => measurement.id === data.id);
+            if (index > -1) {
+                measurementData.splice(index, 1, data);
+            } else {
+                measurementData.push(data);
+            }
+        })
+        viewer.addEventListener(ViewerEvent.MeasurementRemoved, (data) => {
+            console.log("MeasurementRemoved", data);
+            const index = measurementData.findIndex(measurement => measurement.id === data.id);
+            measurementData.splice(index, 1);
+        })
+
+        // markup toolbar for mobile demo
+        function createMarkupToolbar() {
+            if (document.getElementById("markup-toolbar")) {
+                document.getElementById("markup-toolbar").remove();
+            }
+            const markupContainer = document.createElement("div");
+            markupContainer.id = "markup-toolbar";
+            markupContainer.classList.add("markup-toolbar");
+            const type2Name = {
+                [MarkupType.Arrow]: "箭头",
+                [MarkupType.Rectangle]: "矩形框",
+                [MarkupType.CloudLineRectangle]: "云线框",
+                [MarkupType.PolyLine]: "多段线",
+                [MarkupType.Ellipse]: "椭圆",
+                [MarkupType.Circle]: "圆",
+                [MarkupType.Text]: "文字",
+                ["ClearMarkup"]: "清除批注",
+                ["QuitMarkup"]: "退出批注",
+            };
+            let lastTarget;
+            [MarkupType.Arrow, MarkupType.Rectangle, MarkupType.CloudLineRectangle, MarkupType.PolyLine, MarkupType.Ellipse, MarkupType.Circle, MarkupType.Text, "ClearMarkup", "QuitMarkup"].forEach(type => {
+                const item = document.createElement("div");
+                item.classList.add("toolbar-item");
+                const btn = document.createElement("span");
+                btn.dataset.type = type;
+                btn.innerText = type2Name[type];
+                if (type === MarkupType.CloudLineRectangle) {
+                    btn.classList.add("toolbar-item-active");
+                    lastTarget = btn;
+                }
+                item.appendChild(btn);
+                markupContainer.appendChild(item);
+            })
+            markupContainer.addEventListener("touchend", (e) => {
+                if (e.target.dataset.type === "ClearMarkup") {
+                    viewer.clearMarkups();
+                    return;
+                } else if (e.target.dataset.type === "QuitMarkup") {
+                    viewer.deactivateMarkup();
+                    markupContainer.style.display = "none";
+                    viewer.toolbar.show();
+                    return;
+                }
+                if (lastTarget) {
+                    lastTarget.classList.remove("toolbar-item-active");
+                }
+                if (e.target instanceof HTMLSpanElement) {
+                    e.target.classList.add("toolbar-item-active");
+                }
+                lastTarget = e.target;
+                viewer.activateMarkup(e.target.dataset.type);
+            })
+            document.body.appendChild(markupContainer);
+        }
+
+        // for mobile cancel measureing and markup
+        let exitButton;
+        viewer.addEventListener(ViewerEvent.MeasurementActivated, (data) => {
+            if (isMobile) {
+                if (!exitButton) {
+                    exitButton = createMobileExitButton();
+                }
+                exitButton.style.display = "inline-block";
+            }
+        })
+
+        viewer.addEventListener(ViewerEvent.MeasurementDeactivated, (data) => {
+            if (exitButton) {
+                exitButton.style.display = "none";
+            }
+        })
+
+        function createMobileExitButton() {
+            const button = document.createElement("button");
+            button.innerText = "X";
+            button.style.cssText = `position: absolute;right: 5%; top: 5%;background-color: #000000;color: #ffffff;padding: 3px 10px;font-weight: bolder;`;
+            viewer.widgetContainer.appendChild(button);
+            button.style.display = "none";
+            button.addEventListener("touchstart", () => {
+                viewer.cancelMeasurement();
+            });
+            return button;
+        }
+    </script>
 </body>
 
 </html>
