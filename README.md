@@ -17,7 +17,7 @@ http://localhost:3000/
 gemini-viewer is a WebGL based JS SDK, it is built on top of three.js. It provides following viewers:
 
 #### 1. DxfViewer
-Used to view 2d drawings. Dxf format is supported, so we need to convert dwg files to dxf first (there is a dwg2dxf.exe worker). It supports most common entity types, it supports OLE and region via dwg2dxf; It supports common line types; It supports common hatch styles; It support line width;
+Used to view 2d drawings and PDF. For dwg, we need to convert it to dxf first (there is a dwg2dxf.exe worker). It supports most common entity types, it supports OLE and region via dwg2dxf; It supports common line types; It supports common hatch styles; It support line width;
 
 #### 2. BimViewer
 Used to view 3d BIM models. It supports formats including gltf, obj, fbx, ifc, dae, etc. Its features including measurement, section, display outline, orthographic camera, selection, etc.

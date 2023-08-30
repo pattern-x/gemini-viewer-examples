@@ -6,7 +6,8 @@
 .pnp.js
 package-lock.json
 .idea
-public/demo/libs
+public/demo/libs/types
+public/demo/libs/gemini-viewer.esm.min.js
 
 # testing
 /coverage
