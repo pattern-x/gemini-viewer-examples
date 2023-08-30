@@ -53,6 +53,25 @@
       "last 1 safari version"
     ]
   },
+  "keywords": [
+      "webgl",
+      "threejs",
+      "three.js",
+      "3d-viewer",
+      "javascript",
+      "typescript",
+      "vue",
+      "ifc",
+      "bim",
+      "gis",
+      "cad",
+      "buildingsmart",
+      "opensource",
+      "gltf",
+      "obj",
+      "stl",
+      "pdf"
+  ],
   "devDependencies": {
     "copy-webpack-plugin": "^11.0.0",
     "react-app-rewired": "^2.2.1"
