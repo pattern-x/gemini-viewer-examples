@@ -37,7 +37,6 @@ import { DxfViewer, DxfViewerConfig, ModelConfig } from "@pattern-x/gemini-viewe
 
 const viewerCfg: DxfViewerConfig = {
     containerId: "myCanvas",
-    enableToolbar: true,
     enableSpinner: true,
     enableLayoutBar: true,
 };
