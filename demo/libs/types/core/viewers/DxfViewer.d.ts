@@ -310,7 +310,7 @@ export declare class DxfViewer extends BaseViewer {
      * const viewer = new DxfViewer(viewerCfg);
      * await viewer.loadModelAsync(modelCfg, (event) => {
      *     const progress = (event.loaded * 100) / event.total;
-     *     console.log(`${event.type}: ${progress}%`);
+     *     console.log(`Loading progress: ${progress}%`);
      * });
      * console.log("Loaded");
      * ```

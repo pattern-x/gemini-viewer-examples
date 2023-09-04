@@ -24,6 +24,8 @@
             NavCubePlugin,
             SectionPlugin,
         } from "./demo/libs/gemini-viewer.esm.min.js";
+        import * as dat from "./demo/libs/dat.gui.module.js";
+        const gui = new dat.GUI();
 
         const project = {
             "id": "building1",
@@ -82,6 +84,22 @@
                 // viewer.setToOrthographicCamera(false);
             });
         });
+
+        // dat.gui controls
+        const controls = {
+            dxfElevation: 0,
+        }
+        // update dxf elevation between -2 to 30, default value is 17.
+        gui.add(controls, "dxfElevation", -2.0, 30.0, 0.1)
+            .name("Dxf elevation")
+            .setValue(17) // the origin value is 17
+            .onChange((val) => {
+                const dxf = viewer.loadedModels.find((model) => model.modelId.endsWith(".dxf"));
+                const object = dxf.object;
+                object.position.setY(val);
+                object.updateMatrix();
+                viewer.enableRender();
+            });
     </script>
 </body>
 

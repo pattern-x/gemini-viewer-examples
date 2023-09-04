@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { IconClass } from "../Configs";
 /**
  * @internal
  */
@@ -122,11 +123,3 @@ export declare class CommonUtils {
  * @internal
  */
 export declare const setIcon: (classList: DOMTokenList, iconClass: IconClass, active: boolean) => void;
-/**
- * @internal
- */
-export interface IconClass {
-    default: string;
-    active?: string;
-    iconFont?: string;
-}

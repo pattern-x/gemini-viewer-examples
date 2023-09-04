@@ -1,5 +1,5 @@
 import { Tooltip } from "../../components/tool-tip";
-import { IconClass } from "../../core/utils";
+import { IconClass } from "../../core";
 import { BaseViewer } from "../../core/viewers/BaseViewer";
 import { Plugin } from "../../core/viewers/Plugin";
 declare enum BottomBarItemId {

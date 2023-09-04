@@ -5,9 +5,11 @@ import type { DxfViewer, ModelConfig } from "../../core";
  */
 export declare class LocalDxfUploader extends IUploader {
     private viewer;
+    private pdfWorker;
     onSuccess?: (event: any) => void;
     readonly defaultModelConfig: ModelConfig;
     constructor(viewer: DxfViewer, elementId?: string);
+    setPdfWorker(pdfWorker: string): void;
     protected formats(): string[];
     protected uploadFiles(files: FileList): void;
     /**

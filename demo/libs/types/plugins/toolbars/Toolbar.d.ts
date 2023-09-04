@@ -37,7 +37,6 @@ import { type BaseViewer } from "../../core/viewers";
  *     toolbar.toolbarGroupConfig = toolbarGroupConfig;
  *     toolbar.refresh();
  * ```
- * @internal
  */
 export declare class Toolbar {
     protected viewer: BaseViewer;

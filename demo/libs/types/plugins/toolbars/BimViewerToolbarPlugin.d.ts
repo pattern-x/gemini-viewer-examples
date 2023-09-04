@@ -13,7 +13,7 @@ export interface BimViewerToolbarPluginConfig extends PluginConfig {
  */
 export declare class BimViewerToolbarPlugin extends Plugin {
     protected cfg: BimViewerToolbarPluginConfig;
-    toolbar: Toolbar;
+    protected toolbar: Toolbar;
     constructor(viewer: BaseViewer, cfg?: BimViewerToolbarPluginConfig);
     /**
      * Sets a menu item to be active or inactive.

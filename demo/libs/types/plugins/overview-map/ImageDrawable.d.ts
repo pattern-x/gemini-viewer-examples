@@ -5,6 +5,7 @@ export interface ImageDrawableConfig {
     image: HTMLImageElement;
     position: Vector3 | THREE.Vector3;
     radius?: number;
+    displayRadius?: number;
     enabledHover?: boolean;
     direction?: Vector3 | THREE.Vector3;
     rotation?: number;
@@ -18,6 +19,7 @@ export declare class ImageDrawable extends Drawable {
     hover: boolean;
     needsFrustumCulled: boolean;
     position: THREE.Vector3;
+    displayRadius: number;
     radius?: number;
     direction?: THREE.Vector3;
     rotation?: number;

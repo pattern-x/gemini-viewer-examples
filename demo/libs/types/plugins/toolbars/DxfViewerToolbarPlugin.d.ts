@@ -15,8 +15,8 @@ export interface DxfViewerToolbarPluginConfig extends PluginConfig {
  */
 export declare class DxfViewerToolbarPlugin extends Plugin {
     protected cfg: DxfViewerToolbarPluginConfig;
-    toolbar: Toolbar;
-    markupToolbar?: Toolbar;
+    protected toolbar: Toolbar;
+    protected markupToolbar?: Toolbar;
     constructor(viewer: BaseViewer, cfg?: DxfViewerToolbarPluginConfig);
     /**
      * Sets a menu item to be active or inactive.

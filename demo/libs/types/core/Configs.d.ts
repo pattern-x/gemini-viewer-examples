@@ -347,3 +347,21 @@ export interface ScreenshotConfig {
     quality: number;
     includeOverlay: boolean;
 }
+/**
+ * Icon class.
+ * Used by toolbar and bottom bar icons, etc.
+ */
+export interface IconClass {
+    /**
+     * The default icon.
+     */
+    default: string;
+    /**
+     * The icon when item is actived.
+     */
+    active?: string;
+    /**
+     * The icon font class name.
+     */
+    iconFont?: string;
+}

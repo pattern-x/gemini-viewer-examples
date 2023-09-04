@@ -17,19 +17,29 @@ export interface TextDrawableConfig {
     text: string;
     position: Vector3;
     radius?: number;
+    displayRadius?: number;
     offset?: Vector2;
     textStyle?: TextStyle;
+    size?: {
+        width: number;
+        height: number;
+    };
 }
 export declare class TextDrawable extends Drawable {
     text: string;
     position: Vector3;
     offset: Vector2;
+    size: {
+        width: number;
+        height: number;
+    };
     textStyle: TextStyle;
+    displayRadius: number;
     radius?: number;
     needsFrustumCulled: boolean;
     constructor(id: string, cfg: TextDrawableConfig);
     private getFont;
-    drawRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number): void;
+    drawRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, cameraPosition: THREE.Vector2, bClippable: boolean): void;
     draw(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     getBounds(): THREE.Box3;
     drawSelect(): void;

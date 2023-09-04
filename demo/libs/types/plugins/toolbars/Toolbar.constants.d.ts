@@ -1,5 +1,5 @@
 import type { Toolbar } from "./Toolbar";
-import type { IconClass } from "../../core/utils";
+import { IconClass } from "../../core";
 import type { BaseViewer } from "../../core/viewers";
 /**
  * @type
@@ -7,7 +7,6 @@ import type { BaseViewer } from "../../core/viewers";
  * 2：show popup
  * 3：show submenu
  * 4：turn on/off
- * @internal
  */
 export declare enum MenuTypeEnums {
     ClickEvent = 1,
@@ -17,7 +16,6 @@ export declare enum MenuTypeEnums {
 }
 /**
  * Buildin toolbar ids
- * @internal
  */
 export declare enum ToolbarMenuId {
     HomeView = "HomeView",
@@ -69,8 +67,8 @@ export declare enum ToolbarMenuId {
     Screenshot = "GetScreenshot"
 }
 /**
- * ToolbarConfig
- * @internal
+ * Toolbar menu config.
+ * Used to define menu item name, icon, child items, etc.
  */
 export interface ToolbarMenuConfig {
     menuName?: string;
@@ -86,7 +84,8 @@ export interface ToolbarMenuConfig {
     onClick?: (viewer: BaseViewer, toolbar: Toolbar, event: MouseEvent | TouchEvent) => void;
 }
 /**
- * @internal
+ * Toolbar config.
+ * The key is ToolbarMenuId, and the value is a ToolbarMenuConfig.
  */
 export declare type ToolbarConfig = {
     [key in ToolbarMenuId]?: ToolbarMenuConfig;
