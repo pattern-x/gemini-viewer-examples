@@ -2,11 +2,11 @@ import { BaseViewer, Plugin, PluginConfig } from "../../core";
 /**
  * AxisGizmo plugin config.
  */
-export interface AxisGizmoPluginConfig extends PluginConfig {
+export interface AxisGizmoPluginConfig extends Partial<PluginConfig> {
     /**
      * UI element id to contain the plugin.
      */
-    containerId: string;
+    containerId?: string;
     /**
      * Ignores z-axis. It is useful for DxfViewer.
      */
@@ -17,6 +17,7 @@ export interface AxisGizmoPluginConfig extends PluginConfig {
  * the same direction as host renderer's
  */
 export declare class AxisGizmoPlugin extends Plugin {
+    static DEFAULT_ID: string;
     private cfg;
     private hostCamera?;
     private container?;

@@ -21,6 +21,7 @@ export declare class CanvasRender extends Event {
     static _registerDrawableClass(drawable: constructorReturnType<Drawable>): void;
     static createDrawable(data: DrawableData): Drawable<Record<string, unknown>>;
     constructor(viewer: BimViewer | DxfViewer);
+    get is3d(): boolean;
     get container(): HTMLElement;
     get camera(): THREE.Camera;
     get raycaster(): THREE.Raycaster;

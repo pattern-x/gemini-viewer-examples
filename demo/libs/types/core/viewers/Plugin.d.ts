@@ -1,5 +1,4 @@
 import { Event } from "../utils";
-import { type BaseViewer } from "./BaseViewer";
 /**
  * Base plugin config.
  */
@@ -14,7 +13,7 @@ export interface PluginConfig {
  */
 export declare abstract class Plugin<PluginEvents extends Record<string, unknown> = {}> extends Event<PluginEvents> {
     readonly id: string;
-    protected viewer: BaseViewer;
+    protected viewer: any;
     /**
      * Creates this Plugin and installs it into the given {@link Viewer}.
      *
@@ -22,7 +21,7 @@ export declare abstract class Plugin<PluginEvents extends Record<string, unknown
      * @param {Viewer} viewer The viewer.
      * @param {Object} [cfg] Options
      */
-    constructor(viewer: BaseViewer, cfg: PluginConfig);
+    constructor(viewer: any, cfg: PluginConfig);
     /**
      * Destroys this Plugin and removes it from its viewer.
      */

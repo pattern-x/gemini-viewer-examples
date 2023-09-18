@@ -2,7 +2,7 @@ import { DxfLayers, DxfViewer, PdfLayers, Plugin, PluginConfig } from "../../cor
 /**
  * Dxf layer manager config.
  */
-export interface LayerManagerPluginConfig extends PluginConfig {
+export interface LayerManagerPluginConfig extends Partial<PluginConfig> {
     /**
      * Container div id.
      */
@@ -26,6 +26,7 @@ declare type LayerManagerPluginEvents = {
  * Can be used by DxfViewer.
  */
 export declare class LayerManagerPlugin extends Plugin<LayerManagerPluginEvents> {
+    static DEFAULT_ID: string;
     protected cfg: LayerManagerPluginConfig;
     protected container?: HTMLDivElement;
     protected layerMgrRoot?: HTMLDivElement;

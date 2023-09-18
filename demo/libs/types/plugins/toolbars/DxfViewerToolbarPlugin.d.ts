@@ -4,7 +4,7 @@ import { Plugin, type BaseViewer, PluginConfig } from "../../core/viewers";
 /**
  * DxfViewer toolbar plugin config.
  */
-export interface DxfViewerToolbarPluginConfig extends PluginConfig {
+export interface DxfViewerToolbarPluginConfig extends Partial<PluginConfig> {
     menuConfig: ToolbarConfig;
     groupConfig?: ToolbarMenuId[][] | string[][];
     markupMenuCfg?: ToolbarConfig;
@@ -14,10 +14,13 @@ export interface DxfViewerToolbarPluginConfig extends PluginConfig {
  * DxfViewer toolbar plugin.
  */
 export declare class DxfViewerToolbarPlugin extends Plugin {
+    static DEFAULT_ID: string;
     protected cfg: DxfViewerToolbarPluginConfig;
     protected toolbar: Toolbar;
     protected markupToolbar?: Toolbar;
     constructor(viewer: BaseViewer, cfg?: DxfViewerToolbarPluginConfig);
+    getToolbar(): Toolbar;
+    getMarkupToolbar(): Toolbar | undefined;
     /**
      * Sets a menu item to be active or inactive.
      */

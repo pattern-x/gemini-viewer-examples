@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { ObjectExploder } from "./ObjectExploder";
 import { BaseViewer, Plugin, PluginConfig, Vector3 } from "../../core";
-export interface ExplodePluginConfig extends PluginConfig {
+export interface ExplodePluginConfig extends Partial<PluginConfig> {
     /**
      * Explode center.
      * If specified, each object explode based on this position. Otherwise,
@@ -20,6 +20,7 @@ export interface ExplodePluginConfig extends PluginConfig {
  * @internal
  */
 export declare class ExplodePlugin extends Plugin {
+    static DEFAULT_ID: string;
     protected cfg: ExplodePluginConfig;
     protected exploders: ObjectExploder[];
     constructor(viewer: BaseViewer, cfg?: ExplodePluginConfig);

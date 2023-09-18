@@ -60,7 +60,7 @@ export declare class ViewCube extends THREE.Object3D {
     private createEdge;
     private createViewCubeCorners;
     private createCorner;
-    getBbox(): THREE.Box3;
+    getBBox(): THREE.Box3;
     getDirectionByViewCubeName(viewCubeName: ViewCubeName): THREE.Vector3 | undefined;
     update(): void;
     private updateViewCube;

@@ -4,7 +4,7 @@ import { BaseViewer, Plugin, PluginConfig } from "../../core";
 /**
  * Skybox plugin config.
  */
-export interface SkyboxPluginConfig extends PluginConfig {
+export interface SkyboxPluginConfig extends Partial<PluginConfig> {
     /**
      * Initial single color of the skybox.
      * If specified, it initialize with a single color background. Otherwise,
@@ -20,6 +20,7 @@ export interface SkyboxPluginConfig extends PluginConfig {
  * 3) Cube texture, by using setSkyboxByCubeTexture().
  */
 export declare class SkyboxPlugin extends Plugin {
+    static DEFAULT_ID: string;
     protected gradientColorSkybox?: GradientColorSkybox;
     constructor(viewer: BaseViewer, cfg?: SkyboxPluginConfig);
     /**

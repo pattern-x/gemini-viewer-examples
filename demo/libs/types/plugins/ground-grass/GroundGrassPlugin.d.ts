@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { BaseViewer, Plugin, PluginConfig } from "../../core";
-export interface GroundGrassPluginConfig extends PluginConfig {
+export interface GroundGrassPluginConfig extends Partial<PluginConfig> {
     /**
      * Url of a texture image.
      */
@@ -31,6 +31,7 @@ export interface GroundGrassPluginConfig extends PluginConfig {
  * Can be used by BimViewer.
  */
 export declare class GroundGrassPlugin extends Plugin {
+    static DEFAULT_ID: string;
     protected cfg: GroundGrassPluginConfig;
     protected NAME: string;
     protected DEFAULT_SIZE: number;

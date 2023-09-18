@@ -24,8 +24,10 @@ export interface TextDrawableConfig {
         width: number;
         height: number;
     };
+    renderOrder?: number;
 }
 export declare class TextDrawable extends Drawable {
+    renderOrder: number;
     text: string;
     position: Vector3;
     offset: Vector2;
@@ -41,7 +43,6 @@ export declare class TextDrawable extends Drawable {
     private getFont;
     drawRoundRect(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, cameraPosition: THREE.Vector2, bClippable: boolean): void;
     draw(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
-    getBounds(): THREE.Box3;
     drawSelect(): void;
     getClassType(): string;
     isPointInPath(): boolean;

@@ -1,8 +1,9 @@
+import * as THREE from "three";
 import { BaseViewer, BoxSelectHelper, PickMarkupHelper, Plugin, PluginConfig, ScreenshotMode, ScreenshotResult } from "../../core";
 /**
  * Screenshot plugin config.
  */
-export interface ScreenshotPluginConfig extends PluginConfig {
+export interface ScreenshotPluginConfig extends Partial<PluginConfig> {
     /**
      * Image type.
      */
@@ -16,6 +17,7 @@ export interface ScreenshotPluginConfig extends PluginConfig {
  * Screenshot plugin
  */
 export declare class ScreenshotPlugin extends Plugin {
+    static DEFAULT_ID: string;
     protected cfg: ScreenshotPluginConfig;
     protected boxSelectHelper?: BoxSelectHelper;
     protected pickMarkupHelper?: PickMarkupHelper;
@@ -31,6 +33,26 @@ export declare class ScreenshotPlugin extends Plugin {
      * ```
      */
     getScreenshot(): string | undefined;
+    /**
+     * Gets screenshot by bbox under screen cooridinate.
+     */
+    getScreenshotByScreenBBox(bbox: THREE.Box2): Promise<string | undefined>;
+    /**
+     * Gets screenshot by bbox under world coordinate.
+     * It needs to convert world to screen coordinate, in order to get the
+     * screenshot range. Assume it maps to bboxA under screen coordinate,
+     * and current view boundary is bboxB (e.g., 0,0 - 1024,768).
+     * Since, a given world coordinate may not be in current view boundary.
+     * The finally screenshot is the overlap of bboxA and bboxB. When
+     * - bboxA includes bboxB, it get screenshot for bboxB
+     * - bboxB includes bboxA, it get screenshot for bboxA
+     * - bboxA overlaps with bboxB, it get screenshot for the overlapped area
+     * - bboxA doesn't overlap with bboxB, it get nothing
+     *
+     * A best practice to use this API is to use orthographic camera, under top view,
+     * and pass in viewer's bbox.
+     */
+    getScreenshotByWorldBBox(bbox: THREE.Box3): Promise<string | undefined>;
     /**
      * @description {en} Gets screenshot of a rectangular area, or by box selecting an area. Returns an image in format of base64 string.
      * @description {zh} 获取矩形区域或者框选区域的截图。返回base64格式的图片。

@@ -10,6 +10,7 @@ export declare class ExportUtils {
     static EXTENSION_OBJ: string;
     static EXTENSION_DRACO: string;
     static EXTENSION_JSON: string;
+    static EXTENSION_STL: string;
     private static downloadLink;
     /**
      * Exports given object to gltf file
@@ -35,6 +36,10 @@ export declare class ExportUtils {
      */
     static exportToDraco(input: THREE.Mesh, filename: string, options?: DRACOExporterOptions): void;
     /**
+     * Exports given object to stl file
+     */
+    static exportToStl(input: THREE.Object3D, filename: string, binary?: boolean): void;
+    /**
      * Exports to threejs json
      * @param input
      * @param filename
@@ -48,6 +53,7 @@ export declare class ExportUtils {
     static saveJson(json: object, filename: string): void;
     static saveJsonString(jsonString: string, filename: string): void;
     static saveString(str: string, filename: string): void;
+    static saveDataView(dataView: DataView, filename: string): void;
     /**
      * Adds extention if missing
      */

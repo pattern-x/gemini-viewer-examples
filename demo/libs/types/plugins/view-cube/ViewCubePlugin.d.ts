@@ -1,15 +1,15 @@
 import { Plugin, type BaseViewer, PluginConfig } from "../../core/viewers";
-export interface ViewCubePluginConfig extends PluginConfig {
-    containerId: string;
+export interface ViewCubePluginConfig extends Partial<PluginConfig> {
+    containerId?: string;
     context?: WebGLRenderingContext | WebGL2RenderingContext;
     showAxes?: boolean;
     lineColor?: number;
 }
 export declare class ViewCubePlugin extends Plugin {
+    static DEFAULT_ID: string;
     /**
      * @internal
      */
-    name: string;
     private container?;
     private scene?;
     private camera?;
@@ -50,6 +50,6 @@ export declare class ViewCubePlugin extends Plugin {
      */
     private updateCameraDirection;
     private animate;
-    private zoomToBbox;
+    private zoomToBBox;
     destroy(): void;
 }

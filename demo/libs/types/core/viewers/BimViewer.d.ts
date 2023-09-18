@@ -399,6 +399,7 @@ export declare class BimViewer extends BaseViewer {
      * @description Compatible with older versions, use MeasurePlugin instead
      * @internal
      * @description use MeasurementPlugin instead
+     * @deprecated use MeasurePlugin instead
      */
     get measurePlugin(): MeasurementPlugin | undefined;
     /**

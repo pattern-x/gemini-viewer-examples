@@ -12,7 +12,6 @@ export declare abstract class BaseSection {
     protected renderer: THREE.WebGLRenderer;
     protected raycaster: THREE.Raycaster;
     protected sectionBox: THREE.Box3;
-    protected mouseDown: boolean;
     protected lastWorldPos: THREE.Vector3;
     protected mouseMoved: boolean;
     protected dragStarted: boolean;
@@ -40,7 +39,7 @@ export declare abstract class BaseSection {
     setClippingEnabled(enable: boolean): void;
     activate(): void;
     deactivate(): void;
-    protected enableDefaultControl(enable: boolean): void;
+    protected setControlsEnabled(enable: boolean): void;
     protected mousedown: (e: EventInfo) => void;
     protected mousemove: (e: EventInfo) => void;
     protected mouseup: (e: EventInfo) => void;
@@ -53,8 +52,8 @@ export declare abstract class BaseSection {
     protected abstract onDragEnd(e: EventInfo): void;
     protected abstract getIntersectObjects(): THREE.Object3D[];
     protected abstract activateSelectedObject(active: boolean): void;
-    protected abstract initOrUpdateSectionPlane(): void;
-    protected abstract initOrUpdateClipPlane(): void;
+    protected abstract initOrUpdateSectionPlaneMeshes(): void;
+    protected abstract initOrUpdateClipPlanes(): void;
     protected abstract resetSection(): void;
-    protected abstract setSectionVisible(visible: boolean): void;
+    protected abstract setSectionPlaneMeshVisible(visible: boolean): void;
 }

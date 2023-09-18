@@ -5,8 +5,10 @@ export interface OverviewMapDrawableConfig {
     min: THREE.Vector3;
     max: THREE.Vector3;
     radius?: number;
+    renderOrder?: number;
 }
 export declare class OverviewMapDrawable extends Drawable {
+    renderOrder: number;
     image: HTMLImageElement;
     min: THREE.Vector3;
     max: THREE.Vector3;
@@ -17,7 +19,6 @@ export declare class OverviewMapDrawable extends Drawable {
     private getImageScreenSize;
     draw(ctx: CanvasRenderingContext2D, camera: THREE.Camera): void;
     drawSelect(): void;
-    getBounds(): THREE.Box3;
     isPointInPath(): boolean;
     getBBox(): THREE.Box3;
 }

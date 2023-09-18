@@ -2,7 +2,7 @@ import { BaseViewer, DxfModelConfig, FontManager, Model2d, Plugin, PluginConfig 
 /**
  * Pdf loader plugin config.
  */
-export interface PdfLoaderPluginConfig extends PluginConfig {
+export interface PdfLoaderPluginConfig extends Partial<PluginConfig> {
     font: FontManager;
     pdfWorker: string;
 }
@@ -10,6 +10,7 @@ export interface PdfLoaderPluginConfig extends PluginConfig {
  * Pdf loader plugin.
  */
 export declare class PdfLoaderPlugin extends Plugin {
+    static DEFAULT_ID: string;
     protected cfg: PdfLoaderPluginConfig;
     constructor(viewer: BaseViewer, cfg: PdfLoaderPluginConfig);
     /**

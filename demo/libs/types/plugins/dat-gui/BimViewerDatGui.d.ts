@@ -27,6 +27,7 @@ export declare class BimViewerDatGuiPlugin extends Plugin {
         viewpoints: boolean;
         annotations: boolean;
         takeSnapshot: () => void;
+        takeSnapshotForViewerBBox: () => void;
         fullScreen: () => void;
         webcam: boolean;
         uploadFile: () => void;

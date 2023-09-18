@@ -3,7 +3,7 @@ import { BaseViewer, Plugin, PluginConfig } from "../../core";
 /**
  * Ground grid plugin.
  */
-export interface GroundGridPluginConfig extends PluginConfig {
+export interface GroundGridPluginConfig extends Partial<PluginConfig> {
     /**
      * Ground size.
      */
@@ -22,6 +22,7 @@ export interface GroundGridPluginConfig extends PluginConfig {
  * Can be used by BimViewer.
  */
 export declare class GroundGridPlugin extends Plugin {
+    static DEFAULT_ID: string;
     protected cfg: GroundGridPluginConfig;
     protected NAME: string;
     protected DEFAULT_SIZE: number;

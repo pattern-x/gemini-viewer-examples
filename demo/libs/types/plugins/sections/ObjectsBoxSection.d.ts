@@ -1,19 +1,19 @@
 import * as THREE from "three";
 import { BaseSection } from "./BaseSection";
-import { SectionPlane } from "./SectionPlane";
+import { SectionPlaneMesh } from "./SectionPlaneMesh";
 import { EventInfo, InputManager } from "../../core/input/InputManager";
 import { Views } from "../../core/utils/Viewer3DUtils";
 import { BaseViewer } from "../../core/viewers/BaseViewer";
 export declare class ObjectsBoxSection extends BaseSection {
-    protected selectedObject?: SectionPlane;
-    protected planesMesh?: SectionPlane[];
+    protected selectedObject?: SectionPlaneMesh;
+    protected planeMeshes?: SectionPlaneMesh[];
     protected sectionRange: Record<string, number[]>;
     constructor(viewer: BaseViewer, input: InputManager);
     activate(): void;
     deactivate(): void;
     protected initOrUpdateVertices(): void;
-    initOrUpdateClipPlane(): void;
-    initOrUpdateSectionPlane(): void;
+    protected initOrUpdateClipPlanes(): void;
+    protected initOrUpdateSectionPlaneMeshes(): void;
     activateSelectedObject(active: boolean): void;
     onDragStart(e: EventInfo): void;
     onDragMove(e: EventInfo): void;
@@ -21,7 +21,7 @@ export declare class ObjectsBoxSection extends BaseSection {
     protected dragTranslateSectionPlane(axis: THREE.Vector3, from: THREE.Vector3, to: THREE.Vector3, actionType: Views): void;
     protected isInRange(value: number, range: number[]): boolean;
     protected getIntersections(e: EventInfo): THREE.Intersection | undefined;
-    getIntersectObjects(): SectionPlane[];
+    getIntersectObjects(): SectionPlaneMesh[];
     resetSection(): void;
-    setSectionVisible(visible: boolean): void;
+    setSectionPlaneMeshVisible(visible: boolean): void;
 }

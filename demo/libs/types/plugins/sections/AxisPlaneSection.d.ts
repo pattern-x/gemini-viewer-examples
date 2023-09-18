@@ -3,7 +3,7 @@ import { BaseSection } from "./BaseSection";
 import { EventInfo, InputManager } from "../../core/input/InputManager";
 import type { BaseViewer } from "../../core/viewers";
 import { SectionGizmo } from "../../plugins/sections/SectionGizmo";
-import { SectionPlane } from "../../plugins/sections/SectionPlane";
+import { SectionPlaneMesh } from "../../plugins/sections/SectionPlaneMesh";
 export declare enum AxisType {
     X = "X",
     Y = "Y",
@@ -12,9 +12,9 @@ export declare enum AxisType {
 export declare class AxisPlaneSection extends BaseSection {
     protected activeAxis: AxisType;
     protected gizmo?: SectionGizmo;
-    protected planeMesh?: SectionPlane;
+    protected planeMesh?: SectionPlaneMesh;
     protected clipPlane?: THREE.Plane;
-    protected selectedObject?: SectionPlane | THREE.Mesh;
+    protected selectedObject?: SectionPlaneMesh | THREE.Mesh | THREE.Object3D;
     protected axisInfoMap: {
         [key in AxisType]: {
             normal: THREE.Vector3;
@@ -26,10 +26,12 @@ export declare class AxisPlaneSection extends BaseSection {
     deactivate(): void;
     resetSection(): void;
     setActiveAxis(type: AxisType): void;
-    setSectionVisible(visible: boolean): void;
-    initOrUpdateClipPlane(): void;
-    initOrUpdateSectionPlane(): void;
-    initOrUpdateGizmo(): void;
+    setSectionPlaneMeshVisible(visible: boolean): void;
+    protected initOrUpdateClipPlanes(): void;
+    protected initOrUpdateSectionPlaneMeshes(): void;
+    protected initOrUpdateGizmo(): void;
+    mousedown: (e: EventInfo) => void;
+    protected mousemove: (e: EventInfo) => void;
     onDragStart(e: EventInfo): void;
     onDragMove(e: EventInfo): void;
     onDragEnd(e: EventInfo): void;

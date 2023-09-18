@@ -5,7 +5,7 @@ import { Plugin, type BaseViewer, PluginConfig } from "../../core/viewers";
 /**
  * ViewCube plugin config.
  */
-export interface NavCubePluginConfig extends PluginConfig {
+export interface NavCubePluginConfig extends Partial<PluginConfig> {
     containerId: string;
 }
 /**
@@ -13,6 +13,7 @@ export interface NavCubePluginConfig extends PluginConfig {
  * the same direction as host renderer's
  */
 export declare class NavCubePlugin extends Plugin {
+    static DEFAULT_ID: string;
     protected cfg: NavCubePluginConfig;
     protected renderer?: CSS3DRenderer;
     protected navCube?: NavCube;

@@ -3,10 +3,10 @@ import { ImageDrawable } from "./ImageDrawable";
 import { OverviewMapDrawable } from "./OverviewMapDrawable";
 import { Mat4, Vector2, Vector3 } from "../../core/Constants";
 import type { Drawable } from "../../core/canvas/Drawable";
-import { Event } from "../../core/utils";
+import { Plugin, PluginConfig } from "../../core/viewers/Plugin";
 import { ViewerEvent } from "../../core/viewers/ViewerEvent";
-export interface OverviewMapPluginConfig {
-    containerId: string;
+export interface OverviewMapPluginConfig extends Partial<PluginConfig> {
+    containerId?: string;
     context?: WebGLRenderingContext | WebGL2RenderingContext;
     transformMatrix?: Mat4;
     enabled?: boolean;
@@ -29,9 +29,8 @@ export declare enum OverviewMapPluginEvent {
     SyncCamera = "SyncCamera",
     CameraChanged = "CameraChanged"
 }
-export declare class OverviewMapPlugin extends Event<{
-    [K in OverviewMapPluginEvent | ViewerEvent]: unknown;
-}> {
+export declare class OverviewMapPlugin extends Plugin<Record<OverviewMapPluginEvent | ViewerEvent, any>> {
+    static DEFAULT_ID: string;
     private cfg;
     private viewerContainer?;
     private readonly CAMERA_Z_POSITION;
@@ -76,7 +75,7 @@ export declare class OverviewMapPlugin extends Event<{
     enabled: boolean;
     lockCameraInViewCenter: boolean;
     enableLookToAllMarkers: boolean;
-    constructor(cfg?: OverviewMapPluginConfig);
+    constructor(viewer: any, cfg?: OverviewMapPluginConfig);
     get cameraDrawable(): ImageDrawable;
     get cameraDirDrawable(): ImageDrawable;
     get overviewMapDrawable(): OverviewMapDrawable;
@@ -141,6 +140,7 @@ export declare class OverviewMapPlugin extends Event<{
      * @internal
      */
     getViewConfig(): OverviewMapPluginConfig;
+    is3d(): boolean;
     /**
      * Gets how long a pixel represents in world coordinate.
      * This works fine for OrthographicCamera.

@@ -3,10 +3,11 @@ import type { BaseViewer } from "../../core/viewers";
 import { Plugin } from "../../core/viewers/Plugin";
 import { BaseSection } from "../../plugins/sections/BaseSection";
 export declare class SectionPlugin extends Plugin {
+    static DEFAULT_ID: string;
     private sections;
     private activeSectionType?;
     constructor(viewer: BaseViewer);
-    protected get raycaster(): import("three").Raycaster | undefined;
+    protected get raycaster(): any;
     /**
      *
      * @param {SectionType} type

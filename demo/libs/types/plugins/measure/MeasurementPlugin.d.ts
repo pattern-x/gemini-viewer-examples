@@ -1,9 +1,9 @@
-import * as THREE from "three";
 import { BaseMeasureDrawable } from "./BaseMeasureDrawable";
 import { MeasurementData, MeasurementType } from "./BaseMeasurement";
 import type { BaseViewer } from "../../core/viewers";
 import { Plugin } from "../../core/viewers/Plugin";
 export declare class MeasurementPlugin extends Plugin {
+    static DEFAULT_ID: string;
     selectedDrawable: BaseMeasureDrawable | undefined;
     private overlayRender?;
     private drawableList;
@@ -17,7 +17,7 @@ export declare class MeasurementPlugin extends Plugin {
     constructor(viewer: BaseViewer);
     private initEvents;
     protected get canvas(): HTMLCanvasElement;
-    protected get raycaster(): THREE.Raycaster | undefined;
+    protected get raycaster(): any;
     add(drawable: BaseMeasureDrawable, needFireEvent?: boolean): void;
     create(data: MeasurementData): BaseMeasureDrawable;
     remove(drawable: BaseMeasureDrawable, needFireEvent?: boolean): void;

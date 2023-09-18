@@ -4,16 +4,16 @@ import { EventInfo, InputManager } from "../../core/input/InputManager";
 import type { BaseViewer } from "../../core/viewers";
 import { BaseSection } from "../../plugins/sections/BaseSection";
 import { SectionGizmo } from "../../plugins/sections/SectionGizmo";
-import { SectionPlane } from "../../plugins/sections/SectionPlane";
+import { SectionPlaneMesh } from "../../plugins/sections/SectionPlaneMesh";
 export declare class PickPlaneSection extends BaseSection {
     protected faceInfo?: {
         position: THREE.Vector3;
         normal: THREE.Vector3;
     };
     protected gizmo?: SectionGizmo;
-    protected planeMesh?: SectionPlane;
+    protected planeMesh?: SectionPlaneMesh;
     protected clipPlane?: THREE.Plane;
-    protected selectedObject?: SectionPlane | THREE.Mesh | THREE.Object3D;
+    protected selectedObject?: SectionPlaneMesh | THREE.Mesh | THREE.Object3D;
     protected center: THREE.Vector3;
     protected tooltip?: Tooltip;
     constructor(viewer: BaseViewer, input: InputManager);
@@ -21,10 +21,10 @@ export declare class PickPlaneSection extends BaseSection {
     deactivate(): void;
     setSection(): void;
     resetSection(): void;
-    setSectionVisible(visible: boolean): void;
-    initOrUpdateClipPlane(): void;
-    initOrUpdateSectionPlane(): void;
-    initOrUpdateGizmo(): void;
+    setSectionPlaneMeshVisible(visible: boolean): void;
+    protected initOrUpdateClipPlanes(): void;
+    protected initOrUpdateSectionPlaneMeshes(): void;
+    protected initOrUpdateGizmo(): void;
     mousedown: (e: EventInfo) => void;
     mousemove: (e: EventInfo) => void;
     onDragStart(e: EventInfo): void;

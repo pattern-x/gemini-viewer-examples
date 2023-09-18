@@ -1,14 +1,14 @@
 import * as THREE from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { DxfCompareConfig, DxfModelConfig, DxfViewerConfig } from "../../core/Configs";
-import { Box2, ScreenshotMode, Vector2 } from "../../core/Constants";
+import { Box2, Vector2 } from "../../core/Constants";
 import { Drawable, DrawableData } from "../../core/canvas";
 import { DxfChange, DxfData, DxfLayer } from "../../core/dxf";
 import { ILayoutObject } from "../../core/dxf-parser";
 import { FontManager } from "../../core/font";
 import { EventInfo } from "../../core/input/InputManager";
 import { MarkupManager, MarkupType } from "../../core/markup";
-import { BaseViewer, ScreenshotResult, ViewerName } from "../../core/viewers/BaseViewer";
+import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 import { MeasurementData, MeasurementType } from "../../plugins/measure";
 import type { MeasurementPlugin } from "../../plugins/measure";
 /**
@@ -544,10 +544,10 @@ export declare class DxfViewer extends BaseViewer {
      * ```
      * @deprecated use ScreenshotPlugin instead.
      */
-    getScreenshot(mode?: ScreenshotMode): Promise<undefined | ScreenshotResult>;
     /**
      * @description Compatible with older versions, use MeasurePlugin instead
      * @internal
+     * @deprecated use MeasurePlugin instead
      */
     get measurePlugin(): MeasurementPlugin | undefined;
     /**

@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import { BaseViewer, Plugin } from "../../core";
+import { BaseViewer, Plugin, PluginConfig } from "../../core";
 /**
  * Ground shadow config.
  */
-export interface GroundShadowConfig {
+export interface GroundShadowPluginConfig extends Partial<PluginConfig> {
     blur: number;
     darkness: number;
 }
@@ -13,7 +13,8 @@ export interface GroundShadowConfig {
  * @description
  */
 export declare class GroundShadowPlugin extends Plugin {
-    protected cfg: GroundShadowConfig;
+    static DEFAULT_ID: string;
+    protected cfg: GroundShadowPluginConfig;
     protected shadowGroup?: THREE.Group;
     protected blurPlane?: THREE.Mesh;
     protected depthMaterial?: THREE.MeshDepthMaterial;
@@ -22,24 +23,20 @@ export declare class GroundShadowPlugin extends Plugin {
     protected shadowCamera?: THREE.OrthographicCamera;
     protected renderTarget?: THREE.WebGLRenderTarget;
     protected renderTargetBlur?: THREE.WebGLRenderTarget;
-    private modelCount;
-    constructor(viewer: BaseViewer, cfg?: GroundShadowConfig);
-    protected get scene(): THREE.Scene | undefined;
-    protected get renderer(): THREE.WebGLRenderer | undefined;
+    private shouldRender;
+    private timeout?;
+    constructor(viewer: BaseViewer, cfg?: GroundShadowPluginConfig);
+    protected get scene(): any;
+    protected get renderer(): any;
     /**
-     * We'll need to update shadow when
-     * - Model loaded/unloaded
-     * - Any object's visibility, position, etc. changed
+     * Updates ground shadow.
      */
-    protected shouldUpdateShadow(): boolean;
-    protected onModelLoaded: ({ modelId, bbox }: {
-        modelId: string;
-        bbox: THREE.Box3;
-    }) => void;
+    update(): void;
+    protected onModelLoaded: () => void;
     protected onShadowRender: () => void;
     private initMaterial;
     private initRenderTarget;
-    private createGroundShadowByBBox;
+    private updateGroundShadow;
     private blurShadow;
     protected render(): void;
     destroy(): void;
