@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.f052ad65.css",
-    "main.js": "./static/js/main.f2f06aa8.js",
+    "main.js": "./static/js/main.f53cf6dd.js",
     "static/js/787.cf5efa72.chunk.js": "./static/js/787.cf5efa72.chunk.js",
     "demo/libs/gemini-viewer.esm.min.js": "./demo/libs/gemini-viewer.esm.min.js",
     "static/media/dwg_background.png": "./static/media/dwg_background.f630e7cda68e19172eec.png",
@@ -313,11 +313,11 @@
     "demo/libs/types/core/webcam/index.d.ts": "./demo/libs/types/core/webcam/index.d.ts",
     "demo/libs/types/core/workers/CreateMeshBvh.worker.d.ts": "./demo/libs/types/core/workers/CreateMeshBvh.worker.d.ts",
     "main.f052ad65.css.map": "./static/css/main.f052ad65.css.map",
-    "main.f2f06aa8.js.map": "./static/js/main.f2f06aa8.js.map",
+    "main.f53cf6dd.js.map": "./static/js/main.f53cf6dd.js.map",
     "787.cf5efa72.chunk.js.map": "./static/js/787.cf5efa72.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f052ad65.css",
-    "static/js/main.f2f06aa8.js"
+    "static/js/main.f53cf6dd.js"
   ]
 }

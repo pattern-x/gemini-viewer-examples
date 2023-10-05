@@ -22,10 +22,10 @@
             BimViewerToolbarPlugin,
             ContextMenuPlugin,
             MeasurementPlugin,
-            NavCubePlugin,
             SectionPlugin,
             SkyboxPlugin,
             ToolbarMenuId,
+            ViewCubePlugin,
         } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const filename = "rac_basic_sample_project.gltf";
@@ -50,7 +50,7 @@
         new BimViewerToolbarPlugin(viewer, { menuConfig });
         new ContextMenuPlugin(viewer);
         new MeasurementPlugin(viewer);
-        new NavCubePlugin(viewer);
+        new ViewCubePlugin(viewer);
         new SectionPlugin(viewer);
         new SkyboxPlugin(viewer);
 

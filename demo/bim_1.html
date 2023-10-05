@@ -23,7 +23,7 @@
             BottomBarPlugin,
             ContextMenuPlugin,
             GroundShadowPlugin,
-            NavCubePlugin,
+            ViewCubePlugin,
         } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const filename = "Duplex.gltf";
@@ -45,7 +45,7 @@
         new BottomBarPlugin(viewer);
         new ContextMenuPlugin(viewer);
         new GroundShadowPlugin(viewer);
-        new NavCubePlugin(viewer);
+        new ViewCubePlugin(viewer);
 
         // draco decoder path is needed to load draco encoded models.
         // gemini-viewer js sdk user maintains draco decoder code somewhere, and provides the path here.
