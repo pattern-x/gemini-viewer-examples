@@ -21,8 +21,8 @@
             BimViewer,
             BimViewerToolbarPlugin,
             MeasurementPlugin,
-            NavCubePlugin,
             SectionPlugin,
+            ViewCubePlugin,
         } from "./demo/libs/gemini-viewer.esm.min.js";
         import * as dat from "./demo/libs/dat.gui.module.js";
         const gui = new dat.GUI();
@@ -56,7 +56,7 @@
         new AxisGizmoPlugin(viewer);
         new BimViewerToolbarPlugin(viewer);
         new MeasurementPlugin(viewer);
-        new NavCubePlugin(viewer);
+        new ViewCubePlugin(viewer);
         new SectionPlugin(viewer);
 
         // font file is needed for loading dxf

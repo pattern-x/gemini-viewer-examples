@@ -75,8 +75,8 @@
             GroundShadowPlugin,
             LocalModelUploader,
             MeasurementPlugin,
-            NavCubePlugin,
             SectionPlugin,
+            ViewCubePlugin,
         } from "./demo/libs/gemini-viewer.esm.min.js";
 
         const project = {
@@ -101,7 +101,7 @@
         new ContextMenuPlugin(viewer);
         new GroundShadowPlugin(viewer);
         new MeasurementPlugin(viewer);
-        new NavCubePlugin(viewer);
+        new ViewCubePlugin(viewer);
         new SectionPlugin(viewer);
 
         // draco decoder path is needed to load draco encoded models.
