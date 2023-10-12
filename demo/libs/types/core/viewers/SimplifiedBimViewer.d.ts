@@ -1,6 +1,7 @@
 import * as THREE from "three";
-import { Model3d, IsolateObjectsParam, ModelConfig } from "../../core/Configs";
+import { IsolateObjectsParam, ModelConfig } from "../../core/Configs";
 import { CameraControlsEx } from "../../core/controls/CameraControlsEx";
+import { ModelData3d } from "../../core/model";
 /**
  * @internal
  */
@@ -21,7 +22,7 @@ export declare class SimplifiedBimViewer {
     renderTarget?: THREE.WebGLRenderTarget;
     controls?: CameraControlsEx;
     selectedObject: any | undefined;
-    loadedModels: Model3d[];
+    loadedModels: ModelData3d[];
     pmremGenerator?: THREE.PMREMGenerator;
     private clock;
     private viewerMode;
@@ -67,7 +68,7 @@ export declare class SimplifiedBimViewer {
      * @returns
      * @description Add model data to viewer.
      */
-    addModel(model: Model3d): void;
+    addModel(model: ModelData3d): void;
     /**
      * We won't set a opacity or highlight directly, because that way will lose model's original opacity or color value
      * @param isAdd is add or remove the opacity we added

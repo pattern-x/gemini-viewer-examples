@@ -18,10 +18,10 @@ export declare class PickPlaneSection extends BaseSection {
     protected tooltip?: Tooltip;
     constructor(viewer: BaseViewer, input: InputManager);
     activate(): void;
-    deactivate(): void;
+    deactivate(keepSectionState?: boolean): void;
     setSection(): void;
-    resetSection(): void;
-    setSectionPlaneMeshVisible(visible: boolean): void;
+    reset(): void;
+    setSectionPlaneVisible(visible: boolean): void;
     protected initOrUpdateClipPlanes(): void;
     protected initOrUpdateSectionPlaneMeshes(): void;
     protected initOrUpdateGizmo(): void;

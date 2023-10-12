@@ -10,7 +10,7 @@ export declare class ObjectsBoxSection extends BaseSection {
     protected sectionRange: Record<string, number[]>;
     constructor(viewer: BaseViewer, input: InputManager);
     activate(): void;
-    deactivate(): void;
+    deactivate(keepSectionState?: boolean): void;
     protected initOrUpdateVertices(): void;
     protected initOrUpdateClipPlanes(): void;
     protected initOrUpdateSectionPlaneMeshes(): void;
@@ -22,6 +22,6 @@ export declare class ObjectsBoxSection extends BaseSection {
     protected isInRange(value: number, range: number[]): boolean;
     protected getIntersections(e: EventInfo): THREE.Intersection | undefined;
     getIntersectObjects(): SectionPlaneMesh[];
-    resetSection(): void;
-    setSectionPlaneMeshVisible(visible: boolean): void;
+    reset(): void;
+    setSectionPlaneVisible(visible: boolean): void;
 }

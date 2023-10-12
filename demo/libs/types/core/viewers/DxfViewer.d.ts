@@ -1,13 +1,14 @@
 import * as THREE from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
-import { DxfCompareConfig, DxfModelConfig, DxfViewerConfig } from "../../core/Configs";
+import { DxfModelConfig, DxfViewerConfig } from "../../core/Configs";
 import { Box2, Vector2 } from "../../core/Constants";
 import { Drawable, DrawableData } from "../../core/canvas";
-import { DxfChange, DxfData, DxfLayer } from "../../core/dxf";
+import { DxfLayer } from "../../core/dxf";
 import { ILayoutObject } from "../../core/dxf-parser";
 import { FontManager } from "../../core/font";
 import { EventInfo } from "../../core/input/InputManager";
 import { MarkupManager, MarkupType } from "../../core/markup";
+import { Model2d, ModelData2d } from "../../core/model";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 import { MeasurementData, MeasurementType } from "../../plugins/measure";
 import type { MeasurementPlugin } from "../../plugins/measure";
@@ -44,28 +45,6 @@ export interface PdfData {
     layers: Record<string, PdfLayer>;
     layersAndThreejsObjects?: Record<string, THREE.Object3D[]>;
     loadedEntityCount: number;
-}
-/**
- * Loaded 2d model info for DxfViewer.
- */
-export interface Model2d {
-    /**
-     * modelId that is unique for loaded models
-     */
-    modelId: string;
-    /**
-     * Used for dxf data.
-     */
-    dxfData?: DxfData;
-    /**
-     * Used for pdf data.
-     */
-    pdfData?: PdfData;
-    /**
-     * Model space transform matrix.
-     * @internal
-     */
-    msTransformMatrix?: THREE.Matrix4;
 }
 /**
  * Threejs objects are organized in tree view as below:
@@ -206,10 +185,6 @@ export declare class DxfViewer extends BaseViewer {
     private layoutInfos;
     private units;
     private raycastableObjects;
-    /**
-     * @deprecated
-     */
-    private changes;
     private fpsUtils;
     constructor(viewerCfg: DxfViewerConfig);
     /**
@@ -327,30 +302,7 @@ export declare class DxfViewer extends BaseViewer {
      * @returns
      * @description Add model data to viewer.
      */
-    addModel(model: Model2d): void;
-    /**
-     * If it is under compare mode
-     * @deprecated use DxfCompareHelper2 instead
-     */
-    private compareMode;
-    /**
-     * If it is under compare mode
-     * @internal
-     * @deprecated use DxfCompareHelper2 instead
-     */
-    isCompareMode(): boolean;
-    /**
-     * Compares two dxf files. Note that:
-     * - It only compares model spaces.
-     * - It shouldn't load anything else before and after compare.
-     * @param modelCfg1 The first dxf to be compared
-     * @param modelCfg2 The second dxf to be compared
-     * @param {DxfCompareConfig} compareCfg The compare config
-     * @param onProgress loading progress
-     * @internal
-     * @deprecated use DxfCompareHelper instead
-     */
-    compare(modelCfg1: DxfModelConfig, modelCfg2: DxfModelConfig, compareCfg?: DxfCompareConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    addModel(modelData: ModelData2d): Model2d | undefined;
     /**
      * Gets loaded entity count
      * @internal
@@ -455,7 +407,7 @@ export declare class DxfViewer extends BaseViewer {
      * Sets layer's opacity
      * @internal
      */
-    setLayerOpacity(): void;
+    setLayerOpacity(layerName: string, opacity: number, modelId?: string): void;
     /**
      * Sets layer's color
      * @throws Throws exception if layer doesn't exist.
@@ -521,29 +473,6 @@ export declare class DxfViewer extends BaseViewer {
      * ```
      */
     getCurrentViewExtent(): Box2;
-    /**
-     * @description {en} Gets screenshot of a rectangular area, or by box selecting an area. Returns an image in format of base64 string.
-     * @description {zh} 获取矩形区域或者框选区域的截图。返回base64格式的图片。
-     * @param mode
-     * - {en} screenshot mode("Default", "BoxSelection" and "PickMarkup").
-     * - {zh} 截图模式("全屏"， "框选" 和 "选中批注")。
-     * @example
-     * ``` typescript
-     * // {en} Click on markup to take screenshot.
-     * // {zh} 点击批注截屏。
-     * const mode = ScreenshotMode.PickMarkup;
-     * viewer.getScreenshot(mode).then(data => console.log(data));
-     * // {en} Take screenshot by box selecting an area.
-     * // {zh} 根据用户的框选截屏。
-     * const mode = ScreenshotMode.BoxSelection;
-     * viewer.getScreenshot(mode).then(data => console.log(data));
-     * // {en} Take screenshot of the whole view.
-     * // {zh} 全屏截屏。
-     * const mode = ScreenshotMode.Default;
-     * viewer.getScreenshot(mode).then(data => console.log(data));
-     * ```
-     * @deprecated use ScreenshotPlugin instead.
-     */
     /**
      * @description Compatible with older versions, use MeasurePlugin instead
      * @internal
@@ -867,10 +796,7 @@ export declare class DxfViewer extends BaseViewer {
     private getLayoutByName;
     private getActiveLayoutInfo;
     private getMsTransformMatrix;
-    private switchTransformMs;
     private getLayoutExtentEx;
-    private getModelSpaceExtent;
-    private getLayoutExtent;
     /**
      * Shows objects for given layout, and hide any other layouts.
      */
@@ -910,12 +836,6 @@ export declare class DxfViewer extends BaseViewer {
      * @internal
      */
     getRaycaster(): THREE.Raycaster | undefined;
-    /**
-     * TODO: Remove it later.
-     * Gets raycast-able objects.
-     * Raycast-able objects should be visible objects and is snap object in scene.
-     */
-    private getRaycastableObjects;
     /**
      * Gets the corresponding viewport by judging that the point is in the viewport
      */
@@ -1008,36 +928,6 @@ export declare class DxfViewer extends BaseViewer {
      * ```
      */
     zoomToExtent(): void;
-    /**
-     * @description {en} Zooms to a compare change.
-     * @description {zh} 聚焦到图纸的一处变动。
-     * @param changeId
-     * - {en} Change id, which is an incremental integer starts from 1.
-     * - {zh} 变动id，该id是从数字1开始自增的整数。
-     * @example
-     * ``` typescript
-     * const changeId = 1;
-     * viewer.zoomToCompareChange(changeId);
-     * ```
-     * @internal
-     * @deprecated use DxfCompareHelper2 instead
-     */
-    zoomToCompareChange(changeId: number): void;
-    /**
-     * @description {en} Gets compare changes.
-     * @description {zh} 获取对比变动.
-     * @returns
-     * - {en} Compare changes.
-     * - {zh} 对比变动列表。
-     * @example
-     * ``` typescript
-     * const changes = viewer.getCompareChanges();
-     * console.log(changes);
-     * ```
-     * @internal
-     * @deprecated use DxfCompareHelper2 instead
-     */
-    getCompareChanges(): Record<number, DxfChange> | undefined;
     /**
      * @description {en} Sets background color.
      * @description {zh} 设置背景颜色。

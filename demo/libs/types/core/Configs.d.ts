@@ -93,32 +93,6 @@ export interface DxfModelConfig extends ModelConfig {
     overrideColor?: number[];
 }
 /**
- * Loaded 3d model info for BimViewer.
- */
-export interface Model3d {
-    /**
-     * modelId that is unique for loaded models
-     */
-    modelId: string;
-    /**
-     * Three.js object.
-     */
-    object: THREE.Object3D;
-    /**
-     * Bounding box of the model.
-     */
-    bbox?: THREE.Box3;
-    /**
-     * Edge objects of the model.
-     */
-    edges?: THREE.LineSegments[];
-    /**
-     * TilesRenderer for 3dTiles
-     * @internal
-     */
-    tilesRenderer?: any;
-}
-/**
  * Common viewer config
  */
 export interface BaseViewerConfig {
@@ -158,42 +132,6 @@ export interface BaseViewerConfig {
  */
 export interface BimViewerConfig extends BaseViewerConfig {
     /**
-     * Shows the NavCube.
-     * @internal
-     * @deprecated use NavCubePlugin instead
-     */
-    enableNavCube?: boolean;
-    /**
-     * Shows the AxisGizmo.
-     * @internal
-     * @deprecated use AxisGizmoPlugin instead
-     */
-    enableAxisGizmo?: boolean;
-    /**
-     * Shows the stats output.
-     * @internal
-     * @deprecated use StatsPlugin instead
-     */
-    enableStats?: boolean;
-    /**
-     * Enables toolbar.
-     * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
-     * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
-     * @deprecated Use ToolbarPlugin instead
-     */
-    enableToolbar?: boolean;
-    /**
-     * shows the bottom-bar.
-     * @internal
-     * @deprecated use BottomBarPlugin instead
-     */
-    enableBottomBar?: boolean;
-    /**
-     * Shows the context-menu.
-     * @deprecated Use ContextMenuPlugin instead.
-     */
-    enableContextMenu?: boolean;
-    /**
      * If user can select an entity by mouse click
      * @internal
      * @default true
@@ -215,33 +153,11 @@ export interface BimViewerConfig extends BaseViewerConfig {
  */
 export interface DxfViewerConfig extends BaseViewerConfig {
     /**
-     * @internal
-     * @deprecated use AxisGizmoPlugin instead
-     */
-    enableAxisGizmo?: boolean;
-    /**
      * Enables layout bar so we can switch to other layouts.
      * The default layout bar is an example UI of the viewer, since plenty of APIs are exposed,
      * you are recommended to create your own layout bar with customized style, location, etc.
      */
     enableLayoutBar?: boolean;
-    /**
-     * @internal
-     * @deprecated use NavCubePlugin instead
-     */
-    enableStats?: boolean;
-    /**
-     * Enables toolbar.
-     * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
-     * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
-     * @deprecated Use ToolbarPlugin instead
-     */
-    enableToolbar?: boolean;
-    /**
-     * @internal
-     * @deprecated use BottomBarPlugin instead
-     */
-    enableBottomBar?: boolean;
     /**
      * If to cache model into indexeddb (or maybe local storage in future).
      * If enabled, it will get model data from cache the next time model is loaded.
@@ -270,13 +186,6 @@ export interface DxfCompareConfig {
  */
 export interface VRViewerConfig extends BaseViewerConfig {
     autoRotateSpeed?: number;
-    /**
-     * Enables toolbar.
-     * The default toolbar is an example UI of the viewer, since plenty of APIs are exposed,
-     * you are recommended to create your own toolbar with customized style, icon, order, new buttons, etc.
-     * @deprecated Use ToolbarPlugin instead
-     */
-    enableToolbar?: boolean;
 }
 /**
  * VR Viewpoint's hotpoint, which can be a user defined html element.

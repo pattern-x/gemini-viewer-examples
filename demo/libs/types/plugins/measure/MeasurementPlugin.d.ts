@@ -80,7 +80,7 @@ export declare class MeasurementPlugin extends Plugin {
      * @returns
      * @description Sets a measurement's visibility.
      */
-    setVisibilityById(id: string, visible: boolean): boolean;
+    setVisibleById(id: string, visible: boolean): boolean;
     /**
      * Sets all measurement drawables' visibilities.
      */

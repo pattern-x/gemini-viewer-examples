@@ -1,10 +1,11 @@
 import * as THREE from "three";
 import { Settings as SettingsType } from "../../components/settings";
-import { Model3d, BimViewerConfig, CameraConfig, ModelConfig } from "../../core/Configs";
+import { BimViewerConfig, CameraConfig, ModelConfig } from "../../core/Configs";
 import { SectionType, Vector3 } from "../../core/Constants";
 import { Drawable } from "../../core/canvas";
 import { FontManager } from "../../core/font";
 import { EventInfo } from "../../core/input/InputManager";
+import { Model3d, ModelData3d } from "../../core/model";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 import { MeasurementData, MeasurementPlugin, MeasurementType } from "../../plugins/measure";
 import { SectionPlugin } from "../../plugins/sections";
@@ -57,8 +58,6 @@ export declare class BimViewer extends BaseViewer {
     private bloomPass?;
     private unrealBloomPass?;
     private raycaster?;
-    private savedMaterialsForOpacity?;
-    private section?;
     /**
      * @internal
      */
@@ -183,19 +182,19 @@ export declare class BimViewer extends BaseViewer {
      * @returns
      * @description Add model data to viewer.
      */
-    addModel(model: Model3d): void;
+    addModel(model: ModelData3d): void;
     private calculateMeshSurfaceArea;
-    /**
-     * We won't set a opacity directly, because that way will lose model's original opacity value
-     * @param isAdd is add or remove the opacity we added
-     * @param opacity
-     * @internal
-     */
-    addOrRemoveObjectOpacity(isAdd?: boolean, opacity?: number, includeObjectIds?: number[], excludeObjectIds?: number[]): void;
-    /**
-     * @internal
-     */
-    hasTransparentObject(): boolean;
+    setAllModelTransparent(opacity: number): void;
+    clearAllModelTransparent(): void;
+    setObjectTransparent(object: THREE.Object3D, opacity: number): void;
+    clearObjectTransparent(object: THREE.Object3D): void;
+    setOthersObjectTransparent(object: THREE.Object3D): void;
+    setModelTransparent(modelId: string): void;
+    clearModelTransparent(modelId: string): void;
+    setObjectVisible(object: THREE.Object3D, visible: boolean): void;
+    hideOthersObject(object: THREE.Object3D): void;
+    setModelVisible(modelId: string, visible: boolean): void;
+    setAllModelVisible(visible: boolean): void;
     /**
      * @internal
      */

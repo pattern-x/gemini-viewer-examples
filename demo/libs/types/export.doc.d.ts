@@ -1,7 +1,8 @@
-export { SectionType, Vector2, Vector3, Box2, DrawableData, InputManager, Model3d, ScreenshotMode } from "./core";
+export { SectionType, Vector2, Vector3, Box2, DrawableData, InputManager, ModelData3d, ScreenshotMode } from "./core";
 export { BaseDxfCompareHelper, DxfCompareHelper } from "./core/compare";
 export { BaseViewerConfig, BimViewerConfig, CameraConfig, DxfCompareConfig, DxfModelConfig, DxfViewerConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint, } from "./core/Configs";
-export { BaseViewer, BimViewer, DxfLayers, DxfViewer, MarkupData, Model2d, Plugin, PluginConfig, ScreenshotResult, SimplifiedBimViewer, ViewerEvent, VRViewer, } from "./core/viewers";
+export { BaseViewer, BimViewer, DxfLayers, DxfViewer, MarkupData, Plugin, PluginConfig, ScreenshotResult, SimplifiedBimViewer, ViewerEvent, VRViewer, } from "./core/viewers";
+export { Model, Model2d, ModelData2d } from "./core/model";
 export { DxfDetailChanges, DxfChangeType, DxfChange, DxfLayer } from "./core/dxf";
 export { ILayer } from "./core/dxf-parser";
 export { MarkupType } from "./core/markup";

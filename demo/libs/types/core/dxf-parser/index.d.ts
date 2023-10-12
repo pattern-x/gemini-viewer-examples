@@ -18,6 +18,7 @@ export type { IPolylineEntity } from "./entities/polyline";
 export type { ISolidEntity } from "./entities/solid";
 export type { ISplineEntity } from "./entities/spline";
 export type { ITextEntity } from "./entities/text";
+export type { ITableEntity, TableCell } from "./entities/table";
 export type { IVertexEntity } from "./entities/vertex";
 export type { IViewportEntity } from "./entities/viewport";
 export type { IObject } from "./objects/common";

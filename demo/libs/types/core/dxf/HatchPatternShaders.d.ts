@@ -9,4 +9,4 @@ export interface PatternLine {
 }
 export declare function createHatchPatternShaderMaterial(patternLines: PatternLine[], patternAngle: number, cameraZoomUniform: {
     value: number;
-}, color: THREE.Color): THREE.Material;
+}, color: THREE.Color, fixedThicknessInWorldCoord?: number): THREE.Material;

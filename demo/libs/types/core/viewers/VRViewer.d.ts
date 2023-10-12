@@ -1,7 +1,8 @@
 import { CSS2DObject, CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
-import { Model3d, CameraConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint } from "../../core/Configs";
+import { CameraConfig, Hotpoint, ModelConfig, Panorama, VRViewerConfig, VRViewpoint } from "../../core/Configs";
 import { Vector3 } from "../../core/Constants";
+import { ModelData3d } from "../../core/model";
 import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
 import { BaseVRMesh } from "../../core/vr";
 interface ViewpointAssets {
@@ -22,7 +23,7 @@ export declare class VRViewer extends BaseViewer {
     /**
      * @internal
      */
-    loadedModels: Model3d[];
+    loadedModels: ModelData3d[];
     /**
      * @internal
      */
@@ -140,7 +141,7 @@ export declare class VRViewer extends BaseViewer {
      * @returns
      * @description Add model data to viewer.
      */
-    addModel(model: Model3d): void;
+    addModel(model: ModelData3d): void;
     /**
      * Adds a panorama to a viewpoint
      */
@@ -167,7 +168,6 @@ export declare class VRViewer extends BaseViewer {
     /**
      * @deprecated use activatePanoramaById() instead
      */
-    activeViewpointById(viewpointId: string, animate?: boolean, onSuccess?: (viewpoint: VRViewpoint) => void, onError?: (event: ErrorEvent) => void): void;
     /**
      * Activates a panorama by viewpointId and panoramaId
      */

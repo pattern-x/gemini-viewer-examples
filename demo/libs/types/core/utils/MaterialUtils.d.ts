@@ -32,6 +32,7 @@ export declare class MaterialUtils {
     static cloneMaterial(material: THREE.Material | THREE.Material[]): THREE.Material | THREE.Material[];
     static getMaterialColor(material: THREE.Material | THREE.Material[]): THREE.Color;
     static setMaterialColor(material: THREE.Material | THREE.Material[], color: THREE.Color): void;
+    static setMaterialOpacity(material: THREE.Material | THREE.Material[], opacity: number): void;
     /**
      * Clone object's materials
      */

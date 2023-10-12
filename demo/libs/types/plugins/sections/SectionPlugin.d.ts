@@ -18,9 +18,17 @@ export declare class SectionPlugin extends Plugin {
     activate(type: SectionType): void;
     /**
      * @description Deactivate Section plugin
+     * @param keepSectionState Keep objects being clipped even after deactived.
      */
-    deactivate(): void;
-    resetSection(): void;
+    deactivate(keepSectionState?: boolean): void;
+    /**
+     * Resets section to initial state.
+     */
+    reset(): void;
+    /**
+     * Sets gizmo and section plane mesh visibility.
+     */
+    setSectionPlaneVisible(visible: boolean): void;
     /**
      *
      * @returns {boolean} Is Section active

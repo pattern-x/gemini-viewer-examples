@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { DxfChange } from "./DxfCompare";
 import { DxfObject } from "./DxfObject";
 import { Units } from "../../core/Units";
-import { IBlock, IDxf, IEntity, ILayer, ILayoutObject, IPoint, IViewport, IViewportEntity } from "../../core/dxf-parser";
+import { IBlock, IDxf, IEntity, ILayer, ILayoutObject, IPoint, IViewport, IViewportEntity, TableCell } from "../../core/dxf-parser";
 import { ImageFlags } from "../../core/dxf-parser/entities/image";
 import { IMLeaderContextData } from "../../core/dxf-parser/entities/mleader";
 import { ISpatialFilterObject } from "../../core/dxf-parser/objects/spatialfilter";
@@ -119,6 +119,11 @@ export interface DxfEntity extends IEntity {
     uPixel?: IPoint;
     vPixel?: IPoint;
     flags?: ImageFlags;
+    columnCount: number;
+    rowCount: number;
+    cells: TableCell[];
+    rowHeightArr: number[];
+    columnWidthArr: number[];
 }
 /**
  * Dxf block.
@@ -188,6 +193,16 @@ export interface DxfLoaderConfig {
      * Color value between 0 and 1.
      */
     overrideColor?: number[];
+    /**
+     * Idealy, the thickness of lines in hatch pattern should always be 1 pixel.
+     * In DxfViewer, it uses orthographic camera and always in top view,
+     * so we adjust thickness by cameraZoom (and also consider worldScale).
+     * While 3d view is more complex, it can use perspective camera,
+     * its camera position and direction is flexible. We cannot keep line thickness
+     * in a fixed pixel any more, and there is no proper way to adjust thickness as
+     * position changes. So, we need to use a fixed thickness in world coordinates.
+     */
+    overrideHatchPatternLineThickness?: number;
 }
 /**
  * Dxf file loader.
@@ -202,6 +217,7 @@ export declare class DxfLoader extends THREE.Loader {
     font?: FontManager;
     private encoding;
     private overrideColor?;
+    private overrideHatchPatternLineThickness?;
     angBase: number | IPoint;
     angDir: number | IPoint;
     private header;
@@ -371,6 +387,7 @@ export declare class DxfLoader extends THREE.Loader {
     private drawLWPolyline;
     private drawMLeader;
     private drawLeader;
+    private drawTable;
     private drawDefaultLeadArrow;
     private getBlockByHandle;
     static updateMaterialUniforms(material: THREE.Material): void;

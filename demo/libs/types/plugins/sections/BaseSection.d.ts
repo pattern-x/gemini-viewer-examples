@@ -21,7 +21,7 @@ export declare abstract class BaseSection {
     protected refrencePlane: THREE.Plane;
     protected active: boolean;
     /**
-     * If to show section plane or not.
+     * If to show section plane and gizmo or not.
      */
     showSectionPlane: boolean;
     /**
@@ -38,7 +38,7 @@ export declare abstract class BaseSection {
     clearClippingObjectIds(): void;
     setClippingEnabled(enable: boolean): void;
     activate(): void;
-    deactivate(): void;
+    deactivate(keepSectionState?: boolean): void;
     protected setControlsEnabled(enable: boolean): void;
     protected mousedown: (e: EventInfo) => void;
     protected mousemove: (e: EventInfo) => void;
@@ -54,6 +54,6 @@ export declare abstract class BaseSection {
     protected abstract activateSelectedObject(active: boolean): void;
     protected abstract initOrUpdateSectionPlaneMeshes(): void;
     protected abstract initOrUpdateClipPlanes(): void;
-    protected abstract resetSection(): void;
-    protected abstract setSectionPlaneMeshVisible(visible: boolean): void;
+    abstract reset(): void;
+    abstract setSectionPlaneVisible(visible: boolean): void;
 }

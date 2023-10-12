@@ -1,13 +1,11 @@
 import * as pdfjsLib from "pdfjs-dist";
 import type { PDFOperatorList } from "pdfjs-dist/types/src/display/api";
 import * as THREE from "three";
+import type { PdfLoaderPluginConfig } from "./PdfLoaderPlugin";
 import { DxfModelConfig } from "../../core/Configs";
 import { FontManager } from "../../core/font";
-import { Model2d, PdfLayer } from "../../core/viewers";
-export interface PdfLoaderConfig {
-    font: FontManager;
-    pdfWorker: string;
-}
+import { ModelData2d } from "../../core/model/Constants";
+import { PdfLayer } from "../../core/viewers";
 /**
  * PdfLoader
  * @description The pdf coordinate origin is in the lower left corner.
@@ -52,15 +50,20 @@ export declare class PdfLoader extends THREE.Loader {
     fontManager?: FontManager;
     modelCfg?: DxfModelConfig;
     private lineWithWidthCount;
-    constructor(cfg: PdfLoaderConfig);
-    load(modelCfg: DxfModelConfig, onLoad: (data: Model2d) => void, onProgress: (event: ProgressEvent) => void, onError: (error: any) => void): void;
+    /**
+     * Uses progressive load if this is defined.
+     * @param done Indicates if progressive load is done.
+     */
+    progressiveLoadCallback?: (zOrder: number, done: boolean) => void;
+    constructor(cfg: PdfLoaderPluginConfig);
+    load(modelCfg: DxfModelConfig, onLoad: (data: ModelData2d) => void, onProgress: (event: ProgressEvent) => void, onError: (error: any) => void): void;
     /**
      *
      * @param modelCfg
      * @param onProgress
      * @returns
      */
-    loadAsync(modelCfg: DxfModelConfig, onProgress: (event: ProgressEvent) => void): Promise<Model2d>;
+    loadAsync(modelCfg: DxfModelConfig, onProgress: (event: ProgressEvent) => void): Promise<ModelData2d>;
     private getOperatorList;
     private _pumpOperatorList;
     private tryCleanup;

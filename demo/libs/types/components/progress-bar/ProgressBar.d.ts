@@ -6,7 +6,7 @@ export declare class ProgressBar {
     private element;
     private progresseItems;
     constructor(parentElement: HTMLElement);
-    setVisibility(visible: boolean): void;
+    setVisible(visible: boolean): void;
     /**
      * Adds a progress item
      * @param progressItemId

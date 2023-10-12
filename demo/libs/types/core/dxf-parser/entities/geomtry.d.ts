@@ -33,7 +33,7 @@ export interface IEntity {
     blockPosition?: IPoint;
     attributesFollow?: boolean;
 }
-export declare type EntityName = "POINT" | "3DFACE" | "ARC" | "ATTDEF" | "ATTRIB" | "CIRCLE" | "DIMENSION" | "MULTILEADER" | "ELLIPSE" | "HATCH" | "IMAGE" | "INSERT" | "LEADER" | "LINE" | "LWPOLYLINE" | "MTEXT" | "OLE2FRAME" | "POLYLINE" | "REGION" | "RAY" | "SEQEND" | "SOLID" | "SPLINE" | "TEXT" | "VERTEX" | "VIEWPORT" | "XLINE";
+export declare type EntityName = "POINT" | "3DFACE" | "ARC" | "ATTDEF" | "ATTRIB" | "CIRCLE" | "DIMENSION" | "MULTILEADER" | "ELLIPSE" | "HATCH" | "IMAGE" | "INSERT" | "LEADER" | "LINE" | "LWPOLYLINE" | "MTEXT" | "OLE2FRAME" | "POLYLINE" | "REGION" | "RAY" | "SEQEND" | "SOLID" | "SPLINE" | "ACAD_TABLE" | "TEXT" | "VERTEX" | "VIEWPORT" | "XLINE";
 export default interface IGeometry {
     ForEntityName: EntityName;
     parseEntity(scanner: DxfBaseReader, curr: IGroup): IEntity;
