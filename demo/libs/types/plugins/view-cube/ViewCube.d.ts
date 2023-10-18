@@ -33,16 +33,18 @@ export declare enum ViewCubeName {
 }
 export declare class ViewCube extends THREE.Object3D {
     readonly name = "ViewCube";
-    private readonly AXIS_LENGTH;
     private readonly AXIS_COLOR_X;
     private readonly AXIS_COLOR_Y;
     private readonly AXIS_COLOR_Z;
     private readonly FACE_BACKGROUND_COLOR;
     private readonly FACE_HOVER_BACKGROUND_COLOR;
+    private readonly INNER_CUBE_WIDTH;
+    private readonly OUTER_CUBE_WIDTH;
+    private readonly CORNER_WIDTH;
+    private readonly AXIS_LENGTH;
     private readonly EDGE_COLOUR;
     private readonly EDGE_OPACITY;
     private readonly EDGE_SIZE;
-    private readonly CORNER_WIDTH;
     private readonly CORNER_COLOR;
     private readonly CORNER_OPACITY;
     private faces;

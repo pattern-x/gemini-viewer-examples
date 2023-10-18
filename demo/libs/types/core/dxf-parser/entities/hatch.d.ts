@@ -18,6 +18,8 @@ export declare enum HatchEdgeType {
 }
 export declare abstract class HatchEdge {
     readonly type: HatchEdgeType;
+    startPoint: IPoint;
+    endPoint: IPoint;
     constructor(type: HatchEdgeType);
 }
 export declare class HatchPolyline extends HatchEdge {
@@ -26,8 +28,6 @@ export declare class HatchPolyline extends HatchEdge {
     constructor();
 }
 export declare class HatchLine extends HatchEdge {
-    startPoint: IPoint;
-    endPoint: IPoint;
     constructor();
 }
 export declare class HatchArc extends HatchEdge {

@@ -18,10 +18,12 @@
     <script type="module">
         import {
             AxisGizmoPlugin,
+            AxisType,
             BimViewer,
             BimViewerToolbarPlugin,
             MeasurementPlugin,
             SectionPlugin,
+            SectionType,
             ViewCubePlugin,
         } from "./demo/libs/gemini-viewer.esm.min.js";
         import * as dat from "./demo/libs/dat.gui.module.js";
@@ -43,7 +45,7 @@
                     0.001, 0, 0, 0, // the dxf is in "mm", and gltf is in "meter", so need to set scale 0.001
                     0, 0, -0.001, 0,
                     0, 0.001, 0, 0,
-                    -1831.340, 17, 456.910, 1 // also need to consider the base point
+                    -1831.340, 0, 456.910, 1 // also need to consider the base point
                 ],
                 "edges": true,
                 "visible": true
@@ -57,7 +59,7 @@
         new BimViewerToolbarPlugin(viewer);
         new MeasurementPlugin(viewer);
         new ViewCubePlugin(viewer);
-        new SectionPlugin(viewer);
+        const sectionPlugin = new SectionPlugin(viewer);
 
         // font file is needed for loading dxf
         // const fontFiles = ["./demo/libs/fonts/Microsoft_YaHei_Regular.typeface.json"];
@@ -81,24 +83,56 @@
                 console.error("[Demo] Failed to load " + modelCfg.src + ". " + event.message);
             }).then(() => {
                 console.log(`[Demo] Loaded model ${modelCfg.src}`);
-                // viewer.setToOrthographicCamera(false);
+
+                const bothModelsLoaded = viewer.loadedModels.length > 1;
+                if (controls.enableSection && bothModelsLoaded) {
+                    updateDxfAndSectionPlane(controls.dxfElevation, true);
+                }
             });
         });
 
+        const updateDxfAndSectionPlane = (dxfElevation, enableSection) => {
+            const model = viewer.loadedModels.find((model) => model.modelId.endsWith(".dxf"));
+            if (!model) {
+                return; // dxf may not being loaded yet.
+            }
+            const object = model.getModelObject();
+            object.position.setY(dxfElevation);
+            object.updateMatrix();
+            const axisPlaneSection = sectionPlugin.sections[SectionType.AxisPlaneSection];
+            if (enableSection) {
+                if (!sectionPlugin.isActive()) {
+                    const sectionPlaneOffset = 0.01; // to avoid cliping the dxf
+                    axisPlaneSection.activate(AxisType.Y, dxfElevation + sectionPlaneOffset);
+                    axisPlaneSection.setSectionPlaneVisible(false);
+                } else {
+                    axisPlaneSection.setActiveAxis(AxisType.Y, dxfElevation);
+                }
+            } else {
+                axisPlaneSection.deactivate();
+            }
+            viewer.enableRender();
+        };
+
         // dat.gui controls
         const controls = {
-            dxfElevation: 0,
+            dxfElevation: 17,
+            enableSection: true,
         }
         // update dxf elevation between -2 to 30, default value is 17.
         gui.add(controls, "dxfElevation", -2.0, 30.0, 0.1)
             .name("Dxf elevation")
-            .setValue(17) // the origin value is 17
+            .setValue(controls.dxfElevation) // the origin value is 17
             .onChange((val) => {
-                const dxf = viewer.loadedModels.find((model) => model.modelId.endsWith(".dxf"));
-                const object = dxf.object;
-                object.position.setY(val);
-                object.updateMatrix();
-                viewer.enableRender();
+                controls.dxfElevation = val;
+                updateDxfAndSectionPlane(controls.dxfElevation, controls.enableSection);
+            });
+        gui.add(controls, "enableSection", controls.enableSection)
+            .name("Enable Section")
+            .setValue(controls.enableSection)
+            .onChange((val) => {
+                controls.enableSection = val;
+                updateDxfAndSectionPlane(controls.dxfElevation, controls.enableSection);
             });
     </script>
 </body>

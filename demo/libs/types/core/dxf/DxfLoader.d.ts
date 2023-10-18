@@ -124,6 +124,7 @@ export interface DxfEntity extends IEntity {
     cells: TableCell[];
     rowHeightArr: number[];
     columnWidthArr: number[];
+    blockRecordHandle?: string;
 }
 /**
  * Dxf block.
@@ -387,6 +388,7 @@ export declare class DxfLoader extends THREE.Loader {
     private drawLWPolyline;
     private drawMLeader;
     private drawLeader;
+    private getTableTextOffset;
     private drawTable;
     private drawDefaultLeadArrow;
     private getBlockByHandle;

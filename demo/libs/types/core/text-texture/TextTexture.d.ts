@@ -5,6 +5,9 @@ export interface TextTextureConfig {
     alignment?: string;
     backgroundColor?: number;
     fontFamily?: string;
+    /**
+     * With fontSize 18 it generates a 64x64 image, 20 generates 128x128 one.
+     */
     fontSize?: number;
     fontStyle?: string;
     fontVariant?: string;
@@ -23,11 +26,11 @@ export declare class TextTexture extends THREE.Texture {
     private lineOffset;
     private width;
     private height;
+    private lines;
+    private font;
     private pixelRatio;
     cfg: Required<TextTextureConfig>;
     constructor(config: TextTextureConfig, canvas?: HTMLCanvasElement);
-    get lines(): string[];
-    get font(): string;
     private getContentWidth;
     private initDraw;
     private getDrawPosition;

@@ -1,3 +1,4 @@
+export * from "./patches";
 export * from "./canvas";
 export * from "./compare";
 export * from "./controls";

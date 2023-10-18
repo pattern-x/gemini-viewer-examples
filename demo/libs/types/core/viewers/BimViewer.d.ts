@@ -91,6 +91,7 @@ export declare class BimViewer extends BaseViewer {
      * @internal
      */
     private bbox;
+    enableAnchorPointer: boolean;
     private anchor?;
     constructor(viewerCfg: BimViewerConfig, cameraCfg?: CameraConfig);
     /**
