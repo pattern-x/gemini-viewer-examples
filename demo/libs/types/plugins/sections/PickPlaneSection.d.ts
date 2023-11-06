@@ -32,5 +32,5 @@ export declare class PickPlaneSection extends BaseSection {
     onDragEnd(e: EventInfo): void;
     getIntersectObjects(): THREE.Object3D<THREE.Event>[];
     activateSelectedObject(active: boolean): void;
-    pickFace(e: EventInfo): THREE.Intersection<THREE.Object3D<THREE.Event>> | undefined;
+    pickFace(e: EventInfo): import("../../core/pick").CpuIntersection | undefined;
 }

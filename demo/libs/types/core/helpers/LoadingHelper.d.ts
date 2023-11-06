@@ -7,6 +7,7 @@ export declare class LoadingHelper {
     private font?;
     private manager?;
     constructor(manager?: THREE.LoadingManager);
+    setLoadManager(manager?: THREE.LoadingManager): void;
     /**
      * Loads a model from local
      * @param url Created by URL.createObjectURL(file)

@@ -1,11 +1,12 @@
 import { BaseVRMesh } from "./BaseVRMesh";
+import type { ImageManager } from "./ImageManager";
 /**
  * A cube contains 6 planes
  * "r" | "l" | "u" | "d" | "f" | "b": means left, right, up, down, front, back
  * x, -x, y, -y, z, -z, aka, right, left, up/top, down/bottom, front, back
  */
 export declare class VRCube extends BaseVRMesh {
-    constructor(images: string[], thumbnailImages?: string[], size?: number);
+    constructor(manager: ImageManager, images: string[], thumbnailImages?: string[], size?: number);
     create(): Promise<void>;
     private updateMesh;
     protected createMesh(): Promise<void>;

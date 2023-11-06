@@ -141,6 +141,7 @@ export declare class OverviewMapPlugin extends Plugin<Record<OverviewMapPluginEv
      */
     getViewConfig(): OverviewMapPluginConfig;
     is3d(): boolean;
+    getRaycaster(): THREE.Raycaster | undefined;
     /**
      * Gets how long a pixel represents in world coordinate.
      * This works fine for OrthographicCamera.

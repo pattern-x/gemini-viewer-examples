@@ -4,3 +4,4 @@ export * from "./IndexedDbManager";
 export * from "./ViewpointTable";
 export * from "./DxfDataTable";
 export * from "./FontDataTable";
+export * from "./ImageDataTable";

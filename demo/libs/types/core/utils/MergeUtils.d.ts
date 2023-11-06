@@ -13,6 +13,7 @@ export interface Batch {
     indexCount: number;
     boundingSphere?: THREE.Sphere;
     userData?: object;
+    parentUserData?: object;
 }
 /**
  * MergeHelper class is used to merge child objects for a given object

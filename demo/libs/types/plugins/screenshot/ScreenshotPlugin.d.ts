@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { BaseViewer, BoxSelectHelper, PickMarkupHelper, Plugin, PluginConfig, ScreenshotMode, ScreenshotResult } from "../../core";
+import { type BaseViewer, BoxSelectHelper, PickMarkupHelper, Plugin, PluginConfig, ScreenshotMode, ScreenshotResult } from "../../core";
 /**
  * Screenshot plugin config.
  */
@@ -11,7 +11,13 @@ export interface ScreenshotPluginConfig extends Partial<PluginConfig> {
     /**
      * Image quality.
      */
-    quality?: 0.8;
+    quality?: number;
+    /**
+     * Sets background transparent, this must be used for "image/png" format.
+     * @default false
+     * @internal
+     */
+    setBackgroundTransparent?: boolean;
 }
 /**
  * Screenshot plugin
@@ -21,6 +27,8 @@ export declare class ScreenshotPlugin extends Plugin {
     protected cfg: ScreenshotPluginConfig;
     protected boxSelectHelper?: BoxSelectHelper;
     protected pickMarkupHelper?: PickMarkupHelper;
+    protected originalBackground: THREE.Color | undefined;
+    protected originalClearAlpha: number;
     constructor(viewer: BaseViewer, cfg?: ScreenshotPluginConfig);
     /**
      * @description {en} Gets screenshot of current canvas. Returns an image in format of base64 string.
@@ -85,4 +93,14 @@ export declare class ScreenshotPlugin extends Plugin {
      * Cancel current operation if any.
      */
     cancel(): void;
+    /**
+     * Sets scene background transparent.
+     * This is useful when taking screenshop of png format.
+     * In some cases, user don't want the background with a fixed background color.
+     */
+    private setBackgroundTransparent;
+    /**
+     * Recovers to original background settings.
+     */
+    private recoverBackgroundTransparency;
 }

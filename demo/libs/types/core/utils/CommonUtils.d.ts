@@ -34,7 +34,7 @@ export declare class CommonUtils {
     /**
      * Converts vector to a string with proper fraction digits
      */
-    static vectorToString(vec: THREE.Vector2 | THREE.Vector3): string;
+    static vectorToString(vec: THREE.Vector2 | THREE.Vector3 | number[]): string;
     /**
      * Converts number array to THREE.Vector2
      */

@@ -1,10 +1,10 @@
 import * as THREE from "three";
-import type { BimViewer, DxfViewer } from "../../core/viewers";
+import type { BaseViewer } from "../../core/viewers";
 export declare class ZoomToRectHelper {
-    protected viewer: DxfViewer | BimViewer;
+    protected viewer: BaseViewer;
     private boxSelectHelper?;
     private active;
-    constructor(viewer: DxfViewer | BimViewer);
+    constructor(viewer: BaseViewer);
     private get viewerContainer();
     get camera(): THREE.OrthographicCamera | THREE.PerspectiveCamera;
     get raycaster(): THREE.Raycaster;

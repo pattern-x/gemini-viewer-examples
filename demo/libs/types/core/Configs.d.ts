@@ -15,6 +15,10 @@ export interface CameraConfig {
      */
     up?: number[];
     /**
+     * The camera zoom
+     */
+    zoom?: number;
+    /**
      * The camera's near clip plane
      */
     near?: number;
@@ -186,6 +190,7 @@ export interface DxfCompareConfig {
  */
 export interface VRViewerConfig extends BaseViewerConfig {
     autoRotateSpeed?: number;
+    enableCache?: boolean;
 }
 /**
  * VR Viewpoint's hotpoint, which can be a user defined html element.

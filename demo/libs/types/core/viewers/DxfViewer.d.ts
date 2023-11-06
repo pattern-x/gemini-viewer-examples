@@ -1,17 +1,13 @@
 import * as THREE from "three";
-import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { BaseViewer } from "./BaseViewer";
+import { ViewerName } from "./Constants";
 import { DxfModelConfig, DxfViewerConfig } from "../../core/Configs";
 import { Box2, Vector2 } from "../../core/Constants";
 import { Drawable, DrawableData } from "../../core/canvas";
 import { DxfLayer } from "../../core/dxf";
-import { ILayoutObject } from "../../core/dxf-parser";
-import { FontManager } from "../../core/font";
 import { EventInfo } from "../../core/input/InputManager";
 import { MarkupManager, MarkupType } from "../../core/markup";
-import { Model2d, ModelData2d } from "../../core/model";
-import { BaseViewer, ViewerName } from "../../core/viewers/BaseViewer";
-import { MeasurementData, MeasurementType } from "../../plugins/measure";
-import type { MeasurementPlugin } from "../../plugins/measure";
+import { Model2d } from "../../core/model";
 /**
  * Markup for DxfViewer contains additional information, e.g. layoutName.
  *
@@ -146,110 +142,29 @@ export interface PdfData {
  * ```
  */
 export declare class DxfViewer extends BaseViewer {
-    /**
-     * @internal
-     */
     name: ViewerName;
-    private readonly CAMERA_Z_POSITION;
-    private readonly CAMERA_MIN_ZOOM;
-    private timer;
-    protected css2dRenderer?: CSS2DRenderer;
-    protected fontManager?: FontManager;
-    protected enableSelection?: boolean;
-    protected selectedObject?: THREE.Object3D | Drawable;
-    /**
-     * The record "key" is modelId or src.
-     * @internal
-     */
+    enableSelection: boolean;
     loadedModels: Model2d[];
     /**
      * @internal
      */
     masterModelId: string;
+    private activeLayoutName;
     private dxfLayoutBar?;
-    private loadingManager?;
-    private raycaster?;
-    private cameraUpdateInterval?;
-    protected selected: boolean;
-    private markupManager?;
-    private zoomToRectHelper?;
-    private raf?;
-    private clock;
-    protected renderEnabled: boolean;
-    private timeoutSymbol?;
+    private layoutInfos;
+    private units;
     private enableHideVisuallySmallObjects;
     private sortedHidableObjects;
     private lastCameraZoom;
-    private lastFrame;
-    private activeLayoutName;
-    private layoutInfos;
-    private units;
-    private raycastableObjects;
-    private fpsUtils;
+    groundPlane?: THREE.Mesh;
+    raycastableObjects?: THREE.Object3D[];
+    selectedObject?: THREE.Object3D | Drawable;
+    private markupManager?;
     constructor(viewerCfg: DxfViewerConfig);
-    /**
-     * Initialize everything it needs
-     * @internal
-     */
-    protected init(): void;
-    private initInputManager;
-    private initThree;
-    private initDom;
-    private initScene;
-    private initRenderer;
-    protected initCSS2DRenderer(): void;
-    private initCamera;
-    /**
-     * @internal
-     */
-    protected initControls(): void;
-    private onResize;
-    protected onControlsChange(viewer: DxfViewer): () => void;
-    /**
-     * Initialize mouse/pointer events
-     */
-    private initEvents;
-    protected initOthers(): void;
-    private initLoadingProgressBar;
-    /**
-     * Shows the layout bar
-     * @internal
-     */
-    showLayoutBar(): void;
-    /**
-     * Hides the layout bar
-     * @internal
-     */
-    hideLayoutBar(): void;
-    protected animate(): void;
-    /**
-     * In order to have a better performance, it should only render when necessary.
-     * Usually, we should enable render for these cases:
-     *  - Anything added to, removed from scene, or objects' position, scale, rotation, opacity, material, etc. changed
-     *  - Anything selected/unselected
-     *  - Camera changed
-     *  - Render area resized
-     * @internal
-     */
-    enableRender: (time?: number) => void;
-    /**
-     * Gets current FPS value
-     * @internal
-     */
-    getFps(): number;
-    /**
-     * @internal
-     */
-    is3d(): boolean;
-    /**
-     * @description {en} Destroys DxfViewer.
-     * @description {zh} 销毁 DxfViewer。
-     * @example
-     * ```typescript
-     * viewer.destroy();
-     * ```
-     */
-    destroy(): void;
+    get camera(): THREE.OrthographicCamera;
+    private setupDefaultEvents;
+    protected handleMouseClick(e: EventInfo): void;
+    private setDefaultBackground;
     /**
      * Used to indicate how many dxf is loading
      */
@@ -291,28 +206,42 @@ export declare class DxfViewer extends BaseViewer {
      * ```
      */
     loadModelAsync(modelCfg: DxfModelConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    loadModel(modelCfg: DxfModelConfig, onProgress?: ((event: ProgressEvent<EventTarget>) => void) | undefined): Promise<void>;
+    addModel(model: Model2d): void;
+    private getDxfUnits;
+    private handleOverlayDxf;
+    setObjectHighlight(object: THREE.Object3D): void;
+    setObjectUnHighlight(object: THREE.Object3D): void;
+    clearHighlight(): void;
+    clearSelection(): void;
     /**
-     * Unloads a dxf
-     * @internal
+     * Creates a ground plane which is much bigger than bbox.
      */
-    unloadDxf(): void;
+    private updateGroundPlane;
+    getRaycastableObjects(): THREE.Object3D<THREE.Event>[];
     /**
-     *
-     * @param model
-     * @returns
-     * @description Add model data to viewer.
+     * Gets the corresponding viewport by judging that the point is in the viewport
      */
-    addModel(modelData: ModelData2d): Model2d | undefined;
+    private getViewportByPoint;
+    pickPosition(mousePosition: {
+        x: number;
+        y: number;
+    }): THREE.Vector3 | undefined;
     /**
-     * Gets loaded entity count
-     * @internal
-     * @returns {number}
+     * @description {en} Activates a layout.
+     * @description {zh} 激活布局。
+     * @param layoutName
+     * - {en} The name of the layout to be activated.
+     * - {zh} 要激活的布局名称。
+     * @example
+     * ```typescript
+     * viewer.activateLayout('Layout1');
+     * ```
      */
-    getEntitiesCount(): number;
-    /**
-     * Gets loaded dxf model id array
-     */
-    protected getLoadedDxfModelIds(): string[];
+    activateLayout(layoutName?: string): void;
+    private getLayoutExtentEx;
+    private getActiveLayoutInfo;
+    private getLayoutByName;
     /**
      * @description {en} Gets layout names of the master model.
      * @description {zh} 获取主模型的布局名称。
@@ -327,140 +256,11 @@ export declare class DxfViewer extends BaseViewer {
      */
     getLayoutNames(): string[];
     /**
-     * Gets layouts.
-     * Only returns master model's layouts.
+     * Gets LayoutInfo by layoutName. It creats LayoutInfo if doesn't exist.
      */
-    protected getLayouts(): ILayoutObject[];
-    private handleOverlayDxf;
-    /**
-     * @description {en} Activates a layout.
-     * @description {zh} 激活布局。
-     * @param layoutName
-     * - {en} The name of the layout to be activated.
-     * - {zh} 要激活的布局名称。
-     * @example
-     * ```typescript
-     * viewer.activateLayout('Layout1');
-     * ```
-     */
-    activateLayout(layoutName: string): void;
-    private cancelAllOperations;
-    /**
-     * @description {en} Gets active layout.
-     * @description {zh} 获取当前布局。
-     * @returns
-     * - {en} Active layout name or undefined.
-     * - {zh} 当前激活的布局名称或undefined。
-     * @example
-     * ``` typescript
-     * const activeLayout = viewer.getActiveLayoutName();
-     * console.log(activeLayout);
-     * ```
-     */
-    getActiveLayoutName(): string | undefined;
-    /**
-     * @description {en} Gets dxf layers.
-     * @description {zh} 获取dxf图层。
-     * @returns
-     * - {en} Dxf layers.
-     * - {zh} dxf图层。
-     * @example
-     * ``` typescript
-     * const dxfLayers = viewer.getLayers();
-     * for (let i = 0; i < dxfLayers.length; ++i) {
-     *     const layers = dxfLayers[i].layers;
-     *     const layerNames = Object.keys(layers).sort();
-     *     console.log(layerNames);
-     * }
-     * ```
-     */
-    getLayers(): (DxfLayers | PdfLayers)[];
-    /**
-     * Sets model's (aka, a dxf file) visibility.
-     * @throws Throws exception if modelId doesn't exist.
-     * @internal
-     */
-    setModelVisibility(modelId: string, visible: boolean): void;
-    /**
-     * @description {en} Sets layer's visibility.
-     * @description {zh} 设置图层的可见性。
-     * @param layerName
-     * - {en} Layer's name to show or hide.
-     * - {zh} 要显示或隐藏的图层名称。
-     * @param visible
-     * - {en} Layer's target visibility.
-     * - {zh} 图层的目标可见性。
-     * @param modelId
-     * - {en} Useful when more than one model is loaded, if not specified, will use the master model.
-     * - {zh} 当加载了多个模型时有用，如果未指定，将使用主模型。
-     * @throws Error
-     * - {en}: Throws exception if given modelId doesn't exist.
-     * - {zh} 如果给定的modelId不存在，则抛出异常。
-     * @example
-     * ``` typescript
-     * // Hides layer "0"
-     * viewer.setLayerVisibility("0", false);
-     * ```
-     */
-    setLayerVisibility(layerName: string, visible: boolean, modelId?: string): void;
-    /**
-     * Sets layer's opacity
-     * @internal
-     */
-    setLayerOpacity(layerName: string, opacity: number, modelId?: string): void;
-    /**
-     * Sets layer's color
-     * @throws Throws exception if layer doesn't exist.
-     * @internal
-     */
-    setLayerColor(layerName: string, color: number, modelId?: string): void;
-    /**
-     * Resets a layer's color.
-     * @internal
-     */
-    resetLayerColor(layerName: string, modelId?: string): void;
-    /**
-     * @description {en} Sets font.
-     * This needs to be called before loading a dxf, it won't affect any loaded text.
-     * It accepts shx or typeface formats. For typeface, it only support passing in 1 font file in the array for now.
-     * @description {zh} 设置字体。
-     * 需要在加载dxf之前调用，不会影响已加载的文字。
-     * 支持shx或typeface格式。对于typeface，目前只支持传入1个字体文件。
-     * @param urls
-     * - {en} font file urls.
-     * - {zh} 字体文件链接。
-     * @example
-     * ```typescript
-     * viewer.setFont(["https://example.com/xxx.shx"]);
-     * ```
-     */
-    setFont(urls: string[]): Promise<void>;
-    getFont(): FontManager | undefined;
-    /**
-     * Sets loading manager.
-     * @internal
-     * This needs to be called before loading a dxf, used to load local external links.
-     * @param manager
-     */
-    setLoadingManager(manager: THREE.LoadingManager): void;
-    /**
-     * Sets display length units.
-     * @internal Not implemented yet!
-     * @default Millimeters
-     */
-    setDisplayLengthUnits(): void;
-    /**
-     * Sets display area units
-     * @internal Not implemented yet!
-     * @default Meters
-     */
-    setDisplayAreaUnits(): void;
-    /**
-     * Sets display decimal digits
-     * @internal Not implemented yet!
-     * @default 2
-     */
-    setDisplayPrecision(): void;
+    private getLayoutInfo;
+    goToHomeView(): void;
+    zoomToBBox(bbox: THREE.Box3): void;
     /**
      * @description {en} Gets current view extent.
      * This is useful for user to save this value as a viewpoint, and jump to this viewpoint next time.
@@ -474,127 +274,26 @@ export declare class DxfViewer extends BaseViewer {
      */
     getCurrentViewExtent(): Box2;
     /**
-     * @description Compatible with older versions, use MeasurePlugin instead
+     * Gets hit result by Normalized Device Coordinates.
+     * Lower left coordinate: (-1, -1)
+     * Upper right coordinate: (1, 1)
+     */
+    protected getHitResultByNdcCoordinate(coord: Vector2): Vector2 | undefined;
+    /**
+     * Gets mouse hit result in world coordinate
+     * @example
+     * ``` typescript
+     * document.addEventListener("click", (event) => {
+     *     const result = viewer.getHitResult(event);
+     *     const loc = result?.location;
+     *     if (loc) {
+     *         console.log(`Clicked at x: ${loc[0]}, y: ${loc[1]}`);
+     *     }
+     * });
+     * ```
      * @internal
-     * @deprecated use MeasurePlugin instead
      */
-    get measurePlugin(): MeasurementPlugin | undefined;
-    /**
-     * @description {en} Activates one of "Distance", "Area" or "Angle" measurement
-     * @description {zh} 激活"距离", "面积" 或者 "角度"测量
-     * @param type
-     * - "Distance", "Area" or "Angle"
-     * @example
-     * ``` typescript
-     * viewer.activateMeasurement(MeasurementType.Distance);
-     * ```
-     * @deprecated use MeasurePlugin instead
-     */
-    activateMeasurement(type: MeasurementType): void;
-    /**
-     * @description {en} Deactivates measurement.
-     * @description {zh} 退出测量。
-     * @example
-     * ``` typescript
-     * viewer.deactivateMeasurement();
-     * ```
-     * @deprecated use MeasurePlugin instead
-     */
-    deactivateMeasurement(): void;
-    /**
-     * @description {en} Gets active measurement type.
-     * @description {zh} 获取当前激活的测量类型。
-     * @returns
-     * - "Distance", "Area" or "Angle" or undefined
-     * @example
-     * ``` typescript
-     * const measurementType = viewer.getActiveMeasurementType();
-     * console.log(measurementType);
-     * ```
-     * @deprecated use MeasurePlugin instead
-     */
-    getActiveMeasurementType(): MeasurementType | undefined;
-    /**
-     * @description {en} Gets all measurements.
-     * @description {zh} 获取所有测量数据。
-     * @returns
-     * - {en} measurement data array.
-     * - {zh} 测量数据数组。
-     * @example
-     * ``` typescript
-     * const measurementData = viewer.getMeasurements();
-     * console.log(measurementData);
-     * ```
-     * @deprecated use MeasurePlugin instead
-     */
-    getMeasurements(): MeasurementData[];
-    /**
-     * @description {en} Cancels current measurement. This won't deactivate measurement, rather, you can start a new measurement.
-     * @description {zh} 取消当前的测量绘制。这并不会退出测量，用户可以开始一个新的测量。
-     * @deprecated use MeasurePlugin instead
-     */
-    cancelMeasurement(): void;
-    /**
-     * @description {en} Sets measurement data.
-     * @description {zh} 设置测量数据。
-     * @param measurementData
-     * - {en} measurement data array.
-     * - {zh} 测量数据数组。
-     * @example
-     * ``` typescript
-     * const measurementData = [{
-     *     type: "Distance",
-     *     id: "c6ea70a3-ddb0-4dd0-87c8-bd2491936428",
-     *     points: [[0, 1000], [5000, 1000]],
-     * }];
-     * viewer.setMeasurements(measurementData);
-     * ```
-     * @deprecated use MeasurePlugin instead
-     */
-    setMeasurements(measurementData: MeasurementData[]): void;
-    /**
-     * Selects a measurement by id
-     * @internal
-     * @deprecated use MeasurePlugin instead
-     */
-    selectMeasurement(id: string): void;
-    /**
-     * Unselects a measurement.
-     * @internal
-     * @deprecated use MeasurePlugin instead
-     */
-    unselectMeasurement(): void;
-    /**
-     * @description {en} Removes a measurement by id.
-     * @description {zh} 根据id删除测量数据。
-     * @param id
-     * - {en} Measurement data id.
-     * - {zh} 测量数据id。
-     * @example
-     * ``` typescript
-     * const id = "c6ea70a3-ddb0-4dd0-87c8-bd2491936428";
-     * viewer.removeMeasurement(id);
-     * ```
-     * @deprecated use MeasurePlugin instead
-     */
-    removeMeasurement(id: string): void;
-    /**
-     * Sets a measurement's visibility.
-     * Note that, the markup should belong to active layout. You shouldn't update a markup of an inactive layout.
-     * @internal
-     * @deprecated use MeasurePlugin instead
-     */
-    setMeasurementVisibility(id: string, visible: boolean): boolean;
-    /**
-     * @description {en} Clears measurement results.
-     * @description {zh} 清除测量结果。
-     * @example
-     * ``` typescript
-     * viewer.clearMeasurements();
-     * ```
-     * @deprecated use MeasurePlugin instead
-     */
-    clearMeasurements(): void;
+    getHitResult(event: MouseEvent | PointerEvent | EventInfo): Vector2 | undefined;
     /** markup start **/
     /**
      * @internal
@@ -760,222 +459,91 @@ export declare class DxfViewer extends BaseViewer {
     clearMarkups(): void;
     /** markup end **/
     /**
-     * Gets mouse hit result in world coordinate
+     * @description {en} Gets active layout.
+     * @description {zh} 获取当前布局。
+     * @returns
+     * - {en} Active layout name or undefined.
+     * - {zh} 当前激活的布局名称或undefined。
      * @example
      * ``` typescript
-     * document.addEventListener("click", (event) => {
-     *     const result = viewer.getHitResult(event);
-     *     const loc = result?.location;
-     *     if (loc) {
-     *         console.log(`Clicked at x: ${loc[0]}, y: ${loc[1]}`);
-     *     }
-     * });
+     * const activeLayout = viewer.getActiveLayoutName();
+     * console.log(activeLayout);
      * ```
-     * @internal
      */
-    getHitResult(event: MouseEvent | PointerEvent | EventInfo): Vector2 | undefined;
+    getActiveLayoutName(): string | undefined;
+    zoomIn(step?: number): void;
+    zoomOut(step?: number): void;
     /**
-     * Gets hit result by Normalized Device Coordinates.
-     * Lower left coordinate: (-1, -1)
-     * Upper right coordinate: (1, 1)
-     */
-    protected getHitResultByNdcCoordinate(coord: Vector2): Vector2 | undefined;
-    /**
-     * @description {en} Asks user to select a box area, and zooms to it.
-     * @description {zh} 询问用户选择一个框选区域，然后缩放到该区域。
+     * @description {en} Gets dxf layers.
+     * @description {zh} 获取dxf图层。
+     * @returns
+     * - {en} Dxf layers.
+     * - {zh} dxf图层。
      * @example
      * ``` typescript
-     * viewer.zoomToRect();
+     * const dxfLayers = viewer.getLayers();
+     * for (let i = 0; i < dxfLayers.length; ++i) {
+     *     const layers = dxfLayers[i].layers;
+     *     const layerNames = Object.keys(layers).sort();
+     *     console.log(layerNames);
+     * }
      * ```
      */
-    zoomToRect(): void;
+    getLayers(): (DxfLayers | PdfLayers)[];
     /**
+     * Sets model's (aka, a dxf file) visibility.
+     * @throws Throws exception if modelId doesn't exist.
      * @internal
      */
-    deactivateZoomRect(): void;
-    private getLayoutByName;
-    private getActiveLayoutInfo;
-    private getMsTransformMatrix;
-    private getLayoutExtentEx;
+    setModelVisibility(modelId: string, visible: boolean): void;
     /**
-     * Shows objects for given layout, and hide any other layouts.
-     */
-    private showLayoutObjects;
-    private getLayoutViewports;
-    private setMaterialUniforms;
-    /**
-     * Checks if a layer is frozen for viewport (VP Freeze)
-     */
-    private isLayerFrozenForViewport;
-    private getFilteredViewports;
-    private generateObjectsByViewport;
-    private findSpatialFilter;
-    private getAnyMaterial;
-    private addSpatialFilterSection;
-    private getObjectsByBoundingBox;
-    private getDxfUnits;
-    private generateSectionsBySpatialFilter;
-    /**
-     * @description {en} resize viewer
-     * @description {zh} 重置视图大小
-     * @param {number} width
-     * - {en} width of viewer
-     * - {zh} 视图宽度。
-     * @param {number} height
-     * - {en} height of viewer
-     * - {zh} 视图高度。
-     * @example
-     * ```typescript
-     * const width = 800;
-     * const height = 600;
-     * viewer.resize(width, height);
-     * ```
-     */
-    protected resize(width: number, height: number): void;
-    /**
-     * @internal
-     */
-    getRaycaster(): THREE.Raycaster | undefined;
-    /**
-     * Gets the corresponding viewport by judging that the point is in the viewport
-     */
-    private getViewportByPoint;
-    /**
-     * Gets raycast-able objects by mouseEvent.
-     * @internal
-     */
-    getRaycastableObjectsByMouse(event?: EventInfo): THREE.Object3D<THREE.Event>[];
-    /**
-     * Gets intersections by given mouse location.
-     * If no MouseEvent is passed in, use (0, 0) as the raycaster's origin.
-     */
-    private getIntersections;
-    /**
-     * Handles mouse click event
-     */
-    private handleMouseClick;
-    private selectDrawableByEvent;
-    /**
-     * Select or unselect an object.
-     * depthTest is turned off by default. The highlighting is more pronounced when objects cover each other.
-     */
-    protected selectObject(object?: THREE.Object3D, depthTest?: boolean): void;
-    /**
-     * Clears the current selection
-     * @internal
-     */
-    clearSelection(): void;
-    /**
-     * Makes camera fly to objects
-     */
-    protected flyToObjects(objects: THREE.Object3D[]): void;
-    /**
-     * Make camera fly to an object
-     */
-    protected flyToObject(object: THREE.Object3D): void;
-    /**
-     * Flies to current selected object if any
-     */
-    protected flyToSelectedObject(): void;
-    /**
-     * Flies to a random object (by alt + r).
-     * It is useful when either the data is wrong or there is bug in program,
-     * then we cannot see anything in the scene!
-     */
-    protected flyToRandomObject(): void;
-    /**
-     * Makes camera fly to target position with given lookAt position
-     * @param position camera's target position
-     * @param lookAt camera's new lookAt position
-     * @param targetCameraZoom camera's target zoom value
-     * @internal
-     */
-    flyTo(position: THREE.Vector3, lookAt: THREE.Vector3, targetCameraZoom?: number, animate?: boolean): void;
-    /**
-     * Moves camera to target position
-     * @param position 2d position
-     * @internal
-     */
-    goTo(position: Vector2, targetCameraZoom?: number, animate?: boolean): void;
-    /**
-     * @description {en} Moves camera to home view.
-     * @description {zh} 移动相机到主视图.
+     * @description {en} Sets layer's visibility.
+     * @description {zh} 设置图层的可见性。
+     * @param layerName
+     * - {en} Layer's name to show or hide.
+     * - {zh} 要显示或隐藏的图层名称。
+     * @param visible
+     * - {en} Layer's target visibility.
+     * - {zh} 图层的目标可见性。
+     * @param modelId
+     * - {en} Useful when more than one model is loaded, if not specified, will use the master model.
+     * - {zh} 当加载了多个模型时有用，如果未指定，将使用主模型。
+     * @throws Error
+     * - {en}: Throws exception if given modelId doesn't exist.
+     * - {zh} 如果给定的modelId不存在，则抛出异常。
      * @example
      * ``` typescript
-     * viewer.goToHomeView();
+     * // Hides layer "0"
+     * viewer.setLayerVisibility("0", false);
      * ```
      */
-    goToHomeView(): void;
+    setLayerVisibility(layerName: string, visible: boolean, modelId?: string): void;
     /**
-     * @description {en} Zooms to specific bounding box.
-     * @description {zh} 缩放到指定的包围盒.
-     * @param bbox
-     * - {en} 2d bounding box
-     * - {zh} 2d 包围盒。
-     * @example
-     * ``` typescript
-     * const box = { min: { x: 0, y: 0 }, max: { x: 10000, y: 10000} };
-     * viewer.zoomToBBox(box);
-     * ```
-     */
-    zoomToBBox(bbox: Box2): void;
-    /**
-     * @description {en} Zooms to view extent.
-     * @description {zh} 缩放到视图范围.
-     * @example
-     * ``` typescript
-     * viewer.zoomToExtent();
-     * ```
-     */
-    zoomToExtent(): void;
-    /**
-     * @description {en} Sets background color.
-     * @description {zh} 设置背景颜色。
-     * @param r
-     * - {en} Red channel value between 0 and 1.
-     * - {zh} 红色通道值，介于 0 和 1 之间。
-     * @param g
-     * - {en} Green channel value between 0 and 1.
-     * - {zh} 绿色通道值，介于 0 和 1 之间。
-     * @param b
-     * - {en} Blue channel value between 0 and 1.
-     * -{zh} 蓝色通道值，介于 0 和 1 之间。
-     * @example
-     * ``` typescript
-     * // {en} Sets background to gray
-     * // {zh} 设置背景为灰色
-     * viewer.setBackgroundColor(0.5, 0.5, 0.5);
-     * ```
-     */
-    setBackgroundColor(r: number, g: number, b: number): void;
-    /**
-     * Gets LayoutInfo by layoutName. It creats LayoutInfo if doesn't exist.
-     */
-    private getLayoutInfo;
-    /**
-     * Creates a ground plane which is much bigger than bbox.
-     */
-    private updateGroundPlane;
-    /**
-     * Compute bounding box of loaded models for active layout
+     * Sets layer's opacity
      * @internal
      */
-    computeBoundingBox(): THREE.Box3;
+    setLayerOpacity(layerName: string, opacity: number, modelId?: string): void;
     /**
-     * Checks if an expected zoom value is valid, and adjust its value if necessary.
+     * Sets layer's color
+     * @throws Throws exception if layer doesn't exist.
+     * @internal
      */
-    private checkAndGetLimitedCameraZoom;
+    setLayerColor(layerName: string, color: number, modelId?: string): void;
+    /**
+     * Resets a layer's color.
+     * @internal
+     */
+    resetLayerColor(layerName: string, modelId?: string): void;
     private getVisiblePixelSize;
     private setLayoutHidableObjectArray;
-    private statObjects;
-    /**
-     * Updates hidable objects' visibility once camera.zoom changed.
-     */
-    private updateHidableObjectsVisibility;
     /**
      * Updates raycaster threshold to a proper value, so user can easily pick points and lines
      */
     private updateRaycasterThreshold;
+    /**
+     * Updates hidable objects' visibility once camera.zoom changed.
+     */
+    private updateHidableObjectsVisibility;
     /**
      * Updates camera zoom value for shader materials, which are created in DxfLoader
      */

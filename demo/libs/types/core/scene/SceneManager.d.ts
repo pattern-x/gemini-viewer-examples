@@ -1,0 +1,30 @@
+import * as THREE from "three";
+import { Model } from "../../core/model";
+import type { BaseViewer } from "../../core/viewers/BaseViewer";
+export declare class SceneManager {
+    private viewer;
+    scene: THREE.Scene;
+    renderer: THREE.WebGLRenderer;
+    pmremGenerator?: THREE.PMREMGenerator;
+    lights?: THREE.Group;
+    lightsHelper?: THREE.Group;
+    modelGroup: THREE.Group;
+    constructor(viewer: BaseViewer);
+    private initLights;
+    private initPMREMGenerator;
+    get maxFragmentUniforms(): number;
+    addModel(model: Model): void;
+    enableShadow(enable: boolean): void;
+    enableClipping(enable: boolean): void;
+    enableLights(enable: boolean): void;
+    debugLights(enable: boolean): void;
+    setBackground(background: THREE.Color | THREE.CubeTexture | THREE.Texture | null): void;
+    get directionLight(): THREE.Object3D<THREE.Event> | undefined;
+    get ambientLight(): THREE.Object3D<THREE.Event> | undefined;
+    get hemisphereLight(): THREE.Object3D<THREE.Event> | undefined;
+    setEnvironmentFromData(data?: Uint16Array): Promise<void>;
+    setEnvironment(hdrUrl: string): Promise<void>;
+    resize(): void;
+    getRaycastableObjects(): THREE.Object3D<THREE.Event>[];
+    destroy(): void;
+}

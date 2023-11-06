@@ -1,9 +1,11 @@
 import * as THREE from "three";
+import type { ImageManager } from "./ImageManager";
 /**
  * The base class of vr mesh.
  */
 export declare class BaseVRMesh extends THREE.Group {
     protected textureLoader: THREE.TextureLoader;
+    protected imageManager: ImageManager;
     protected images: string[];
     protected mesh?: THREE.Object3D;
     protected thumbnailImages?: string[];
@@ -11,7 +13,9 @@ export declare class BaseVRMesh extends THREE.Group {
     protected size: number;
     private fadingInInterval?;
     private fadingOutInterval?;
-    constructor(images: string[], thumbnailImages?: string[], size?: number);
+    render?: () => void;
+    private enableCache;
+    constructor(manager: ImageManager, images: string[], thumbnailImages?: string[], size?: number);
     /**
      * Fades in by changing its opacity
      */
@@ -30,8 +34,8 @@ export declare class BaseVRMesh extends THREE.Group {
     protected getMaterials(): THREE.Material[];
     protected create(): void;
     protected createThumbnailMesh(size: number): Promise<void>;
-    protected loadTextures(images: string[]): THREE.Texture[];
-    protected loadTexturesAsync(images: string[]): Promise<THREE.Texture[]>;
+    protected loadTexturesAsync(images: string[], isCache?: boolean): Promise<THREE.Texture[]>;
+    setCacheEnabled(enable: boolean): void;
     destroyMesh(mesh: THREE.Mesh): void;
     destroy(): void;
 }

@@ -11,6 +11,7 @@ import type { PdfData, PdfLayer } from "../../core/viewers/DxfViewer";
 export declare class Model2d extends Model {
     modelId: string;
     private modelData;
+    modelObject: THREE.Object3D;
     private bbox?;
     constructor(modelData: ModelData2d);
     get pdfData(): PdfData | undefined;
@@ -74,6 +75,7 @@ export declare class Model2d extends Model {
      * Gets layout of dxf data.
      */
     getLayouts(): ILayoutObject[];
+    getLayoutByName(layoutName: string): ILayoutObject | undefined;
     /**
      * Gets layout extent of dxf data.
      * @internal
@@ -112,4 +114,29 @@ export declare class Model2d extends Model {
      * @internal
      */
     switchTransformMs(layoutName: string): void;
+    activateLayout(layoutName: string | undefined, isLayoutInitialized: boolean): void;
+    getFilteredViewports(layout: ILayoutObject): IViewportEntity[];
+    private generateObjectsByViewport;
+    private setMaterialUniforms;
+    private getObjectsByBoundingBox;
+    /**
+     * Shows objects for given layout, and hide any other layouts.
+     */
+    showLayoutObjects(layoutName: string): void;
+    /**
+     * Checks if a layer is frozen for viewport (VP Freeze)
+     */
+    private isLayerFrozenForViewport;
+    addSpatialFilterSection(object: THREE.Object3D, dxfData: DxfData, bFromViewport?: boolean): void;
+    private findSpatialFilter;
+    private getAnyMaterial;
+    private generateSectionsBySpatialFilter;
+    private hasObject;
+    private hasObjectWithId;
+    /**
+     * Highlights an object.
+     */
+    highlightObject(object: THREE.Object3D): void;
+    unHighlightObject(object: THREE.Object3D): void;
+    clearHighlight(): void;
 }

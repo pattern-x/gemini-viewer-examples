@@ -1,5 +1,5 @@
 import { IUploader } from "./IUploader";
-import type { DxfViewer, ModelConfig } from "../../core";
+import { DxfViewer, ModelConfig } from "../../core";
 /**
  * @internal
  */

@@ -89,5 +89,14 @@ export declare class HotpointPlugin extends Plugin {
      */
     setVisible(hotpointId: string, visible: boolean): void;
     protected findHotpointObject(hotpointId: string): CSS2DObject | undefined;
+    /**
+     *
+     * @param hotpointId
+     * @param zoom
+     * @returns
+     * @description Fly to hotpoint by hotpointId.
+     */
+    flyToHotpoint(hotpointId: string, zoom?: any): void;
+    destroy(): void;
     protected onAfterRender: () => void;
 }

@@ -13,7 +13,7 @@ declare type MarkupEvents = {
 export declare class MarkupManager extends Event<MarkupEvents> {
     private viewer;
     private inputManager;
-    overlayRender?: CanvasRender;
+    overlayRender: CanvasRender;
     private drawableList;
     private lineWidth;
     private lineColor;
@@ -24,9 +24,6 @@ export declare class MarkupManager extends Event<MarkupEvents> {
     protected mouseDownPositionY?: number;
     protected mousedownPoint?: THREE.Vector2;
     private isSelectLeaderText;
-    private tempKey?;
-    private tempTouch?;
-    private tempArrowKeys?;
     private selectedShape?;
     private type?;
     private isDrawing;
@@ -34,7 +31,6 @@ export declare class MarkupManager extends Event<MarkupEvents> {
     private creatingShape?;
     private tempPoints;
     private activated;
-    protected exitButton?: HTMLButtonElement;
     constructor(viewer: BaseViewer, input: InputManager);
     get viewerCanvas(): HTMLCanvasElement;
     get camera(): THREE.OrthographicCamera | THREE.PerspectiveCamera;
@@ -43,7 +39,6 @@ export declare class MarkupManager extends Event<MarkupEvents> {
     setMarkupsVisibility(visible: boolean): void;
     clearAll(): void;
     isMarkupActive(): boolean;
-    protected createMobileExitButton(): HTMLButtonElement;
     activate(): void;
     deactivate(): void;
     getActiveMarkupType(): MarkupType | undefined;

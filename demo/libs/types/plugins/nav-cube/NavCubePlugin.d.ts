@@ -1,7 +1,7 @@
 import { OrthographicCamera, Scene, Vector3 } from "three";
 import { CSS3DRenderer } from "three/examples/jsm/renderers/CSS3DRenderer.js";
 import { NavCube } from "./NavCube";
-import { Plugin, type BaseViewer, PluginConfig } from "../../core/viewers";
+import { type BaseViewer, Plugin, PluginConfig } from "../../core/viewers";
 /**
  * ViewCube plugin config.
  */

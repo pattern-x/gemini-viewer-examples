@@ -38,6 +38,11 @@ export declare enum ViewerEvent {
      */
     CameraChanged = "CameraChanged",
     /**
+     * Triggered when control end
+     * @internal
+     */
+    ControlChanged = "ControlChanged",
+    /**
      * Triggered when box select activated
      */
     BoxSelectActivated = "BoxSelectActivated",
@@ -83,5 +88,9 @@ export declare enum ViewerEvent {
     /**
      * Triggered when a measure is removed
      */
-    MeasurementRemoved = "MeasurementRemoved"
+    MeasurementRemoved = "MeasurementRemoved",
+    /**
+     * Triggered when click hotpoint
+     */
+    HotpointClicked = "HotpointClicked"
 }

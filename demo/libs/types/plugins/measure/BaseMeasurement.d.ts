@@ -62,7 +62,7 @@ export declare abstract class BaseMeasurement extends Event<MeasurementEvents> {
     private inputManager;
     protected drawList: DrawableList;
     protected osnapHelper: OSnapHelper;
-    protected raycaster?: THREE.Raycaster;
+    protected actived: boolean;
     protected mouseMoved: boolean;
     protected mouseDowned: boolean;
     protected touchDowned: boolean;
@@ -82,8 +82,7 @@ export declare abstract class BaseMeasurement extends Event<MeasurementEvents> {
     protected firstPickedListener?: () => void;
     protected completedListener?: () => void;
     constructor(type: MeasurementType, viewer: BaseViewer, input: InputManager, drawList: DrawableList, osnapHelper: OSnapHelper);
-    get canvas(): HTMLCanvasElement;
-    get camera(): THREE.Camera;
+    get overlayRender(): import("../..").CanvasRender;
     get renderer(): THREE.WebGLRenderer;
     /**
      * If measurement is active.

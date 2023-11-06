@@ -1,4 +1,5 @@
 import { BaseVRMesh } from "./BaseVRMesh";
+import type { ImageManager } from "./ImageManager";
 /**
  * A cube contains 6 planes, each plane contains 4 sub-planes as bellow:
  * ratio, 1 : 1
@@ -37,7 +38,7 @@ export declare class VRCube24Faces extends BaseVRMesh {
      * @param images must be in order of right, left, up/top, down/bottom, front, back
      * And the 4 images for each side, must be in order of 1_1, 1_2, 2_1, 2_2.
      */
-    constructor(images: string[], thumbnailImages?: string[], size?: number);
+    constructor(manager: ImageManager, images: string[], thumbnailImages?: string[], size?: number);
     create(): Promise<void>;
     protected createMesh(): Promise<void>;
     private createPlaneOfAFace;

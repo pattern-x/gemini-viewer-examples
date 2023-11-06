@@ -1,6 +1,6 @@
 import { PopPanel } from "./PopPanel";
 import type { BaseViewer } from "../../core/viewers/BaseViewer";
-import type { PickPlaneSection } from "../../plugins/sections/PickPlaneSection";
+import { PickPlaneSection } from "../../plugins/sections";
 export declare class PickSectionPopPanel extends PopPanel {
     protected activeSelectNode?: Element;
     protected isVisible: boolean;

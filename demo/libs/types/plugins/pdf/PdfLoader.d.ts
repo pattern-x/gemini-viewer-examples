@@ -37,6 +37,7 @@ export declare class PdfLoader extends THREE.Loader {
     viewportScale: number;
     baseTransform: THREE.Matrix4;
     pdfDocumentGroup?: THREE.Group;
+    viewportMesh?: THREE.Mesh;
     pdfPageGroup?: THREE.Group;
     currentTransform: THREE.Matrix4;
     transformStack: THREE.Matrix4[];
@@ -64,6 +65,8 @@ export declare class PdfLoader extends THREE.Loader {
      * @returns
      */
     loadAsync(modelCfg: DxfModelConfig, onProgress: (event: ProgressEvent) => void): Promise<ModelData2d>;
+    loadPage(page: number, onProgress?: (event: ProgressEvent) => void): Promise<undefined>;
+    getPageCount(): number | undefined;
     private getOperatorList;
     private _pumpOperatorList;
     private tryCleanup;

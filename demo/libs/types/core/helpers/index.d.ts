@@ -1,4 +1,3 @@
-export * from "./ControlsHelper";
 export * from "./InstantiateHelper";
 export * from "./RafHelper";
 export * from "./BinaryReader";

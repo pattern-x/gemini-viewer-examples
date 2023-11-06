@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GradientColorSkybox } from "./GradientColorSkybox";
-import { BaseViewer, Plugin, PluginConfig } from "../../core";
+import { Plugin, PluginConfig } from "../../core";
+import type { BaseViewer } from "../../core/viewers/BaseViewer";
 /**
  * Skybox plugin config.
  */

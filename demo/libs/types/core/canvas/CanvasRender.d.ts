@@ -3,7 +3,7 @@ import { DrawableData } from "./Constants";
 import { Drawable } from "./Drawable";
 import type { DrawableList } from "./DrawableList";
 import { Event } from "../../core/utils";
-import type { BimViewer, DxfViewer } from "../../core/viewers";
+import type { BaseViewer } from "../../core/viewers";
 /**
  * @internal
  */
@@ -20,7 +20,7 @@ export declare class CanvasRender extends Event {
     private projScreenMatrix;
     static _registerDrawableClass(drawable: constructorReturnType<Drawable>): void;
     static createDrawable(data: DrawableData): Drawable<Record<string, unknown>>;
-    constructor(viewer: BimViewer | DxfViewer);
+    constructor(viewer: BaseViewer);
     get is3d(): boolean;
     get container(): HTMLElement;
     get camera(): THREE.Camera;
@@ -33,7 +33,8 @@ export declare class CanvasRender extends Event {
     render(): void;
     setSize(width: number, height: number): void;
     getSortedDrawables(onlyVisible?: boolean): Drawable<Record<string, unknown>>[];
-    getDrawablesByPosition(p: THREE.Vector3, raycaster?: THREE.Raycaster): Drawable[];
+    getDrawablesByDrawableListAndPosition(drawList: DrawableList, p: THREE.Vector3): Drawable<Record<string, unknown>> | undefined;
+    getDrawablesByPosition(p: THREE.Vector3): Drawable[];
     getDrawableById(id: string): Drawable<Record<string, unknown>> | undefined;
     measureTextLength(text: string, font: string): number;
     /**

@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import type { CameraControlsEx } from "../../core/controls/CameraControlsEx";
 import { EventInfo, InputManager } from "../../core/input/InputManager";
 import type { BaseViewer } from "../../core/viewers";
 /**
@@ -32,7 +31,6 @@ export declare abstract class BaseSection {
     protected get canvas(): HTMLCanvasElement;
     get isActive(): boolean;
     protected get camera(): THREE.Camera;
-    protected get controls(): CameraControlsEx;
     private setGlobalClippingEnabled;
     private setObjectClippingEnabled;
     clearClippingObjectIds(): void;

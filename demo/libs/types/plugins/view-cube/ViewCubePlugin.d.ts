@@ -1,7 +1,7 @@
-import { Plugin, type BaseViewer, PluginConfig } from "../../core/viewers";
+import { Plugin, PluginConfig } from "../../core/viewers";
+import type { BaseViewer } from "../../core/viewers/BaseViewer";
 export interface ViewCubePluginConfig extends Partial<PluginConfig> {
     containerId?: string;
-    context?: WebGLRenderingContext | WebGL2RenderingContext;
     showAxes?: boolean;
     lineColor?: number;
 }
@@ -10,24 +10,23 @@ export declare class ViewCubePlugin extends Plugin {
     /**
      * @internal
      */
-    private container?;
+    private cfg;
+    private container;
     private scene?;
     private camera?;
-    private cfg;
     private renderer?;
     private directionalLight?;
     private width;
     private height;
     private requestAnimationFrameHandle?;
-    private raycaster;
+    private pickManager;
     private renderEnabled;
     private inputManager?;
     private viewCube?;
     private lastCoords?;
     constructor(viewer: BaseViewer, cfg?: ViewCubePluginConfig);
+    get viewerContainer(): HTMLElement;
     private init;
-    private initDom;
-    private initInputManager;
     private initScene;
     private initCamera;
     private initRenderer;
@@ -40,8 +39,6 @@ export declare class ViewCubePlugin extends Plugin {
     private onClick;
     private updateViewerCamera;
     private updateActivateMeshName;
-    private getNdcPointByEvent;
-    private getIntersects;
     private updateCameraAndMeshName;
     /**
      * Update viewCube according to camera direction.

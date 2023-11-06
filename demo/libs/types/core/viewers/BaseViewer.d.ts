@@ -1,17 +1,23 @@
-import type { TFunction } from "i18next";
 import * as THREE from "three";
+import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { Box2 } from "../Constants";
+import { ProgressBar, Spinner } from "../components";
+import { ViewerName } from "./Constants";
+import { Plugin } from "./Plugin";
 import { ViewerEvent } from "./ViewerEvent";
-import type { BaseViewerConfig, CameraConfig } from "../../core/Configs";
-import type { CanvasRender } from "../../core/canvas";
-import type { CameraControlsEx, VRControls } from "../../core/controls";
-import { EventInfo, InputManager } from "../../core/input/InputManager";
-import type { MarkupManager } from "../../core/markup";
-import { UndoRedoManager } from "../../core/undo-redo/UndoRedoManager";
+import { BaseViewerConfig, CameraConfig, ModelConfig } from "../../core/Configs";
+import { CameraInfo, CameraManager, CameraProjections } from "../../core/camera";
+import { CanvasRender } from "../../core/canvas";
+import { Container } from "../../core/components/Container";
+import { FontManager } from "../../core/font";
+import { ZoomToRectHelper } from "../../core/helpers";
+import { LoadingHelper } from "../../core/helpers/LoadingHelper";
+import { InputManager } from "../../core/input";
+import { Model } from "../../core/model";
+import { PickManager } from "../../core/pick";
+import { SceneManager } from "../../core/scene/SceneManager";
+import { UndoRedoManager } from "../../core/undo-redo";
 import { Event } from "../../core/utils";
-import { Plugin } from "../../core/viewers/Plugin";
-import type { MeasurementPlugin } from "../../plugins";
-import type { BaseSection } from "../../plugins/sections";
 /**
  * Screenshot result, which contains a result image and,
  * for DxfViewer, it also contains the view extent when the screenshot is taken,
@@ -42,191 +48,82 @@ export interface ScreenshotResult {
      */
     base64Image: string;
 }
-/**
- * @internal
- */
-export declare enum ViewerName {
-    BaseViewer = "BaseViewer",
-    BimViewer = "BimViewer",
-    DxfViewer = "DxfViewer",
-    VRViewer = "VRViewer"
-}
 declare type ViewerEvents = {
     [K in ViewerEvent]: any;
 };
-/**
- * Abstract base class for DxfViewer, BimViewer, etc.
- */
 export declare abstract class BaseViewer extends Event<ViewerEvents> {
-    /**
-     * @internal
-     */
     name: ViewerName;
-    /**
-     * @internal
-     */
-    translate: TFunction;
-    /**
-     * @internal
-     */
-    parentContainer?: HTMLElement;
-    /**
-     * @internal
-     */
-    viewerContainer?: HTMLElement;
-    container?: HTMLElement;
-    protected inputManager?: InputManager;
-    /**
-     * @internal
-     */
-    scene?: THREE.Scene;
-    /**
-     * @internal
-     */
-    renderer?: THREE.WebGLRenderer;
-    /**
-     * @internal
-     */
-    camera?: THREE.PerspectiveCamera | THREE.OrthographicCamera;
-    /**
-     * @internal
-     */
-    controls?: CameraControlsEx | VRControls;
-    protected height: number;
-    protected width: number;
-    /**
-     * @internal
-     */
-    widgetContainer?: HTMLElement;
-    private spinner?;
-    protected jobCount: number;
     protected viewerCfg: BaseViewerConfig;
-    /**
-     * @internal
-     */
-    cameraCfg?: CameraConfig;
-    /**
-     * @internal
-     */
-    groundPlane?: THREE.Mesh;
-    /**
-     * @describe overlay canvas
-     * @internal
-     */
-    overlayRender?: CanvasRender;
-    /**
-     * @internal
-     */
-    loadedModels?: any;
-    /**
-     * @internal
-     */
-    undoRedoManager?: UndoRedoManager;
-    protected enableOverlayRenderer: boolean;
+    private clock;
+    protected fps: number;
+    protected timeStamp: number;
+    private renderEnabled;
     /**
      * @internal
      */
     protected requestAnimationFrameHandle?: number;
-    /**
-     * @internal
-     */
-    protected frustumSize: number;
-    /**
-     * @internal
-     */
-    protected loadingProgressBar?: any;
-    protected lastFrameExecuteTime: number;
-    protected minFrameInterval: number;
+    container: Container;
     protected plugins: Plugin[];
+    loadedModels: Model[];
+    private raf?;
+    private timeoutSymbol?;
+    protected homeView?: CameraConfig;
+    protected inputManager: InputManager;
+    protected cameraManager: CameraManager;
+    protected sceneManager: SceneManager;
+    protected fontManager?: FontManager;
+    protected pickManager: PickManager;
+    protected undoRedoManager: UndoRedoManager;
+    protected overlayRender: CanvasRender;
+    protected css2dRenderer: CSS2DRenderer;
+    protected spinner: Spinner;
+    protected progressBar: ProgressBar;
+    protected loaderHelper: LoadingHelper;
+    protected zoomToRectHelper?: ZoomToRectHelper;
     constructor(viewerCfg: BaseViewerConfig);
     private initLogLevel;
     private initLocalization;
-    private initContainer;
+    get viewerContainer(): HTMLElement;
+    get widgetContainer(): HTMLElement;
+    getUndoRedoManager(): UndoRedoManager;
+    getInputManager(): InputManager;
+    getCameraManager(): CameraManager;
+    getOverlayRender(): CanvasRender;
+    get renderer(): THREE.WebGLRenderer;
+    get camera(): THREE.PerspectiveCamera | THREE.OrthographicCamera;
+    get scene(): THREE.Scene;
+    getRaycaster(): THREE.Raycaster;
+    getViewConfig(): BaseViewerConfig;
+    getSpinner(): Spinner;
+    getFontManager(): FontManager | undefined;
+    private initCSS2DRenderer;
     /**
-     * Creates a viewerContainer under the container that user passed in.
-     * There are some benifits to create a new one. e.g., its style won't affect
-     * the container div user passed in.
+     * In order to have a better performance, it should only render when necessary.
+     * Usually, we should enable render for these cases:
+     *  - Anything added to, removed from scene, or objects' position, scale, rotation, opacity, material, etc. changed
+     *  - Anything selected/unselected
+     *  - Camera changed
+     *  - Render area resized
+     * @internal
      */
-    private initViewerContainer;
+    enableRender: (time?: number) => void;
+    protected animate(): void;
+    resize(): void;
+    /**
+     * Sets decoder path for draco loader.
+     * Draco decoder will be used if a model is draco encoded.
+     * @param decoderPath e.g., "libs/draco/gltf/"
+     * @internal
+     */
+    setDracoDecoderPath(path: string): void;
+    abstract loadModel(modelCfg: ModelConfig, onProgress?: (event: ProgressEvent) => void): Promise<void>;
+    addModel(model: Model): void;
+    setFont(urls: string[]): Promise<void>;
     /**
      *
-     * @description Create a div for ui widget, if widget need position, just reletive container, maybe remove later.
-     */
-    private initWidgetContainer;
-    protected initSpinner(): void;
-    /**
-     * Sets spinner visibility
-     */
-    protected setSpinnerVisibility(visible: boolean): void;
-    /**
-     * Increases job count, and show spinner accordingly
-     */
-    protected increaseJobCount(): void;
-    /**
-     * Decreases job count, and hide spinner accordingly
-     */
-    protected decreaseJobCount(): void;
-    protected resize(width: number, height: number): void;
-    destroy(): void;
-    /**
-     * @internal
-     * @description Global event input manager.eg:mousedown, mouseup, keydown.
-     */
-    getInputManager(): InputManager | undefined;
-    /**
-     * @internal
-     */
-    getViewConfig(): BaseViewerConfig;
-    /**
-     * @internal
-     */
-    enableRender(): void;
-    /**
-     * @internal
-     */
-    getRaycaster(): THREE.Raycaster | undefined;
-    /**
-     * @internal
-     */
-    getRaycastableObjectsByMouse(event?: EventInfo): THREE.Object3D[];
-    /**
-     * Gets all objects' bounding box in viewer.
-     * @internal
-     */
-    getBBox(): THREE.Box3 | undefined;
-    /**
-     * @internal
-     */
-    getActiveSection(): BaseSection | undefined;
-    flyTo(position: THREE.Vector3, lookAt: THREE.Vector3): void;
-    /**
-     * If it is a 3d viewer.
-     * DxfViewer is 2d, thus returns false.
-     * @default true
-     * @internal
+     * @description 2d ignore position z.
      */
     is3d(): boolean;
-    /**
-     * @description Compatible with older versions, use MeasurePlugin instead
-     * @internal
-     */
-    get measurePlugin(): MeasurementPlugin | undefined;
-    /**
-     * @internal
-     */
-    getMarkupManager(): MarkupManager | undefined;
-    /**
-     * @deprecated
-     */
-    deactivateMeasurement(): void;
-    /**
-     * @deprecated
-     */
-    setMeasurementVisibility(id: string, visible: boolean): boolean;
-    /**
-     * @internal
-     */
-    screenshot(config: any): Promise<undefined | string>;
     /**
      * Gets how long a pixel represents in world coordinate.
      * This works fine for OrthographicCamera.
@@ -236,9 +133,105 @@ export declare abstract class BaseViewer extends Event<ViewerEvents> {
      */
     getPixelSizeInWorldCoord(): number;
     /**
+     * @description {en} Asks user to select a box area, and zooms to it.
+     * @description {zh} 询问用户选择一个框选区域，然后缩放到该区域。
+     * @example
+     * ``` typescript
+     * viewer.zoomToRect();
+     * ```
+     */
+    zoomToRect(): void;
+    /**
+     * @internal
+     */
+    deactivateZoomRect(): void;
+    /**
      * Gets an unique modelId in case the expected id is duplicated.
      */
     protected getUniqueModelId(expectedModelId: string): string;
+    /**
+     * @description get all model box
+     */
+    getBBox(): THREE.Box3;
+    flyToObject(object: THREE.Object3D): void;
+    flyToObjects(objects: THREE.Object3D[]): void;
+    /**
+     * Make camera fly to target position with given lookAt position
+     * @param position camera's target position
+     * @param lookAt camera's new lookAt position
+     */
+    flyTo(position: THREE.Vector3, lookAt: THREE.Vector3): void;
+    flyToDirection(direction: THREE.Vector3): void;
+    /**
+     * Goes to home view
+     */
+    goToHomeView(): void;
+    /**
+     * Fits the camera to view all objects in scene
+     */
+    viewFitAll(): void;
+    /**
+     *
+     * @param bbox
+     */
+    zoomToBBox(bbox: THREE.Box3): void;
+    pickModel(mousePosition: {
+        x: number;
+        y: number;
+    }): import("../../core/pick").CpuIntersection | undefined;
+    pickObjectsByMouse(mousePosition: {
+        x: number;
+        y: number;
+    }): THREE.Intersection<THREE.Object3D<THREE.Event>>[];
+    getRaycastableObjects(): THREE.Object3D<THREE.Event>[];
+    /**
+     * @description {en} Sets background color.
+     * @description {zh} 设置背景颜色。
+     * @param r
+     * - {en} Red channel value between 0 and 1.
+     * - {zh} 红色通道值，介于 0 和 1 之间。
+     * @param g
+     * - {en} Green channel value between 0 and 1.
+     * - {zh} 绿色通道值，介于 0 和 1 之间。
+     * @param b
+     * - {en} Blue channel value between 0 and 1.
+     * -{zh} 蓝色通道值，介于 0 和 1 之间。
+     * @example
+     * ``` typescript
+     * // {en} Sets background to gray
+     * // {zh} 设置背景为灰色
+     * viewer.setBackgroundColor(0.5, 0.5, 0.5);
+     * ```
+     */
+    setBackgroundColor(r: number, g: number, b: number): void;
+    setCameraProjection(projection: CameraProjections): void;
+    enableControl(enable: boolean): void;
+    enableRotate(enable: boolean): void;
+    enableZoom(enable: boolean): void;
+    enablePan(enable: boolean): void;
+    getCameraInfo(): {
+        near: number;
+        far: number;
+        zoom: number;
+        eye: THREE.Vector3Tuple;
+        up: THREE.Vector3Tuple;
+        look: THREE.Vector3Tuple;
+    };
+    setCameraInfo(cameraInfo: CameraInfo): void;
+    getCameraDirection(): THREE.Vector3;
+    getRenderInfo(): {
+        drawCalls: number;
+        lines: number;
+        points: number;
+        triangles: number;
+        geometries: number;
+        textures: number;
+        materials: number;
+    };
+    /**
+     *
+     */
+    destroy(): void;
     /**
      * Installs a Plugin.
      */
