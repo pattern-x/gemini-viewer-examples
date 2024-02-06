@@ -28,7 +28,7 @@ export declare class PickManager {
     get viewerContainer(): HTMLElement;
     getRaycaster(): THREE.Raycaster;
     pickObjectByNdc(ndcCoord: THREE.Vector2, modelObject: THREE.Object3D | THREE.Object3D[]): {
-        object: THREE.Object3D<THREE.Event>;
+        object: THREE.Object3D<THREE.Object3DEventMap>;
         point: THREE.Vector3;
         distance: number;
         face: THREE.Face | undefined;

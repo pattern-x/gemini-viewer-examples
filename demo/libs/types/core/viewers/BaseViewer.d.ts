@@ -1,3 +1,4 @@
+import { TFunction } from "i18next";
 import * as THREE from "three";
 import { CSS2DRenderer } from "three/examples/jsm/renderers/CSS2DRenderer.js";
 import { Box2 } from "../Constants";
@@ -54,6 +55,10 @@ declare type ViewerEvents = {
 export declare abstract class BaseViewer extends Event<ViewerEvents> {
     name: ViewerName;
     protected viewerCfg: BaseViewerConfig;
+    /**
+     * @internal
+     */
+    translate: TFunction;
     private clock;
     protected fps: number;
     protected timeStamp: number;
@@ -77,7 +82,7 @@ export declare abstract class BaseViewer extends Event<ViewerEvents> {
     protected overlayRender: CanvasRender;
     protected css2dRenderer: CSS2DRenderer;
     protected spinner: Spinner;
-    protected progressBar: ProgressBar;
+    protected progressBar?: ProgressBar;
     protected loaderHelper: LoadingHelper;
     protected zoomToRectHelper?: ZoomToRectHelper;
     constructor(viewerCfg: BaseViewerConfig);
@@ -182,8 +187,8 @@ export declare abstract class BaseViewer extends Event<ViewerEvents> {
     pickObjectsByMouse(mousePosition: {
         x: number;
         y: number;
-    }): THREE.Intersection<THREE.Object3D<THREE.Event>>[];
-    getRaycastableObjects(): THREE.Object3D<THREE.Event>[];
+    }): THREE.Intersection<THREE.Object3D<THREE.Object3DEventMap>>[];
+    getRaycastableObjects(): THREE.Object3D<THREE.Object3DEventMap>[];
     /**
      * @description {en} Sets background color.
      * @description {zh} 设置背景颜色。
@@ -210,6 +215,25 @@ export declare abstract class BaseViewer extends Event<ViewerEvents> {
     enableZoom(enable: boolean): void;
     enablePan(enable: boolean): void;
     getCameraInfo(): {
+        /**
+         * @description {en} Sets background color.
+         * @description {zh} 设置背景颜色。
+         * @param r
+         * - {en} Red channel value between 0 and 1.
+         * - {zh} 红色通道值，介于 0 和 1 之间。
+         * @param g
+         * - {en} Green channel value between 0 and 1.
+         * - {zh} 绿色通道值，介于 0 和 1 之间。
+         * @param b
+         * - {en} Blue channel value between 0 and 1.
+         * -{zh} 蓝色通道值，介于 0 和 1 之间。
+         * @example
+         * ``` typescript
+         * // {en} Sets background to gray
+         * // {zh} 设置背景为灰色
+         * viewer.setBackgroundColor(0.5, 0.5, 0.5);
+         * ```
+         */
         near: number;
         far: number;
         zoom: number;

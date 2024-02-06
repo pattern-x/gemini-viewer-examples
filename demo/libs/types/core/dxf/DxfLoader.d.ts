@@ -235,7 +235,6 @@ export declare class DxfLoader extends THREE.Loader {
     private enableLocalCache;
     private enableReleaseData;
     private enableMerge;
-    private enableRTC;
     private enablePlineWidth;
     private dxfDataId;
     /**
@@ -323,7 +322,7 @@ export declare class DxfLoader extends THREE.Loader {
      * @param onProgress on progress callback
      * @returns DxfData
      */
-    load(url: string, dxfDataId?: string, onProgress?: (event: ProgressEvent) => void): Promise<DxfData>;
+    loadEx(url: string, dxfDataId?: string, onProgress?: (event: ProgressEvent) => void): Promise<DxfData>;
     /**
      * Loads dxf asynchronously. It mainly contains 2 steps:
      * 1. Parses file content
@@ -469,14 +468,6 @@ export declare class DxfLoader extends THREE.Loader {
     private buildContainHierarchyTree;
     private buildHatchGeometry;
     private findIntersectHole;
-    /**
-     * Checks if we should rebase points in case their values are big, and do rebase if necessary
-     */
-    private checkAndRebasePolygonsOnRTC;
-    /**
-     * Adds "relativeToCenter" flag to indicate an object has been rebased
-     */
-    private setRTCUserData;
     private IsfilteredByPathTypeFlag;
     /**
      * Finds spatial filter by entity handle.

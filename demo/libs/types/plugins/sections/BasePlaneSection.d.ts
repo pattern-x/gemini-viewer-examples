@@ -21,7 +21,7 @@ export declare class BasePlaneSection {
     protected renderer: WebGLRenderer;
     protected controls: CameraControlsEx;
     protected isSectionObjectVisible: boolean;
-    protected gizmo: THREE.Group;
+    protected gizmo: THREE.Group<THREE.Object3DEventMap>;
     protected objectPixelSizeHelper?: ObjectPixelSizeHelper;
     canvasHeight: number;
     /**

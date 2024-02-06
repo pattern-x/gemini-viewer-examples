@@ -153,9 +153,6 @@ export declare class DxfViewer extends BaseViewer {
     private dxfLayoutBar?;
     private layoutInfos;
     private units;
-    private enableHideVisuallySmallObjects;
-    private sortedHidableObjects;
-    private lastCameraZoom;
     groundPlane?: THREE.Mesh;
     raycastableObjects?: THREE.Object3D[];
     selectedObject?: THREE.Object3D | Drawable;
@@ -218,7 +215,7 @@ export declare class DxfViewer extends BaseViewer {
      * Creates a ground plane which is much bigger than bbox.
      */
     private updateGroundPlane;
-    getRaycastableObjects(): THREE.Object3D<THREE.Event>[];
+    getRaycastableObjects(): THREE.Object3D[];
     /**
      * Gets the corresponding viewport by judging that the point is in the viewport
      */
@@ -535,17 +532,4 @@ export declare class DxfViewer extends BaseViewer {
      */
     resetLayerColor(layerName: string, modelId?: string): void;
     private getVisiblePixelSize;
-    private setLayoutHidableObjectArray;
-    /**
-     * Updates raycaster threshold to a proper value, so user can easily pick points and lines
-     */
-    private updateRaycasterThreshold;
-    /**
-     * Updates hidable objects' visibility once camera.zoom changed.
-     */
-    private updateHidableObjectsVisibility;
-    /**
-     * Updates camera zoom value for shader materials, which are created in DxfLoader
-     */
-    private updateCameraZoomUniform;
 }

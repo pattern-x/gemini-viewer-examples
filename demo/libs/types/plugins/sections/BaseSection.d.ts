@@ -19,10 +19,13 @@ export declare abstract class BaseSection {
     protected selectedObject?: THREE.Object3D;
     protected refrencePlane: THREE.Plane;
     protected active: boolean;
+    protected capsVisibility: boolean;
+    protected capsWireframeMaterial: THREE.MeshBasicMaterial;
     /**
      * If to show section plane and gizmo or not.
      */
     showSectionPlane: boolean;
+    capsScene: THREE.Scene;
     /**
      * @internal
      */
@@ -37,6 +40,8 @@ export declare abstract class BaseSection {
     setClippingEnabled(enable: boolean): void;
     activate(): void;
     deactivate(keepSectionState?: boolean): void;
+    setCapsVisible(visible: boolean): void;
+    getCapsVisible(): boolean;
     protected setControlsEnabled(enable: boolean): void;
     protected mousedown: (e: EventInfo) => void;
     protected mousemove: (e: EventInfo) => void;

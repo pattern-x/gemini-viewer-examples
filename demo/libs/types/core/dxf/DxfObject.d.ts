@@ -27,6 +27,6 @@ export declare class DxfObject {
     traverse(callback: CallBack): void;
     clone(recursive?: boolean): DxfObject;
     copy(source: DxfObject, recursive?: boolean): this;
-    convertToThreejsObject(recursive?: boolean): Object3D<import("three").Event> | undefined;
+    convertToThreejsObject(recursive?: boolean): Object3D<import("three").Object3DEventMap> | undefined;
     static getBox(object: DxfObject, box: THREE.Box3, parentMatrix?: Matrix4): Box3;
 }

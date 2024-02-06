@@ -42,14 +42,6 @@ export declare class GeometryUtils {
     static isPointOnLineSegment(point: THREE.Vector3, line: ILine, epsilon?: number): boolean;
     static isPointOnLineSegments(point: THREE.Vector3, lines: THREE.Vector3[], epsilon?: number): boolean;
     /**
-     * Checks if we should rebase points in case their values are big, and do rebase if necessary
-     */
-    static checkAndRebasePositionsOnRTC(positions: THREE.Vector3[] | THREE.Vector2[], offset: THREE.Vector3): boolean;
-    /**
-     * Checks if we should rebase a point in case its value is too large
-     */
-    static shouldRebasePositionOnRTC(vector: THREE.Vector3 | THREE.Vector2): boolean;
-    /**
      * Calculates surface area
      */
     static calculateSurfaceArea(geometry: THREE.BufferGeometry): number;

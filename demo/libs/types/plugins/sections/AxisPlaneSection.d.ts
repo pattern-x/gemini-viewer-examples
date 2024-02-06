@@ -13,6 +13,7 @@ export declare class AxisPlaneSection extends BaseSection {
     protected activeAxis: AxisType;
     protected gizmo?: SectionGizmo;
     protected planeMesh?: SectionPlaneMesh;
+    protected capsWireframe?: SectionPlaneMesh;
     protected clipPlane?: THREE.Plane;
     protected selectedObject?: SectionPlaneMesh | THREE.Mesh | THREE.Object3D;
     protected axisInfoMap: {
@@ -47,13 +48,14 @@ export declare class AxisPlaneSection extends BaseSection {
     setSectionPlaneVisible(visible: boolean): void;
     protected initOrUpdateClipPlanes(): void;
     protected initOrUpdateSectionPlaneMeshes(): void;
+    private createCapsWireframe;
     protected initOrUpdateGizmo(): void;
     mousedown: (e: EventInfo) => void;
     protected mousemove: (e: EventInfo) => void;
     onDragStart(e: EventInfo): void;
     onDragMove(e: EventInfo): void;
     onDragEnd(e: EventInfo): void;
-    getIntersectObjects(): THREE.Object3D<THREE.Event>[];
+    getIntersectObjects(): THREE.Object3D[];
     activateSelectedObject(active: boolean): void;
     /**
      * Adjusts a position by activeAxis and clipPlaneConstant.

@@ -97,7 +97,7 @@ export declare class Model2d extends Model {
     /**
      * Sets layer visibility.
      */
-    setLayerVisible(layerName: string, visible: boolean, enableHideVisuallySmallObjects?: boolean, cameraZoom?: number): void;
+    setLayerVisible(layerName: string, visible: boolean, cameraZoom?: number): void;
     /**
      * Sets layer opacity.
      */

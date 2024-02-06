@@ -12,7 +12,7 @@ export declare class ShpThree {
      * @param spherize is spherize or not. This only works well for the sameple shp for now!
      */
     createModel(shp: any): THREE.Object3D;
-    loadCompressed(deltaEncoded: any): THREE.Object3D<THREE.Event>;
+    loadCompressed(deltaEncoded: any): THREE.Object3D<THREE.Object3DEventMap>;
     compress(shp: any): ArrayBuffer;
     deltaEncode(arr: any): ArrayBuffer;
     deltaEncode6(arr: any): ArrayBuffer;

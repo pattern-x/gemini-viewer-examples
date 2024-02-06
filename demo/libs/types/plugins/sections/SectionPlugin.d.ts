@@ -4,8 +4,7 @@ import { Plugin } from "../../core/viewers/Plugin";
 import { BaseSection } from "../../plugins/sections/BaseSection";
 export declare class SectionPlugin extends Plugin {
     static DEFAULT_ID: string;
-    private sections;
-    private activeSectionType?;
+    private sectionManager;
     constructor(viewer: BaseViewer);
     protected get raycaster(): any;
     /**

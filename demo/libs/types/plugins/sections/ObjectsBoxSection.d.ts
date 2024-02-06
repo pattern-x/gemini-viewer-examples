@@ -8,12 +8,15 @@ export declare class ObjectsBoxSection extends BaseSection {
     protected selectedObject?: SectionPlaneMesh;
     protected planeMeshes?: SectionPlaneMesh[];
     protected sectionRange: Record<string, number[]>;
+    private capsWireframes?;
     constructor(viewer: BaseViewer, input: InputManager);
     activate(): void;
     deactivate(keepSectionState?: boolean): void;
     protected initOrUpdateVertices(): void;
     protected initOrUpdateClipPlanes(): void;
     protected initOrUpdateSectionPlaneMeshes(): void;
+    protected initOrUpdateCapsWireframes(): void;
+    protected createCapsWireframe(actionType: Views, vertices: THREE.Vector3[]): SectionPlaneMesh;
     activateSelectedObject(active: boolean): void;
     onDragStart(e: EventInfo): void;
     onDragMove(e: EventInfo): void;
@@ -24,4 +27,5 @@ export declare class ObjectsBoxSection extends BaseSection {
     getIntersectObjects(): SectionPlaneMesh[];
     reset(): void;
     setSectionPlaneVisible(visible: boolean): void;
+    setCapsVisible(visible: boolean): void;
 }

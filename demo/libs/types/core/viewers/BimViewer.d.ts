@@ -19,6 +19,7 @@ export declare class BimViewer extends BaseViewer {
     is3d(): boolean;
     loadLocalModel(url: string, modelCfg: ModelConfig, manager?: THREE.LoadingManager, onProgress?: (event: ProgressEvent) => void): Promise<void>;
     loadModel(modelCfg: ModelConfig, onProgress?: ((event: ProgressEvent<EventTarget>) => void) | undefined): Promise<void>;
+    private loadModelInternal;
     /**
      * Sets distance culling factor in order to improve performance.
      * 0 means distance culling is disabled.
@@ -46,13 +47,14 @@ export declare class BimViewer extends BaseViewer {
     clearHighlight(): void;
     clearSelection(): void;
     enableSsao(enable: boolean): void;
+    getSsaoEnabled(): boolean;
     setEnvironmentData(data?: Uint16Array): Promise<void>;
     setEnvironment(hdrUrl: string): Promise<void>;
     showVertexNormals(show: boolean, size?: number): void;
     getLights(): {
-        sun: THREE.Object3D<THREE.Event> | undefined;
-        ambient: THREE.Object3D<THREE.Event> | undefined;
-        hemisphere: THREE.Object3D<THREE.Event> | undefined;
+        sun: THREE.DirectionalLight;
+        ambient: THREE.Object3D<THREE.Object3DEventMap> | undefined;
+        hemisphere: THREE.Object3D<THREE.Object3DEventMap> | undefined;
     };
     debugLights(enable: boolean): void;
 }

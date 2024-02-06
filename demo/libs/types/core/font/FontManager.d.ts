@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import { BaseFont } from "./BaseFont";
 export declare class FontManager {
     private loader;
@@ -35,8 +34,8 @@ export declare class FontManager {
      * @param size
      * @returns
      */
-    getCharShape(char: string, fontName: string, size: number): THREE.BufferGeometry<THREE.NormalBufferAttributes> | TextGeometry | undefined;
-    getNotFoundTextShape(size: number): THREE.BufferGeometry<THREE.NormalBufferAttributes> | THREE.ExtrudeGeometry | undefined;
+    getCharShape(char: string, fontName: string, size: number): THREE.BufferGeometry<THREE.NormalBufferAttributes> | undefined;
+    getNotFoundTextShape(size: number): THREE.BufferGeometry<THREE.NormalBufferAttributes> | undefined;
     private checkAllFontsLoaded;
     getFontFromIndexeddb(): Promise<void>;
     isShxFont(fontName: string): boolean | undefined;

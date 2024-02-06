@@ -12,7 +12,7 @@ import { PdfLayer } from "../../core/viewers";
  * @link https://zxyle.github.io/PDF-Explained/
  * @link https://github.com/mozilla/pdf.js/
  */
-export declare class PdfLoader extends THREE.Loader {
+export declare class PdfLoader extends THREE.Loader<unknown, DxfModelConfig> {
     static readonly MODEL_LAYOUT_NAME = "Model";
     pdf?: pdfjsLib.PDFDocumentProxy;
     pdfPage?: pdfjsLib.PDFPageProxy;
@@ -147,7 +147,7 @@ export declare class PdfLoader extends THREE.Loader {
     setLeadingMoveText(): void;
     setTextMatrix(a: number, b: number, c: number, d: number, e: number, f: number): void;
     nextLine(): void;
-    paintChar(character: string, x: number, y: number): THREE.BufferGeometry<THREE.NormalBufferAttributes> | import("three/examples/jsm/geometries/TextGeometry").TextGeometry | undefined;
+    paintChar(character: string, x: number, y: number): THREE.BufferGeometry<THREE.NormalBufferAttributes> | undefined;
     showText(glyphs: any[]): void;
     showType3Text(glyphs: any): void;
     setCharWidth(xWidth: any, yWidth: any): void;

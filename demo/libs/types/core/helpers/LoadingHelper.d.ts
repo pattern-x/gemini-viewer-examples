@@ -3,6 +3,7 @@ import type { DxfData, DxfLoaderConfig } from "../../core/dxf";
 import type { FontManager } from "../../core/font";
 export declare class LoadingHelper {
     private static decoderPath;
+    private static rhino3dmLibraryPath;
     private gltfLoader?;
     private font?;
     private manager?;
@@ -24,6 +25,10 @@ export declare class LoadingHelper {
     loadStl(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     loadShp(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     loadDae(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
+    /**
+     * Loads rhino 3dm file.
+     */
+    load3dm(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     loadDxf(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     loadPly(url: string, onProgress?: (event: ProgressEvent) => void): Promise<THREE.Object3D>;
     /**
@@ -41,8 +46,13 @@ export declare class LoadingHelper {
     setFont(font: FontManager): void;
     /**
      * Sets decoder path for draco loader.
-     * @param decoderPath e.g., "libs/draco/gltf/"
+     * @param path e.g., "libs/draco/gltf/"
      */
     static setDracoDecoderPath(path: string): void;
+    /**
+     * Sets decoder path for draco loader.
+     * @param path e.g., "libs/rhino3dm/"
+     */
+    static setRhino3dmLibraryPath(path: string): void;
     private getGltfLoader;
 }

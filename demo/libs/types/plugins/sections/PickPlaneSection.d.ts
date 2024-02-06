@@ -12,6 +12,7 @@ export declare class PickPlaneSection extends BaseSection {
     };
     protected gizmo?: SectionGizmo;
     protected planeMesh?: SectionPlaneMesh;
+    protected capsWireframe?: SectionPlaneMesh;
     protected clipPlane?: THREE.Plane;
     protected selectedObject?: SectionPlaneMesh | THREE.Mesh | THREE.Object3D;
     protected center: THREE.Vector3;
@@ -24,13 +25,15 @@ export declare class PickPlaneSection extends BaseSection {
     setSectionPlaneVisible(visible: boolean): void;
     protected initOrUpdateClipPlanes(): void;
     protected initOrUpdateSectionPlaneMeshes(): void;
+    private createCapsWireframe;
     protected initOrUpdateGizmo(): void;
     mousedown: (e: EventInfo) => void;
     mousemove: (e: EventInfo) => void;
     onDragStart(e: EventInfo): void;
     onDragMove(e: EventInfo): void;
     onDragEnd(e: EventInfo): void;
-    getIntersectObjects(): THREE.Object3D<THREE.Event>[];
+    getIntersectObjects(): THREE.Object3D[];
     activateSelectedObject(active: boolean): void;
     pickFace(e: EventInfo): import("../../core/pick").CpuIntersection | undefined;
+    setCapsVisible(visible: boolean): void;
 }
